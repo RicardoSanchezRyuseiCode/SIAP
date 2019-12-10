@@ -1,0 +1,87 @@
+<html xmlns="http://www.w3.org/1999/xhtml" xmlns:th="http://www.thymeleaf.org" xmlns:sec="http://www.thymeleaf.org/thymeleaf-extras-springsecurity4">
+	<head>
+	</head>
+	<body>
+		<div th:fragment="aside">		   
+		   <aside class="left-sidebar" data-sidebarbg="skin6">
+                <div class="scroll-sidebar">
+                    <!-- Sidebar navigation-->
+                    <nav class="sidebar-nav">
+                        <ul id="sidebarnav" data-elysium-menu-items>
+                            
+                            <li>
+                                <!-- User Profile-->
+                                <div class="user-profile d-flex no-block dropdown mt-3">
+                                    <div class="user-pic"><img data-elysium-user-profile-photo th:src="@{/Xtreme/images/users/1.jpg}" alt="users" class="rounded-circle" width="40" /></div>
+                                    <div class="user-content hide-menu ml-2">
+                                        <a href="javascript:void(0)" class="" id="Userdd" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                                            <h5 class="mb-0 user-name font-medium"><span sec:authentication="name"></span></h5>
+                                            <span class="op-5 user-email">Bienvenido</span>
+                                        </a>
+                                    </div>
+                                </div>
+                                <!-- End User Profile-->
+                            </li>
+                            
+                            <li class="nav-small-cap"><i class=""></i> <span class="hide-menu">Menú Principal</span></li>
+                            
+                            <li class="sidebar-item" selected>
+	                            <a data-elysium-menu-items-islink data-elysium-menu-items-initial-view class="sidebar-link waves-effect waves-dark sidebar-link" th:href="@{/home}" aria-expanded="false" active>
+	                                <i class="fas fa-home"></i><span class="hide-menu">Inicio</span>
+	                            </a>
+                            </li>
+                           
+                           <li class="sidebar-item" sec:authorize="hasAnyAuthority('ADMIN')">
+	                           <a data-elysium-menu-items-islink class="sidebar-link waves-effect waves-dark sidebar-link" th:href="@{/admin/administrativeUnit}" aria-expanded="false">
+	                               <i class="fas fa-cubes"></i><span class="hide-menu">Unidades administrativas</span>
+	                           </a>
+                           </li>
+                            
+                           <li class="sidebar-item" sec:authorize="hasAnyAuthority('ADMIN')">
+	                           <a data-elysium-menu-items-islink class="sidebar-link waves-effect waves-dark sidebar-link" th:href="@{/admin/users}" aria-expanded="false">
+	                               <i class="fas fa-users"></i><span class="hide-menu">Administración de usuarios</span>
+	                           </a>
+                           </li>
+                                
+                            <li class="sidebar-item" sec:authorize="hasAnyAuthority('ADMIN','AWARD', 'AWREQ')">
+	                            <a data-elysium-menu-items-islink class="sidebar-link waves-effect waves-dark sidebar-link" th:href="@{/award/creation}" aria-expanded="false">
+	                                <i class="fas fa-hands-helping"></i><span class="hide-menu">Adjudicación</span>
+	                            </a>
+                            </li>
+                            
+                            <li class="sidebar-item" sec:authorize="hasAnyAuthority('ADMIN','AWARD', 'AWREQ')">
+	                            <a data-elysium-menu-items-islink class="sidebar-link waves-effect waves-dark sidebar-link" th:href="@{/award/pending}" aria-expanded="false">
+	                                <i class="fas fa-hands-helping"></i><span class="hide-menu">Completar Adjudicación</span>
+	                            </a>
+                            </li>
+                            
+                            <li class="sidebar-item" sec:authorize="hasAnyAuthority('ADMIN','AWARD', 'AWREQ')">
+	                            <a data-elysium-menu-items-islink class="sidebar-link waves-effect waves-dark sidebar-link" th:href="@{/award/asset}" aria-expanded="false">
+	                                <i class="fas fa-building"></i><span class="hide-menu">Bienes</span>
+	                            </a>
+                            </li>
+                            
+                            <li class="sidebar-item" sec:authorize="hasAnyAuthority('ADMIN','AWARD', 'AWREQ')">
+	                            <a data-elysium-menu-items-islink class="sidebar-link waves-effect waves-dark sidebar-link" th:href="@{/award/suppliers}" aria-expanded="false">
+	                                <i class="fas fa-truck"></i><span class="hide-menu">Proveedores</span>
+	                            </a>
+                            </li>
+                            
+                            <li class="sidebar-item" sec:authorize="hasAnyAuthority('ADMIN','AWARD', 'AWREQ')">
+	                            <a data-elysium-menu-items-islink class="sidebar-link waves-effect waves-dark sidebar-link" th:href="@{/award/reprint}" aria-expanded="false">
+	                                <i class="fas fa-print"></i><span class="hide-menu">Reimpresión de documentos</span>
+	                            </a>
+                            </li>
+                            
+                            <li class="sidebar-item" sec:authorize="hasAnyAuthority('ADMIN','REQUI', 'AWREQ')">
+	                            <a data-elysium-menu-items-islink class="sidebar-link waves-effect waves-dark sidebar-link" th:href="@{/requisition/creation}" aria-expanded="false">
+	                                <i class="fas fa-clipboard-list"></i><span class="hide-menu">Requisición</span>
+	                            </a>
+                            </li>
+                        </ul>
+                    </nav>
+                </div>
+            </aside>
+		</div>
+	</body>
+</html>

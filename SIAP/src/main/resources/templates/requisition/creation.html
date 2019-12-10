@@ -1,0 +1,167 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml" xmlns:th="http://www.thymeleaf.org">
+	<head>
+        <!-- Meta -->
+        <meta charset="utf-8">
+        <meta http-equiv="X-UA-Compatible" content="IE=edge">
+        <!-- Responsive and information -->
+        <meta name="viewport" content="width=device-width, initial-scale=1">
+        <meta name="description" content="SIAP - RyuseiCode">
+        <meta name="author" content="Ricardo Sanchez Romero - RyuseiCode">
+        <!-- Title -->
+	    <title>.::SIAP::.</title>
+	    <!-- Xtreme Styles-->
+	    <link rel="stylesheet" media="all" th:href="@{/Xtreme/libs/fullcalendar/dist/fullcalendar.min.css}" />
+	    <link rel="stylesheet" media="all" th:href="@{/Xtreme/extra-libs/calendar/calendar.css}" />
+	    <link rel="stylesheet" media="all" th:href="@{/Xtreme/libs/bootstrap-material-datetimepicker/css/bootstrap-material-datetimepicker.css}" />
+	    <link rel="stylesheet" media="all" th:href="@{/Xtreme/libs/select2/dist/css/select2.min.css}" />
+	    <link rel="stylesheet" media="all" th:href="@{/Xtreme/libs/datatables.net-bs4/css/dataTables.bootstrap4.css}" />
+	    <link rel="stylesheet" media="all" th:href="@{/Xtreme/dist/css/style.css}" />
+	    <link rel="stylesheet" media="all" th:href="@{/Xtreme/libs/parsley/src/parsley.css}" />
+	    <link rel="stylesheet" media="all" th:href="@{/Xtreme/libs/noty/noty.css}" />
+	    <link rel="stylesheet" media="all" th:href="@{/Xtreme/libs/jquery-smart-wizard/dist/css/smart_wizard.min.css}" />
+	    <link rel="stylesheet" media="all" th:href="@{/Xtreme/libs/jquery-smart-wizard/dist/css/smart_wizard_theme_dots.min.css}" />
+	    <link rel="stylesheet" media="all" th:href="@{/Xtreme/libs/leaflet/leaflet.css}" />
+	    <link rel="stylesheet" media="all" th:href="@{/Xtreme/libs/spectrum/spectrum.css}" />    
+	    <!-- SIAP Style -->
+	    <link rel="stylesheet" type="text/css" media="all" th:href="@{/App/css/siap.css}" />
+	    <!-- HTML5 Shim and Respond.js IE8 support of HTML5 elements and media queries -->
+	    <!-- WARNING: Respond.js doesn't work if you view the page via file:// -->
+	    <!--[if lt IE 9]>
+	    <script src="https://oss.maxcdn.com/libs/html5shiv/3.7.0/html5shiv.js"></script>
+	    <script src="https://oss.maxcdn.com/libs/respond.js/1.4.2/respond.min.js"></script>
+	 	<![endif]-->
+    </head>
+	<body>
+		<!-- ====================================================================================== -->
+		<!-- =								       Main Wrapper 						          = -->
+		<!-- ====================================================================================== -->
+		<div id="main-wrapper">
+			<!-- ====================================================================================== -->
+			<!-- =								        Header       						          = -->
+			<!-- ====================================================================================== -->
+			<div th:replace="fragments/header :: header"/>
+			<!-- ====================================================================================== -->
+			<!-- =								        Header       						          = -->
+			<!-- ====================================================================================== -->
+			
+			<!-- ====================================================================================== -->
+			<!-- =								        Header       						          = -->
+			<!-- ====================================================================================== -->
+			<div th:replace="fragments/aside :: aside"/>
+			<!-- ====================================================================================== -->
+			<!-- =								        Header       						          = -->
+			<!-- ====================================================================================== -->
+			
+			<!-- ====================================================================================== -->
+			<!-- =								       Page Wrapper 						          = -->
+			<!-- ====================================================================================== -->	
+			<div class="page-wrapper">
+				<!-- ====================================================================================== -->
+				<!-- =								          Footer     						          = -->
+				<!-- ====================================================================================== -->
+				<div id="content" class="container-fluid">
+                    Requisition creation
+                </div>
+				<!-- ====================================================================================== -->
+				<!-- =								          Footer     						          = -->
+				<!-- ====================================================================================== -->
+				<div th:replace="fragments/footer :: footer"/>
+				<!-- ====================================================================================== -->
+				<!-- =								          Footer     						          = -->
+				<!-- ====================================================================================== -->
+			</div>
+			<!-- ====================================================================================== -->
+		<!-- =								       Page Wrapper 						          = -->
+		<!-- ====================================================================================== -->
+		</div>
+		<!-- ====================================================================================== -->
+		<!-- =								       Main Wrapper 						          = -->
+		<!-- ====================================================================================== -->
+		
+	    <!-- ====================================================================================== -->
+		<!-- =								     Xtreme Templates						          = -->
+		<!-- ====================================================================================== -->
+		<script type="text/javascript" th:src="@{/Xtreme/libs/jquery/dist/jquery.min.js}"></script>
+		<script type="text/javascript" th:src="@{/Xtreme/extra-libs/taskboard/js/jquery.ui.touch-punch-improved.js}"></script>
+		<script type="text/javascript" th:src="@{/Xtreme/extra-libs/taskboard/js/jquery-ui.min.js}"></script>
+		<script type="text/javascript" th:src="@{/Xtreme/libs/popper.js/dist/umd/popper.min.js}"></script>
+		<script type="text/javascript" th:src="@{/Xtreme/libs/bootstrap/dist/js/bootstrap.min.js}"></script>
+		<script type="text/javascript" th:src="@{/Xtreme/libs/bluebird/bluebird.min.js}"></script>
+		<script type="text/javascript" th:src="@{/Xtreme/libs/parsley/dist/parsley.js}"></script>
+		<script type="text/javascript" th:src="@{/Xtreme/libs/i18next/i18next.min.js}"></script>
+		<script type="text/javascript" th:src="@{/Xtreme/libs/i18next/jquery-i18next.min.js}"></script>
+		<script type="text/javascript" th:src="@{/Xtreme/libs/noty/noty.js}"></script>
+		<script type="text/javascript" th:src="@{/Xtreme/dist/js/app.min.js}"></script>
+		<script type="text/javascript" th:src="@{/Xtreme/dist/js/app.init.js}"></script>
+		<script type="text/javascript" th:src="@{/Xtreme/dist/js/app-style-switcher.js}"></script>
+		<script type="text/javascript" th:src="@{/Xtreme/libs/perfect-scrollbar/dist/perfect-scrollbar.jquery.min.js}"></script>
+		<script type="text/javascript" th:src="@{/Xtreme/extra-libs/sparkline/sparkline.js}"></script>
+		<script type="text/javascript" th:src="@{/Xtreme/dist/js/waves.js}"></script>
+		<script type="text/javascript" th:src="@{/Xtreme/dist/js/sidebarmenu.js}"></script>
+		<script type="text/javascript" th:src="@{/Xtreme/dist/js/custom.min.js}"></script>
+		<script type="text/javascript" th:src="@{/Xtreme/libs/bootstrap-sweetalert/sweetalert.min.js}"></script>
+		<script type="text/javascript" th:src="@{/Xtreme/libs/moment/min/moment.min.js}"></script>
+		<script type="text/javascript" th:src="@{/Xtreme/libs/moment/locale/es.js}"></script>
+		<script type="text/javascript" th:src="@{/Xtreme/libs/fullcalendar/dist/fullcalendar.min.js}"></script>
+		<script type="text/javascript" th:src="@{/Xtreme/libs/fullcalendar/dist/locale-all.js}"></script>
+		<script type="text/javascript" th:src="@{/Xtreme/libs/jquery-smart-wizard/src/js/jquery.smartWizard.js}"></script>
+		<script type="text/javascript" th:src="@{/Xtreme/libs/bootstrap-material-datetimepicker/js/bootstrap-material-datetimepicker-custom.js}"></script>
+		<script type="text/javascript" th:src="@{/Xtreme/libs/leaflet/leaflet.js}"></script>
+		<script type="text/javascript" th:src="@{/Xtreme/libs/select2/dist/js/select2.full.min.js}"></script>
+		<script type="text/javascript" th:src="@{/Xtreme/libs/select2/dist/js/select2.min.js}"></script>
+		<script type="text/javascript" th:src="@{/Xtreme/libs/sheetJS/xlsx.full.min.js}"></script>
+		<script type="text/javascript" th:src="@{/Xtreme/extra-libs/DataTables/datatables.min.js}"></script>
+		<script type="text/javascript" th:src="@{/Xtreme/libs/spectrum/datatables.min.js}"></script>
+		<script type="text/javascript" th:src="@{/Xtreme/libs/spectrum/spectrum.js}"></script>
+		
+		
+		<!-- ====================================================================================== -->
+		<!-- =								         Elysium	     					          = -->
+		<!-- ====================================================================================== -->
+		<script type="text/javascript" th:src="@{/Elysium/Elysium.js}"></script>
+		<script type="text/javascript" th:src="@{/Elysium/Types/String.js}"></script>
+		<script type="text/javascript" th:src="@{/Elysium/Types/Image.js}"></script>
+		<script type="text/javascript" th:src="@{/Elysium/UI/Interfaces/IRevolutionarySlider.js}"></script>
+		<script type="text/javascript" th:src="@{/Elysium/UI/Interfaces/IForm.js}"></script>
+		<script type="text/javascript" th:src="@{/Elysium/UI/Interfaces/IWizard.js}"></script>
+		<script type="text/javascript" th:src="@{/Elysium/UI/Interfaces/IPaymentCard.js}"></script>
+		<script type="text/javascript" th:src="@{/Elysium/UI/Interfaces/IMsgBox.js}"></script>
+		<script type="text/javascript" th:src="@{/Elysium/UI/Interfaces/INotification.js}"></script>
+		<script type="text/javascript" th:src="@{/Elysium/UI/Interfaces/ISpinner.js}"></script>
+		<script type="text/javascript" th:src="@{/Elysium/UI/Interfaces/ITable.js}"></script>
+		<script type="text/javascript" th:src="@{/Elysium/UI/Interfaces/IDatePicker.js}"></script>
+		<script type="text/javascript" th:src="@{/Elysium/UI/Interfaces/IDateTimePicker.js}"></script>
+		<script type="text/javascript" th:src="@{/Elysium/UI/Interfaces/IDatePickerRange.js}"></script>
+		<script type="text/javascript" th:src="@{/Elysium/UI/Interfaces/IPagination.js}"></script>
+		<script type="text/javascript" th:src="@{/Elysium/UI/Interfaces/IRating.js}"></script>
+		<script type="text/javascript" th:src="@{/Elysium/UI/Interfaces/IReportViewer.js}"></script>
+		<script type="text/javascript" th:src="@{/Elysium/UI/Interfaces/IStylesheet.js}"></script>
+		<script type="text/javascript" th:src="@{/Elysium/UI/Interfaces/ICalendar.js}"></script>
+		<script type="text/javascript" th:src="@{/Elysium/UI/Entities/RevolutionarySlider.js}"></script>
+		<script type="text/javascript" th:src="@{/Elysium/UI/Entities/Form.js}"></script>
+		<script type="text/javascript" th:src="@{/Elysium/UI/Entities/Wizard.js}"></script>
+		<script type="text/javascript" th:src="@{/Elysium/UI/Entities/PaymentCard.js}"></script>
+		<script type="text/javascript" th:src="@{/Elysium/UI/Entities/MsgBox.js}"></script>
+		<script type="text/javascript" th:src="@{/Elysium/UI/Entities/Notification.js}"></script>
+		<script type="text/javascript" th:src="@{/Elysium/UI/Entities/Spinner.js}"></script>
+		<script type="text/javascript" th:src="@{/Elysium/UI/Entities/Table.js}"></script>
+		<script type="text/javascript" th:src="@{/Elysium/UI/Entities/DatePicker.js}"></script>
+		<script type="text/javascript" th:src="@{/Elysium/UI/Entities/DateTimePicker.js}"></script>
+		<script type="text/javascript" th:src="@{/Elysium/UI/Entities/DatePickerRange.js}"></script>
+		<script type="text/javascript" th:src="@{/Elysium/UI/Entities/Pagination.js}"></script>
+		<script type="text/javascript" th:src="@{/Elysium/UI/Entities/Rating.js}"></script>
+		<script type="text/javascript" th:src="@{/Elysium/UI/Entities/ReportViewer.js}"></script>
+		<script type="text/javascript" th:src="@{/Elysium/UI/Entities/Stylesheet.js}"></script>
+		<script type="text/javascript" th:src="@{/Elysium/UI/Entities/Calendar.js}"></script>
+		<script type="text/javascript" th:src="@{/Elysium/Directives/RequestError.js}"></script>
+		
+		<script type="text/javascript" th:src="@{/Elysium/App/Interfaces/IController.js}"></script>
+		
+		<script type="text/javascript" th:src="@{/Elysium/App/Globals/BrdcstChGlobals.js}"></script>
+		<script type="text/javascript" th:src="@{/Elysium/App/Globals/I18nGlobals.js}"></script>
+		<script type="text/javascript" th:src="@{/Elysium/App/Globals/ValidatorGlobals.js}"></script>
+		<script type="text/javascript" th:src="@{/Elysium/App/Globals/SessionGlobals.js}"></script>
+		<script type="text/javascript" th:src="@{/Elysium/App/Globals/MenuItemGlobals.js}"></script>
+	</body>
+</html>

@@ -1,0 +1,253 @@
+<html xmlns="http://www.w3.org/1999/xhtml" xmlns:th="http://www.thymeleaf.org" xmlns:sec="http://www.thymeleaf.org/thymeleaf-extras-springsecurity4">
+	<head>
+	</head>
+	<body>
+		<div th:fragment="technicalAperture">
+			 <div id="ModalTechnicalAperture" class="modal fade bs-example-modal-lg" tabindex="-1" role="dialog" aria-labelledby="myLargeModalLabel" aria-hidden="true" style="display: none;" data-backdrop="static" data-keyboard="false">
+			    <div class="modal-dialog modal-dialog-centered modal-lg">
+			        <div class="modal-content">
+			            <div class="modal-header">
+			                <h4 class="modal-title">Apertura Técnica Económica</h4>
+			                <button type="button" class="close" data-dismiss="modal" aria-hidden="true">×</button>
+			            </div>
+			            <div class="modal-body">
+			                <div class="row">
+			                    <div class="col-md-12">                        
+				                    
+				                    	<div class="row">
+				                    		<div class="col-md-1"></div>
+				                    		<div class="col-md-10">
+				                    			<form id="FormOpening">                    							
+                    								<div class="row">
+                    									<div class="col-md-12 form-group">
+                    										<label for="denomination" class="control-label mt-2">Denominación</label>
+                    										<input 
+                    											type="text" 
+                    											class="form-control" 
+                    											id="denomination" 
+                    											name="denomination" 
+                    											placeholder="Denominación"
+                    											data-parsley-required="true"
+				                                    			data-parsley-required-message="Debe ingresar una denominación"
+							                                    data-parsley-minlength="1"
+							                                    data-parsley-minlength-message="La longitud minima es de 1 caracter"
+							                                    data-parsley-maxlength="150"
+							                                    data-parsley-maxlength-message="La longitud maxima es de 150 caracteres"
+                    										/>
+                    									</div>
+                    								</div>
+                    								<div class="row">
+                    									<div class="col-md-3 text-right mb-2">
+                    										<label for="eventDate" class="control-label mt-2">Fecha en que se realiza el evento</label>
+                    									</div>
+                    									<div class="col-md-3">
+                    										<input 
+                    											type="text" 
+                    											class="form-control" 
+                    											id="eventDate" 
+                    											name="eventDate"
+                    											data-parsley-required="true"
+			                                    				data-parsley-required-message="Debe seleccionar una fecha"
+                    										/>
+                    									</div>
+                    									<div class="col-md-6">
+                    										<input 
+                    											type="text" 
+                    											class="form-control"
+                    											id="eventDateText"
+                    											name="eventDateText" 
+                    											readonly="readonly" 
+                   											/>
+                    									</div>
+                    								</div>
+                    								<div class="row">
+                    									<div class="col-md-3 text-right mb-2">
+                    										<label for="eventStartHour" class="control-label mt-2">Hora en que se realiza el evento</label>
+                    									</div>
+                    									<div class="col-md-3">
+                    										<input 
+                    											type="text" 
+                    											class="form-control"
+                    											id="eventStartHour"
+                    											name="eventStartHour"
+                    											data-parsley-required="true"
+			                                    				data-parsley-required-message="Debe seleccionar una hora"
+                    										/>
+                    									</div>
+                    									<div class="col-md-6">
+                    										<input 
+                    											type="text" 
+                    											class="form-control"
+                    											id="eventStartHourText"
+                    											name="eventStartHourText"
+                    											readonly="readonly" />
+                    									</div>
+                    								</div>
+                    								<div class="row">
+                    									<div class="col-md-3 text-right mb-2">
+                    										<label for="eventEndHour" class="control-label mt-2">Hora de finalización evento de apertura</label>
+                    									</div>
+                    									<div class="col-md-3">
+                    										<input 
+                    											type="text" 
+                    											class="form-control"
+                    											id="eventEndHour"
+                    											name="eventEndHour"
+                    											data-parsley-required="true"
+			                                    				data-parsley-required-message="Debe seleccionar una hora"
+                    										/>
+                    									</div>
+                    									<div class="col-md-6">
+                    										<input 
+                    											type="text" 
+                    											class="form-control" 
+                    											id="eventEndHourText"
+                    											name="eventEndHourText"
+                    											readonly="readonly" />
+                    									</div>
+                    								</div>
+                    								<hr/>
+                    								
+                    								<div class="row">
+                    									<div class="col-md-3 text-right mb-2">
+                    										<label for="responsable" class="control-label mt-2">Responsable de adjudicación</label>
+                    									</div>
+                    									<div class="col-md-9">
+                    										<input 
+                    											type="text" 
+                    											class="form-control"
+                    											id="responsable"
+                    											name="responsable"
+                    											data-parsley-required="true"
+				                                    			data-parsley-required-message="Debe ingresar un responsable"
+							                                    data-parsley-minlength="1"
+							                                    data-parsley-minlength-message="La longitud minima es de 1 caracter"
+							                                    data-parsley-maxlength="250"
+							                                    data-parsley-maxlength-message="La longitud maxima es de 250 caracteres"
+                    										 />
+                    									</div>
+                    								</div>
+                    								<div class="row">
+                    									<div class="col-md-3 text-right mb-2">
+                    										<label for="firstWitness" class="control-label mt-2">Testigo 1</label>
+                    									</div>
+                    									<div class="col-md-9">
+                    										<input 
+                    											type="text" 
+                    											class="form-control"
+                    											id="firstWitness"
+                    											name="firstWitness"
+                    											data-parsley-required="true"
+				                                    			data-parsley-required-message="Debe ingresar el testigo número 1"
+							                                    data-parsley-minlength="1"
+							                                    data-parsley-minlength-message="La longitud minima es de 1 caracter"
+							                                    data-parsley-maxlength="250"
+							                                    data-parsley-maxlength-message="La longitud maxima es de 250 caracteres"
+                    										 />
+                    									</div>
+                    								</div>
+                    								<div class="row">
+                    									<div class="col-md-3 text-right mb-2">
+                    										<label for="secondWitness" class="control-label mt-2">Testigo 2</label>
+                    									</div>
+                    									<div class="col-md-9">
+                    										<input 
+                    											type="text"
+                    										    class="form-control" 
+                    										    id="secondWitness"
+                    											name="secondWitness"
+                    											data-parsley-required="true"
+				                                    			data-parsley-required-message="Debe ingresar el testigo número 2"
+							                                    data-parsley-minlength="1"
+							                                    data-parsley-minlength-message="La longitud minima es de 1 caracter"
+							                                    data-parsley-maxlength="250"
+							                                    data-parsley-maxlength-message="La longitud maxima es de 250 caracteres"
+                    										/>
+                    									</div>
+                    								</div>
+                    								<div class="row">
+                    									<div class="col-md-3 text-right mb-2">
+                    										<label for="supplierId" class="control-label mt-2">Representante de proveedores</label>
+                    									</div>
+                    									<div class="col-md-9">
+                    										<select 
+                    											id="openingSupplierId" 
+                    											name="supplierId" 
+                    											class="form-control"
+                    											data-parsley-required="true"
+	                                   							data-parsley-select="Seleccionar proveedor"
+	                                   							data-parsley-select-message="Debe seleccionar un proveedor"
+                    										></select>
+                    									</div>
+                    								</div>
+                    								<div class="row">
+                    									<div class="col-md-3 text-right mb-2">
+                    										<label for="failureIssuanceDate" class="control-label mt-2">Fecha de emision del fallo</label>
+                    									</div>
+                    									<div class="col-md-3">
+                    										<input 
+                    											type="text" 
+                    											class="form-control"
+                    											id="failureIssuanceDate"
+                    											name="failureIssuanceDate"
+                    											data-parsley-required="true"
+			                                    				data-parsley-required-message="Debe seleccionar una fecha"
+                    										/>
+                    									</div>
+                    									<div class="col-md-6">
+                    										<input 
+                    											type="text" 
+                    											class="form-control" 
+                    											readonly="readonly"
+                    											id="failureIssuanceDateText"
+                    											name="failureIssuanceDateText"
+                    										/>
+                    									</div>
+                    								</div>
+                    								<div class="row">
+                    									<div class="col-md-3 text-right mb-2">
+                    										<label for="address" class="control-label mt-2">Hora de emision del fallo</label>
+                    									</div>
+                    									<div class="col-md-3">
+                    										<input 
+                    											type="text" 
+                    											class="form-control"
+                    											id="failureIssuanceHour"
+                    											name="failureIssuanceHour"
+                    											data-parsley-required="true"
+			                                    				data-parsley-required-message="Debe seleccionar una hora"
+                    										/>
+                    									</div>
+                    									<div class="col-md-6">
+                    										<input 
+                    											type="text" 
+                    											class="form-control" 
+                    											readonly="readonly"
+                    											id="failureIssuanceHourText"
+                    											name="failureIssuanceHourText" 
+                    										/>
+                    									</div>
+                    								</div>
+                    								<hr/>                    								                  							
+				                                    <div class="row">
+				                                    	<div class="offset-md-10 col-md-2">
+				                                    		<button type="submit" class="btn btn-primary waves-effect waves-light btn-block">
+				                                    			<span class="fas fa-save"></span> Guardar
+				                                    		</button>
+				                                    	</div>
+				                                    </div>				                                        
+				                                </form>	
+				                    		</div>
+				                    		<div class="col-md-1"></div>
+				                    	</div>	   
+				                    
+			                    </div>
+			                </div>
+			            </div>
+			        </div>
+			    </div>
+			</div>
+		</div>
+	</body>
+</html>
+

@@ -1,0 +1,479 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml" xmlns:th="http://www.thymeleaf.org">
+	<head>
+        <!-- Meta -->
+        <meta charset="utf-8">
+        <meta http-equiv="X-UA-Compatible" content="IE=edge">
+        <!-- Responsive and information -->
+        <meta name="viewport" content="width=device-width, initial-scale=1">
+        <meta name="description" content="SIAP - RyuseiCode">
+        <meta name="author" content="Ricardo Sanchez Romero - RyuseiCode">
+        <!-- Title -->
+	    <title>.::SIAP::.</title>
+	    <!-- Xtreme Styles-->
+	    <link rel="stylesheet" media="all" th:href="@{/Xtreme/libs/fullcalendar/dist/fullcalendar.min.css}" />
+	    <link rel="stylesheet" media="all" th:href="@{/Xtreme/extra-libs/calendar/calendar.css}" />
+	    <link rel="stylesheet" media="all" th:href="@{/Xtreme/libs/bootstrap-material-datetimepicker/css/bootstrap-material-datetimepicker.css}" />
+	    <link rel="stylesheet" media="all" th:href="@{/Xtreme/libs/select2/dist/css/select2.min.css}" />
+	    <link rel="stylesheet" media="all" th:href="@{/Xtreme/extra-libs/DataTablesV4/datatables.min.css}" />
+	    <link rel="stylesheet" media="all" th:href="@{/Xtreme/extra-libs/DataTablesV4/KeyTable-2.5.1/css/keyTable.bootstrap4.min.css}" />
+	    <link rel="stylesheet" media="all" th:href="@{/Xtreme/dist/css/style.css}" />
+	    <link rel="stylesheet" media="all" th:href="@{/Xtreme/libs/parsley/src/parsley.css}" />
+	    <link rel="stylesheet" media="all" th:href="@{/Xtreme/libs/noty/noty.css}" />
+	    <link rel="stylesheet" media="all" th:href="@{/Xtreme/libs/jquery-smart-wizard/dist/css/smart_wizard.min.css}" />
+	    <link rel="stylesheet" media="all" th:href="@{/Xtreme/libs/jquery-smart-wizard/dist/css/smart_wizard_theme_dots.min.css}" />
+	    <link rel="stylesheet" media="all" th:href="@{/Xtreme/libs/leaflet/leaflet.css}" />
+	    <link rel="stylesheet" media="all" th:href="@{/Xtreme/libs/spectrum/spectrum.css}" />    
+	    <!-- SIAP Style -->
+	    <link rel="stylesheet" type="text/css" media="all" th:href="@{/App/css/siap.css}" />
+	    <!-- HTML5 Shim and Respond.js IE8 support of HTML5 elements and media queries -->
+	    <!-- WARNING: Respond.js doesn't work if you view the page via file:// -->
+	    <!--[if lt IE 9]>
+	    <script src="https://oss.maxcdn.com/libs/html5shiv/3.7.0/html5shiv.js"></script>
+	    <script src="https://oss.maxcdn.com/libs/respond.js/1.4.2/respond.min.js"></script>
+	 	<![endif]-->
+    </head>
+	<body>
+		<!-- ====================================================================================== -->
+		<!-- =								       Main Wrapper 						          = -->
+		<!-- ====================================================================================== -->
+		<div id="main-wrapper">
+			<!-- ====================================================================================== -->
+			<!-- =								        Header       						          = -->
+			<!-- ====================================================================================== -->
+			<div th:replace="fragments/header :: header"></div>
+			<!-- ====================================================================================== -->
+			<!-- =								        Header       						          = -->
+			<!-- ====================================================================================== -->
+			
+			<!-- ====================================================================================== -->
+			<!-- =								        Header       						          = -->
+			<!-- ====================================================================================== -->
+			<div th:replace="fragments/aside :: aside"></div>
+			<!-- ====================================================================================== -->
+			<!-- =								        Header       						          = -->
+			<!-- ====================================================================================== -->
+			
+			<!-- ====================================================================================== -->
+			<!-- =								       Page Wrapper 						          = -->
+			<!-- ====================================================================================== -->	
+			<div class="page-wrapper">
+				<div id="content" class="container-fluid">
+                    <!-- Breadcumb  -->
+                    <div class="page-breadcrumb">
+		                <div class="row">
+		                    <div class="col-5 align-self-center">
+		                        <h4 class="page-title">Completar Adjudicación</h4>
+		                        <div class="d-flex align-items-center">
+		                            <nav aria-label="breadcrumb">
+		                                <ol class="breadcrumb">
+		                                    <li class="breadcrumb-item"><a th:href="@{/home}">Inicio</a></li>
+		                                    <li class="breadcrumb-item active" aria-current="page">Completar Adjudicación</li>
+		                                </ol>
+		                            </nav>
+		                        </div>
+		                    </div>
+		                </div>
+		            </div>
+		            <br/>
+                    <!-- Breadcumb  -->
+                    <!-- Card Container  -->
+                    <div class="container-fluid">
+                    	<div class="row">
+                    		<div class="col-md-12">
+                    			<div class="card">
+                    				<!-- Card body -->
+                    				<div class="card-body">
+                    					<hr />
+                    					<div class="row mt-4">
+                    						<div class="col-md-1"></div>
+                    						<div class="col-md-9">
+                    							<form id="FormAdjudication">            
+                    								<div class="row">
+														<div class="col-md-12">
+															<div class="card">
+									                            <div class="card-body">
+										                            <div class="row">
+									                                    <div class="col-12">
+									                                        <h3 class="text-primary" data-elysium-adjudication-status>Nueva</h3>
+									                                        <h6 class="card-subtitle">Estatus</h6></div>
+									                                    <div class="col-12">
+									                                        <div class="progress">
+									                                            <div class="progress-bar bg-primary" role="progressbar" style="width: 85%; height: 6px;" aria-valuenow="10" aria-valuemin="0" aria-valuemax="100"></div>
+									                                        </div>
+									                                    </div>
+									                                </div>
+									                            </div>
+								                            </div>
+							                            </div>
+						                            </div>
+                    								<hr />
+                    								<div class="row">
+                    									<div class="col-md-4">
+                    										<div class="row">
+	                    										<div class="col-md-12 form-group">
+		                    										<label for="sourceOrigin" class="control-label mt-2">Origen del Recurso</label>
+		                    										<select
+		                    											id="sourceOrigin" 
+		                    											name="sourceOrigin"
+		                    											class="form-control"
+		                    											data-parsley-required="true"
+		                                    							data-parsley-select="Seleccionar Origen"
+		                                    							data-parsley-select-message="Debe seleccionar un origen" 
+	                                    							>
+		                    											<option selected>Seleccionar Origen</option>
+		                    											<option value="Federal">Federal</option>
+		                    											<option value="Estatal">Estatal</option>
+		                    											<option value="Mixto">Mixto</option>
+		                    										</select>
+		                    									</div>
+                    										</div>
+                    									</div>
+                    									<div class="col-md-4">
+	                    									<div class="row">
+	                    										<div class="col-md-12 form-group">
+		                    										<label for="amount" class="control-label mt-2">Monto</label>
+		                    										<input 
+		                    											type="number" 
+		                    											id="amount" 
+		                    											name="amount" 
+		                    											step="0.01" 
+		                    											min="1"
+		                    											max="2000000000" 
+		                    											class="form-control"
+		                    											data-parsley-required="true"
+						                                    			data-parsley-required-message="Debe ingresar un monto"
+						                                    			data-parsley-type="number"
+																		data-parsley-type-message="El monto debe ser numerico mayor o igual a 1 y menor que 2,000,000,000.00"									                                    
+									                                    data-parsley-gte="1"
+									                                    data-parsley-gte-message="El mondo debe ser mayor o igual a 1"
+									                                    data-parsley-lte="2000000000"
+									                                    data-parsley-lte-message="El mondo debe ser menor o igual a 1" />			                    										
+		                    									</div>
+                    										</div>
+                    									</div>
+                    									<div class="col-md-4">
+                    										<div class="row">
+	                    										<div class="col-md-12 form-group">
+		                    										<label for="adjudicationType" class="control-label mt-2">Tipo</label>
+		                    										<select
+		                    											id="adjudicationType" 
+		                    											name="adjudicationType"
+		                    											class="form-control" 
+		                    											data-parsley-required="true"
+		                                    							data-parsley-select="Seleccionar Tipo"
+		                                    							data-parsley-select-message="Debe seleccionar un tipo"	                    											>
+		                    											<option selected>Seleccionar Tipo</option>
+		                    											<option value="Directa">Directa</option>
+		                    											<option value="A cuando menos tres personas">A cuando menos tres personas</option>
+		                    											<option value="Licitación Pública">Licitación Pública</option>
+		                    										</select>
+		                    									</div>
+                    										</div>
+                    									</div>
+                    								</div>    
+                    								<div class="row">
+                    									<div class="col-md-4">
+                    										<div class="row">
+	                    										<div class="col-md-12 form-group">
+		                    										<label for="procedureNumber" class="control-label mt-2">Número de Procedimiento</label>
+		                    										<input 
+		                    											type="text" 
+		                    											id="procedureNumber" 
+		                    											name="procedureNumber"
+		                    											class="form-control"
+		                    											data-parsley-required="true"
+						                                    			data-parsley-required-message="Debe ingresar un número de procedimiento"
+									                                    data-parsley-minlength="1"
+									                                    data-parsley-minlength-message="La longitud minima es de 1 caracter"
+									                                    data-parsley-maxlength="50"
+									                                    data-parsley-maxlength-message="La longitud maxima es de 50 caracteres"
+									                                    data-parsley-procedure
+									                                    data-parsley-procedure-message="No se permiten caracteres especiales en el número de procedimiento"									                                     
+	                    											/>			                    										
+		                    									</div>
+                    										</div>
+                    									</div>
+                    									<div class="col-md-4">
+                    										<div class="row">
+	                    										<div class="col-md-12 form-group">
+		                    										<label for="contractType" class="control-label mt-2">Contrato</label>
+		                    										<select
+	                    												id="contractType" 
+	                    												name="contractType"
+	                    												class="form-control" 
+	                    												data-parsley-required="true"
+		                                    							data-parsley-select="Seleccionar contrato"
+		                                    							data-parsley-select-message="Debe seleccionar un contrato"
+	                                    							>
+		                    											<option selected>Seleccionar contrato</option>
+		                    											<option value="Bienes/Abierto">Bienes/Abierto</option>
+		                    											<option value="Bienes/Cerrrado">Bienes/Cerrrado</option>
+		                    											<option value="Prestación de servicios">Prestación de servicios</option>
+		                    										</select>
+		                    									</div>
+                    										</div>
+                    									</div>
+                    									<div class="col-md-4">
+                    										<div class="row">
+	                    										<div class="col-md-12 form-group">
+		                    										<label for="modality" class="control-label mt-2">Modalidad</label>
+		                    										<select
+		                    											id="modality" 
+		                    											name="modality"
+		                    											class="form-control"
+		                    											data-parsley-required="true"
+		                                    							data-parsley-select="Seleccionar modalidad"
+		                                    							data-parsley-select-message="Debe seleccionar una modalidad"
+	                    											>
+		                    											<option selected>Seleccionar modalidad</option>
+		                    											<option value="Lote">Lote</option>
+		                    											<option value="Múltiple">Múltiple</option>
+		                    										</select>
+		                    									</div>
+                    										</div>
+                    									</div>
+                    								</div>
+                    								<div class="row">
+				                                    	<div class="offset-md-10 col-md-2">
+				                                    		<button type="submit" class="btn btn-primary waves-effect waves-light btn-block">
+				                                    			<span class="fas fa-save"></span> Guardar
+				                                    		</button>
+				                                    	</div>
+				                                    </div>
+				                                </form>	
+				                                <hr />
+				                                <div class="row">
+		                    						<div class="col-md-3">
+		                    							<button type="button" id="Invitation" class="btn waves-effect waves-light btn-light btn-block">Invitación</button>
+		                    						</div>
+		                    						<div class="col-md-3">
+		                    							<button type="button" id="Append" class="btn waves-effect waves-light btn-light btn-block">Anexo</button>
+		                    						</div>
+		                    						<div class="col-md-3">
+		                    							<button type="button" id="TechnicalAperture" class="btn waves-effect waves-light btn-light btn-block">Apertura Técnica-Económica</button>
+		                    						</div>
+		                    						<div class="col-md-3">
+		                    							<button type="button" id="DetailTechnicalAperture" class="btn waves-effect waves-light btn-light btn-block">Detalle Apertura Técnica-Económica</button>
+		                    						</div>
+		                    					</div>
+		                    					<div class="row mt-3">
+			                    					<div class="col-md-4">
+			                    						<button type="button" id="ComparativeChart" class="btn waves-effect waves-light btn-light btn-block">Cuadro Comparativa</button>
+			                    					</div>
+			                    					<div class="col-md-4">
+			                    						<button type="button" id="Judgment" class="btn waves-effect waves-light btn-light btn-block">Fallo</button>
+			                    					</div>
+			                    					<div class="col-md-4">
+			                    						<button type="button" id="BtnContract" class="btn waves-effect waves-light btn-light btn-block">Contrato</button>
+			                    					</div>
+		                    					</div>
+				                                
+                    						</div>
+                    						<div class="col-md-2"></div>
+                    					</div>
+                    					<br />
+                    					<hr />
+                    					       					
+                    				</div>
+                    				<!-- Card body -->
+                    			</div>
+                    		</div>
+                    	</div>
+                    </div>
+                    <!-- Card Container -->
+                <!-- ====================================================================================== -->
+				<!-- =								          Footer     						          = -->
+				<!-- ====================================================================================== -->
+				
+				<div th:replace="fragments/footer :: footer"></div>
+				<!-- ====================================================================================== -->
+				<!-- =								          Footer     						          = -->
+				<!-- ====================================================================================== -->
+			</div>
+			<!-- ====================================================================================== -->
+			<!-- =								       Page Wrapper 						          = -->
+			<!-- ====================================================================================== -->
+			
+			<div th:replace="award/fragments/invitation :: invitation"></div>
+			
+			<div th:replace="award/fragments/append :: append"></div>
+			
+			<div th:replace="award/fragments/technicalAperture :: technicalAperture"></div>
+			
+			<div th:replace="award/fragments/detailTechnicalAperture :: detailTechnicalAperture"></div>
+			
+			<div th:replace="award/fragments/comparativeChart :: comparativeChart"></div>
+			
+			<div th:replace="award/fragments/judgment :: judgment"></div>
+			
+			<div th:replace="award/fragments/contract :: contract"></div>
+			
+		</div>
+		</div>
+		<!-- ====================================================================================== -->
+		<!-- =								       Main Wrapper 						          = -->
+		<!-- ====================================================================================== -->
+		
+	    <!-- ====================================================================================== -->
+		<!-- =								     Xtreme Templates						          = -->
+		<!-- ====================================================================================== -->
+		<script type="text/javascript" th:src="@{/Xtreme/libs/jquery/dist/jquery.min.js}"></script>
+		<script type="text/javascript" th:src="@{/Xtreme/extra-libs/taskboard/js/jquery.ui.touch-punch-improved.js}"></script>
+		<script type="text/javascript" th:src="@{/Xtreme/extra-libs/taskboard/js/jquery-ui.min.js}"></script>
+		<script type="text/javascript" th:src="@{/Xtreme/libs/popper.js/dist/umd/popper.min.js}"></script>
+		<script type="text/javascript" th:src="@{/Xtreme/libs/bootstrap/dist/js/bootstrap.min.js}"></script>
+		<script type="text/javascript" th:src="@{/Xtreme/libs/bluebird/bluebird.min.js}"></script>
+		<script type="text/javascript" th:src="@{/Xtreme/libs/parsley/dist/parsley.js}"></script>
+		<script type="text/javascript" th:src="@{/Xtreme/libs/i18next/i18next.min.js}"></script>
+		<script type="text/javascript" th:src="@{/Xtreme/libs/i18next/jquery-i18next.min.js}"></script>
+		<script type="text/javascript" th:src="@{/Xtreme/libs/noty/noty.js}"></script>
+		<script type="text/javascript" th:src="@{/Xtreme/dist/js/app.min.js}"></script>
+		<script type="text/javascript" th:src="@{/Xtreme/dist/js/app.init.js}"></script>
+		<script type="text/javascript" th:src="@{/Xtreme/dist/js/app-style-switcher.js}"></script>
+		<script type="text/javascript" th:src="@{/Xtreme/libs/perfect-scrollbar/dist/perfect-scrollbar.jquery.min.js}"></script>
+		<script type="text/javascript" th:src="@{/Xtreme/extra-libs/sparkline/sparkline.js}"></script>
+		<script type="text/javascript" th:src="@{/Xtreme/dist/js/waves.js}"></script>
+		<script type="text/javascript" th:src="@{/Xtreme/dist/js/sidebarmenu.js}"></script>
+		<script type="text/javascript" th:src="@{/Xtreme/dist/js/custom.min.js}"></script>
+		<script type="text/javascript" th:src="@{/Xtreme/libs/bootstrap-sweetalert/sweetalert.min.js}"></script>
+		<script type="text/javascript" th:src="@{/Xtreme/libs/moment/min/moment.min.js}"></script>
+		<script type="text/javascript" th:src="@{/Xtreme/libs/moment/locale/es.js}"></script>
+		<script type="text/javascript" th:src="@{/Xtreme/libs/fullcalendar/dist/fullcalendar.min.js}"></script>
+		<script type="text/javascript" th:src="@{/Xtreme/libs/fullcalendar/dist/locale-all.js}"></script>
+		<script type="text/javascript" th:src="@{/Xtreme/libs/jquery-smart-wizard/src/js/jquery.smartWizard.js}"></script>
+		<script type="text/javascript" th:src="@{/Xtreme/libs/bootstrap-material-datetimepicker/js/bootstrap-material-datetimepicker-custom.js}"></script>
+		<script type="text/javascript" th:src="@{/Xtreme/libs/leaflet/leaflet.js}"></script>
+		<script type="text/javascript" th:src="@{/Xtreme/libs/select2/dist/js/select2.full.min.js}"></script>
+		<script type="text/javascript" th:src="@{/Xtreme/libs/select2/dist/js/select2.min.js}"></script>
+		<script type="text/javascript" th:src="@{/Xtreme/libs/sheetJS/xlsx.full.min.js}"></script>
+		<script type="text/javascript" th:src="@{/Xtreme/extra-libs/DataTablesV4/datatables.min.js}"></script>
+		<script type="text/javascript" th:src="@{/Xtreme/extra-libs/DataTablesV4/KeyTable-2.5.1/js/dataTables.keyTable.min.js}"></script>
+		<script type="text/javascript" th:src="@{/Xtreme/extra-libs/DataTablesV4/KeyTable-2.5.1/js/keyTable.bootstrap4.min.js}"></script>
+		<script type="text/javascript" th:src="@{/Xtreme/libs/spectrum/datatables.min.js}"></script>
+		<script type="text/javascript" th:src="@{/Xtreme/libs/spectrum/spectrum.js}"></script>
+		<!-- ====================================================================================== -->
+		<!-- =								         Elysium	     					          = -->
+		<!-- ====================================================================================== -->
+		<script type="text/javascript" th:src="@{/Elysium/Elysium.js}"></script>
+		<script type="text/javascript" th:src="@{/Elysium/Types/String.js}"></script>
+		<script type="text/javascript" th:src="@{/Elysium/Types/Image.js}"></script>
+		<script type="text/javascript" th:src="@{/Elysium/UI/Interfaces/IRevolutionarySlider.js}"></script>
+		<script type="text/javascript" th:src="@{/Elysium/UI/Interfaces/IForm.js}"></script>
+		<script type="text/javascript" th:src="@{/Elysium/UI/Interfaces/IWizard.js}"></script>
+		<script type="text/javascript" th:src="@{/Elysium/UI/Interfaces/IPaymentCard.js}"></script>
+		<script type="text/javascript" th:src="@{/Elysium/UI/Interfaces/IMsgBox.js}"></script>
+		<script type="text/javascript" th:src="@{/Elysium/UI/Interfaces/INotification.js}"></script>
+		<script type="text/javascript" th:src="@{/Elysium/UI/Interfaces/ISpinner.js}"></script>
+		<script type="text/javascript" th:src="@{/Elysium/UI/Interfaces/ITable.js}"></script>
+		<script type="text/javascript" th:src="@{/Elysium/UI/Interfaces/IDatePicker.js}"></script>
+		<script type="text/javascript" th:src="@{/Elysium/UI/Interfaces/IDateTimePicker.js}"></script>
+		<script type="text/javascript" th:src="@{/Elysium/UI/Interfaces/IDatePickerRange.js}"></script>
+		<script type="text/javascript" th:src="@{/Elysium/UI/Interfaces/IPagination.js}"></script>
+		<script type="text/javascript" th:src="@{/Elysium/UI/Interfaces/IRating.js}"></script>
+		<script type="text/javascript" th:src="@{/Elysium/UI/Interfaces/IReportViewer.js}"></script>
+		<script type="text/javascript" th:src="@{/Elysium/UI/Interfaces/IStylesheet.js}"></script>
+		<script type="text/javascript" th:src="@{/Elysium/UI/Interfaces/ICalendar.js}"></script>
+		<script type="text/javascript" th:src="@{/Elysium/UI/Entities/RevolutionarySlider.js}"></script>
+		<script type="text/javascript" th:src="@{/Elysium/UI/Entities/Form.js}"></script>
+		<script type="text/javascript" th:src="@{/Elysium/UI/Entities/Wizard.js}"></script>
+		<script type="text/javascript" th:src="@{/Elysium/UI/Entities/PaymentCard.js}"></script>
+		<script type="text/javascript" th:src="@{/Elysium/UI/Entities/MsgBox.js}"></script>
+		<script type="text/javascript" th:src="@{/Elysium/UI/Entities/Notification.js}"></script>
+		<script type="text/javascript" th:src="@{/Elysium/UI/Entities/Spinner.js}"></script>
+		<script type="text/javascript" th:src="@{/Elysium/UI/Entities/Table.js}"></script>
+		<script type="text/javascript" th:src="@{/Elysium/UI/Entities/DatePicker.js}"></script>
+		<script type="text/javascript" th:src="@{/Elysium/UI/Entities/DateTimePicker.js}"></script>
+		<script type="text/javascript" th:src="@{/Elysium/UI/Entities/DatePickerRange.js}"></script>
+		<script type="text/javascript" th:src="@{/Elysium/UI/Entities/Pagination.js}"></script>
+		<script type="text/javascript" th:src="@{/Elysium/UI/Entities/Rating.js}"></script>
+		<script type="text/javascript" th:src="@{/Elysium/UI/Entities/ReportViewer.js}"></script>
+		<script type="text/javascript" th:src="@{/Elysium/UI/Entities/Stylesheet.js}"></script>
+		<script type="text/javascript" th:src="@{/Elysium/UI/Entities/Calendar.js}"></script>
+		<script type="text/javascript" th:src="@{/Elysium/Directives/RequestError.js}"></script>
+		<script type="text/javascript" th:src="@{/Elysium/App/Services/Award/AdjudicationService.js}"></script>
+		<script type="text/javascript" th:src="@{/Elysium/App/Services/Award/EmissionService.js}"></script>
+		<script type="text/javascript" th:src="@{/Elysium/App/Services/Award/CompetitorService.js}"></script>
+		<script type="text/javascript" th:src="@{/Elysium/App/Services/Award/SupplierService.js}"></script>
+		<script type="text/javascript" th:src="@{/Elysium/App/Services/Award/InvitationService.js}"></script>
+		<script type="text/javascript" th:src="@{/Elysium/App/Services/Award/AssetService.js}"></script>
+		<script type="text/javascript" th:src="@{/Elysium/App/Services/Award/AnnexService.js}"></script>
+		<script type="text/javascript" th:src="@{/Elysium/App/Services/Award/OpeningService.js}"></script>
+		<script type="text/javascript" th:src="@{/Elysium/App/Services/Util/DateParserService.js}"></script>		
+		<script type="text/javascript" th:src="@{/Elysium/App/Interfaces/IController.js}"></script>
+		<script type="text/javascript" th:src="@{/Elysium/App/Controllers/Areas/Award/CreationController.js}"></script>		
+		<script type="text/javascript" th:src="@{/Elysium/App/Globals/BrdcstChGlobals.js}"></script>
+		<script type="text/javascript" th:src="@{/Elysium/App/Globals/I18nGlobals.js}"></script>
+		<script type="text/javascript" th:src="@{/Elysium/App/Globals/ValidatorGlobals.js}"></script>
+		<script type="text/javascript" th:src="@{/Elysium/App/Globals/SessionGlobals.js}"></script>
+		<script type="text/javascript" th:src="@{/Elysium/App/Globals/MenuItemGlobals.js}"></script>
+		<!-- ============================================================== -->
+		<!--                            Script of page                      -->
+		<!-- ============================================================== -->		
+		<script>
+		    /**
+		     * Entry point of app
+		     */
+		    $(document).ready(function () {
+		        // Define controller
+		        var controller = Elysium.Implements(new Elysium.App.Controllers.Areas.Award.CreationController({
+		            UI: {
+		                MainPanel: "#content",
+		                ModalInvitation: "#ModalInvitation",
+		                ModalAppend: "#ModalAppend",
+		                ModalTechnicalAperture: "#ModalTechnicalAperture",
+		                ModalDetailTechnicalAperture: "#ModalDetailTechnicalAperture",
+		                ModalComparativeChart: "#ModalComparativeChart",
+		                ModalJudgment: "#ModalJudgment",
+		                ModalContract: "#ModalContract",		                
+		                BtnInvitation: "#Invitation",
+		                BtnAppend: "#Append",
+		                BtnTechnicalAperture: "#TechnicalAperture",
+		                BtnDetailTechnicalAperture: "#DetailTechnicalAperture",
+		                BtnComparativeChart: "#ComparativeChart",
+		                BtnJudgment: "#Judgment",
+		                BtnContract: "#BtnContract",
+		                InvitationTable: "#SuppliersTable",
+		                AppendTable: "#AppendTable",
+		                DetailTATable1: "#DetailTATable1",
+		                DetailTATable2: "#DetailTATable2",
+		                ContractTable: "#ContractTable",
+		                ContractSelection: "#ContractSelection",
+		                ContractData: "#ContractData",
+		                ContractBtnGenerate: "#BtnGenerateContract",
+		                FormAdjudicationStatus: "[data-elysium-adjudication-status]",
+		                FormAdjudication: "#FormAdjudication",
+		                EmissionForm: "#emisionForm",
+		                EmissionDate: "#emissionDate",
+		                EmissionDateText: "#emissionDateText",
+		                CompetitorSelect: "#competitorSelect",
+		                CompetitorAdd: "#competitorAdd",
+		                CompetitorForm: "#CompetitorForm",
+		                CompetitorTradeNumber: "#tradeNumber",
+		                InvitationCreateBtn: "#InvitationCreateBtn",
+		                AnnexCopyDeliveryTerm: "#CopyDeliveryTerm",
+		                AnnexCopyDeliveryPlace: "#CopyDeliveryPlace",
+		                AnnexCreate: "#CreateAnnex",
+		                AnnexImportInput: "#AnnexImportInput",
+		                AnnexImportButton: "#AnnexImportButton",
+		                AnnexImportLabel: "#AnnexImportLabel",
+		                OpeningFormOpening: "#FormOpening",
+		                OpeningEventDate: "#eventDate",
+		                OpeningEventDateText: "#eventDateText",
+		                OpeningEventStartHour: "#eventStartHour",
+		                OpeningEventStartHourText: "#eventStartHourText",
+		                OpeningEventEndHour: "#eventEndHour",
+		                OpeningEventEndHourText: "#eventEndHourText",
+		                OpeningSupplierId: "#openingSupplierId",
+		                OpeningFailureIssuanceDate: "#failureIssuanceDate",
+		                OpeningFailureIssuanceDateText: "#failureIssuanceDateText",
+		                OpeningFailureIssuanceHour: "#failureIssuanceHour",
+		                OpeningFailureIssuanceHourText: "#failureIssuanceHourText"		                
+		            }
+		        }), [Elysium.App.Interfaces.IController]);
+		        // Initialize controller
+		        controller.Initialize();
+		    });
+		</script>
+	</body>
+</html>
