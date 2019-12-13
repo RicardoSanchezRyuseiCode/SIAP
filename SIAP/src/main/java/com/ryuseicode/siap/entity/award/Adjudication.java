@@ -23,6 +23,26 @@ public class Adjudication {
      * SOURCE_MIXED
      */
     public static final String SOURCE_MIXED = "Mixto";	
+    /**
+     * ADJUDICATION_TYPE_DIRECT
+     */
+    public static final String ADJUDICATION_TYPE_DIRECT = "Directa";
+    /**
+     * ADJUDICATION_TYPE_PERSONS
+     */
+    public static final String ADJUDICATION_TYPE_PERSONS = "A cuando menos tres personas";
+    /**
+     * ADJUDICATION_TYPE_PUBLIC
+     */
+    public static final String ADJUDICATION_TYPE_PUBLIC = "Licitación Pública";
+    /**
+     * ADJUDICATION_MODALITY_BATCH
+     */
+    public static final String ADJUDICATION_MODALITY_BATCH = "Lote";
+    /**
+     * ADJUDICATION_MODALITY_MULTIPLE
+     */
+    public static final String ADJUDICATION_MODALITY_MULTIPLE = "Múltiple";
 	/**
 	 * AdjudicationId
 	 */

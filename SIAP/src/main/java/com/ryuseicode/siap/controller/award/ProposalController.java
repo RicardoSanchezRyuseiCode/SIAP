@@ -6,7 +6,6 @@ import java.nio.file.Paths;
 import java.text.DateFormat;
 import java.text.SimpleDateFormat;
 import java.util.Date;
-import java.util.List;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
@@ -31,60 +30,61 @@ import org.springframework.web.server.ResponseStatusException;
 
 import com.ryuseicode.siap.entity.award.AdjudicationDocument;
 import com.ryuseicode.siap.exception.ServiceException;
-import com.ryuseicode.siap.paraminput.award.AnnexCreationParam;
-import com.ryuseicode.siap.paramoutput.award.AnnexParamOutput;
+import com.ryuseicode.siap.paraminput.award.ListProposalCreationParam;
 import com.ryuseicode.siap.properties.FolderProperties;
 import com.ryuseicode.siap.service.award.imp.AdjudicationDocumentService;
-import com.ryuseicode.siap.service.award.imp.AnnexService;
-import com.ryuseicode.siap.wrapper.award.imp.AnnexWrapper;
+import com.ryuseicode.siap.wrapper.award.imp.ProposalWrapper;
 /**
- * @name AnnexController
- * {@summary Controller to expose annex endpoints }
+ * @name ProposalController
+ * {@summary Controller class for proposal }
  * @author Ricardo Sanchez Romero (ricardo.sanchez@ryuseicode.com)
- * @since Dec 8, 2019
+ * @since Dec 10, 2019
  */
 @Controller
-public class AnnexController {
-	/**
-	 * AnnexService
-	 */
-	@Autowired
-	private AnnexService annexService;
-	/**
-	 * AnnexWrapper
-	 */
-	@Autowired
-	private AnnexWrapper annexWrapper;
+public class ProposalController {
 	/**
 	 * AdjudicationDocumentService
 	 */
 	@Autowired
 	private AdjudicationDocumentService adjudicationDocumentService;
 	/**
+	 * ProposalWrapper
+	 */
+	@Autowired
+	private ProposalWrapper proposalWrapper;
+	/**
 	 * folderProperties
 	 */
 	@Autowired
 	private FolderProperties folderProperties;
 	/**
-	 * @name getbyAdjudicationId
-	 * {@summary Method to get a collection of AnnexParamOutput by adjudicationId }
-	 * @param adjudicationId
+	 * @name create
+	 * {@summary Method to create proposal with items }
+	 * @param listProposalCreationParams
+	 * @param response
 	 * @return
 	 */
-	@ResponseBody
-	@GetMapping(path = "/award/annex/getByAdjudicationId/{adjudicationId}")
-	public List<AnnexParamOutput> getbyAdjudicationId(@PathVariable("adjudicationId") int adjudicationId) {
-		return this.annexService.GetByAdjudicationId(adjudicationId);
+	@PostMapping(path = "/award/proposal/create", consumes = "application/json") 
+	public ResponseEntity<Object> create(@RequestBody ListProposalCreationParam  listProposalCreationParams, HttpServletResponse response) {
+		try {
+	    	return new ResponseEntity<Object>(this.proposalWrapper.create(listProposalCreationParams) , HttpStatus.OK);
+	    }
+	    catch (ServiceException ex) {
+	    	throw new ResponseStatusException(HttpStatus.INTERNAL_SERVER_ERROR, ex.getMessage());
+	    }
+	    catch (Exception ex) {
+	    	throw new ResponseStatusException(HttpStatus.INTERNAL_SERVER_ERROR, String.format("Error al crear adjudicación: %s", ex.getMessage()));
+	    }
 	}
 	/**
-	 * @name uplodad
-	 * {@summary Method to upload an asset file to import the quantity}
+	 * @name upload
+	 * {@summary Method to upload file to import unit price }
 	 * @param file
 	 * @param response
 	 * @return
 	 */
-	@PostMapping("/award/annex/upload") 
-    public ResponseEntity<Object> upload(@RequestParam("file") MultipartFile file, HttpServletResponse response) {
+	@PostMapping("/award/proposal/upload/{adjudicationId}") 
+    public ResponseEntity<Object> upload(@PathVariable("adjudicationId") int adjudicationId, @RequestParam("file") MultipartFile file, HttpServletResponse response) {
 		// Check if file is not empty
 		if (file.isEmpty()) {
 			throw new ResponseStatusException(HttpStatus.INTERNAL_SERVER_ERROR, "No ha enviado algpun archivo a procesar");
@@ -104,43 +104,24 @@ public class AnnexController {
             // Write files to path
             Files.write(path, bytes);
             // After save the file process to save the list of goods
-            return new ResponseEntity<Object>(this.annexWrapper.importFile(pathStr), HttpStatus.OK);  
+            return new ResponseEntity<Object>(this.proposalWrapper.importFile(adjudicationId, pathStr), HttpStatus.OK);
         } 
 		catch (ServiceException ex) {
 	    	throw new ResponseStatusException(HttpStatus.INTERNAL_SERVER_ERROR, ex.getMessage());
 	    }
 	    catch (Exception ex) {
-	    	throw new ResponseStatusException(HttpStatus.INTERNAL_SERVER_ERROR, String.format("Error al importar anexos: %s", ex.getMessage()));
-	    }
-	}
-	/**
-	 * @name create
-	 * {@summary Method to create annex and documents for adjudication }
-	 * @param annexCreationParam
-	 * @param response
-	 * @return
-	 */
-	@PostMapping(path = "/award/annex/create", consumes = "application/json") 
-	public ResponseEntity<Object> create(@RequestBody AnnexCreationParam  annexCreationParam, HttpServletResponse response) {
-		try {
-	    	return new ResponseEntity<Object>(this.annexWrapper.create(annexCreationParam.getAdjudicationId(), annexCreationParam.getAnnexs()), HttpStatus.OK);
-	    }
-	    catch (ServiceException ex) {
-	    	throw new ResponseStatusException(HttpStatus.INTERNAL_SERVER_ERROR, ex.getMessage());
-	    }
-	    catch (Exception ex) {
-	    	throw new ResponseStatusException(HttpStatus.INTERNAL_SERVER_ERROR, String.format("Error al crear adjudicación: %s", ex.getMessage()));
+	    	throw new ResponseStatusException(HttpStatus.INTERNAL_SERVER_ERROR, String.format("Error al importar precios: %s", ex.getMessage()));
 	    }
 	}
 	/**
 	 * @name download
-	 * {@summary Method to download annex file}
+	 * {@summary Method to download document }
 	 * @param fileName
 	 * @param request
 	 * @return
 	 */
 	@ResponseBody
-	@GetMapping(path = "/award/annex/download/{fileName:.+}")
+	@GetMapping(path = "/award/proposal/download/{fileName:.+}")
 	public ResponseEntity<Resource> download(@PathVariable("fileName") String fileName, HttpServletRequest request) {
 		try {
 			// Get document
@@ -157,7 +138,7 @@ public class AnnexController {
 	                .body(new ByteArrayResource(Files.readAllBytes(Paths.get(adjudicationDocument.getPath()))));	
 	    }
 	    catch (Exception ex) {
-	    	throw new ResponseStatusException(HttpStatus.INTERNAL_SERVER_ERROR, String.format("Error al descargar anexo: %s", ex.getMessage()));
+	    	throw new ResponseStatusException(HttpStatus.INTERNAL_SERVER_ERROR, String.format("Error al descargar apertura: %s", ex.getMessage()));
 	    }
-	}
+	}	
 }

@@ -1,58 +1,28 @@
 /**
- * @name AnnexService
+ * @name ProposalService
  * @abstract Service class
  * @author Ricardo Sanchez Romero (ricardo.sanchez@ryuseicode.com)
  * @CreationDate 2019-12-01
  */
-Elysium.App.Services.Award.AnnexService = (function () {
+Elysium.App.Services.Award.ProposalService = (function () {
     /**********************************************/
     /*                   Variables                */
     /**********************************************/
-    var Api = '/award/annex';
+    var Api = '/award/proposal';
     /**********************************************/
     /*                   Methods                  */
     /**********************************************/
     /**
-     * @name Get
-     * @abstract Method to get a collection of user objects
-     */
-    var GetByAdjudicationId = function (adjudicationId) {
-        // Define promise
-        var deferred = new $.Deferred();
-        // Check Access        
-        var url = Api + '/getByAdjudicationId/' + adjudicationId;
-        $.ajax({
-            // tipo de llamado
-            type: 'GET',
-            // url del llamado a ajax
-            url: url,
-            // obtener siempre los datos mas actualizados
-            cache: false,
-            // tipo de datos de regreso
-            dataType: "json",
-            // funcion en caso de exito
-            success: function (data, textStatus, jqXHR) {
-                deferred.resolve(data);
-            },
-            // funcion en caso de error
-            error: function (xhr, status, error) {
-                deferred.reject(xhr);
-            }
-        });
-        // return promise
-        return deferred.promise();
-    };
-    /**
      * @name Save
      * @abstract Method to update an user
      */
-    var Create = function (annexCreationParam) {
+    var Create = function (listProposalCreationParam) {
         // Define promise
         var deferred = new $.Deferred();
         // Get type and url
         var url = Api + '/create';
         var type = 'POST';
-        var objJson = JSON.stringify(annexCreationParam);
+        var objJson = JSON.stringify(listProposalCreationParam);
         $.ajax({
             // tipo de llamado
             type: type,
@@ -80,11 +50,11 @@ Elysium.App.Services.Award.AnnexService = (function () {
      * @name Upload
      * @abstract Method to upload a file to server
      */
-    var Upload = function (formData, handlerProgress) {
+    var Upload = function (adjudicationId, formData, handlerProgress) {
         // Define promise
         var deferred = new $.Deferred();
         // Get type and url
-        var url = Api + '/upload';
+        var url = Api + '/upload/' + adjudicationId;
         var type = 'POST';
         $.ajax({
             // tipo de llamado
@@ -130,7 +100,6 @@ Elysium.App.Services.Award.AnnexService = (function () {
     /*                 Encapsulate                */
     /**********************************************/
     return {
-    	GetByAdjudicationId: GetByAdjudicationId,
     	Create: Create,
     	Upload: Upload,
     	Download: Download

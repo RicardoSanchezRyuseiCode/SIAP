@@ -32,6 +32,11 @@
 	    <script src="https://oss.maxcdn.com/libs/html5shiv/3.7.0/html5shiv.js"></script>
 	    <script src="https://oss.maxcdn.com/libs/respond.js/1.4.2/respond.min.js"></script>
 	 	<![endif]-->
+	 	<style>
+	 		table.dataTable tbody>tr.selected, table.dataTable tbody>tr>.selected {
+	 		    background-color: #a0a6ac !important;
+	 		}
+	 	</style>
     </head>
 	<body>
 		<!-- ====================================================================================== -->
@@ -399,6 +404,7 @@
 		<script type="text/javascript" th:src="@{/Elysium/App/Services/Award/AssetService.js}"></script>
 		<script type="text/javascript" th:src="@{/Elysium/App/Services/Award/AnnexService.js}"></script>
 		<script type="text/javascript" th:src="@{/Elysium/App/Services/Award/OpeningService.js}"></script>
+		<script type="text/javascript" th:src="@{/Elysium/App/Services/Award/ProposalService.js}"></script>
 		<script type="text/javascript" th:src="@{/Elysium/App/Services/Util/DateParserService.js}"></script>		
 		<script type="text/javascript" th:src="@{/Elysium/App/Interfaces/IController.js}"></script>
 		<script type="text/javascript" th:src="@{/Elysium/App/Controllers/Areas/Award/CreationController.js}"></script>		
@@ -468,7 +474,11 @@
 		                OpeningFailureIssuanceDate: "#failureIssuanceDate",
 		                OpeningFailureIssuanceDateText: "#failureIssuanceDateText",
 		                OpeningFailureIssuanceHour: "#failureIssuanceHour",
-		                OpeningFailureIssuanceHourText: "#failureIssuanceHourText"		                
+		                OpeningFailureIssuanceHourText: "#failureIssuanceHourText",
+		                ProposalImportInput: "#ProposalImportInput",
+		                ProposalImportText: "#ProposalImportText",
+		                ProposalImporButton: "#ProposalImporButton",
+		                ProposalSave: "#ProposalSave"
 		            }
 		        }), [Elysium.App.Interfaces.IController]);
 		        // Initialize controller

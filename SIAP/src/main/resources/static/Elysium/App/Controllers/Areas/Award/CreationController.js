@@ -17,6 +17,7 @@ Elysium.App.Controllers.Areas.Award.CreationController = function (arguments) {
 	var AnnexService = Elysium.App.Services.Award.AnnexService;
 	var AssetService = Elysium.App.Services.Award.AssetService;
 	var OpeningService = Elysium.App.Services.Award.OpeningService;
+	var ProposalService = Elysium.App.Services.Award.ProposalService;
 	// Util
 	var DateParserService = Elysium.App.Services.Util.DateParserService;
 	/*******************************************************************************/
@@ -101,14 +102,114 @@ Elysium.App.Controllers.Areas.Award.CreationController = function (arguments) {
         selector: Attr.UI.DetailTATable1,
         responsive: true,
         paging: true,
-        columnDefs: [],
+        keys: true,
+        columnDefs: [
+        	
+        	{
+    			targets: 1,
+                searchable: false,
+                orderable: false,
+                className: 'dt-center',
+                render: function (data, type, full, meta) {
+                    return '<select class="form-control" data-adjudication-proposal-technicalsubmitted>' +
+                    			'<option selected>Seleccionar...</option>' +
+                    			'<option value="Si Presentó">Si Presentó</option>' +
+                    			'<option value="No Presentó">No Presentó</option>' +
+                    	   '</select>';
+                }
+    		},
+    		{
+    			targets: 2,
+                searchable: false,
+                orderable: false,
+                className: 'dt-center',
+                render: function (data, type, full, meta) {
+                	return '<input type="text" class="form-control" value="" data-adjudication-proposal-technicalremark />';
+                }
+    		},
+    		{
+    			targets: 3,
+                searchable: false,
+                orderable: false,
+                className: 'dt-center',
+                render: function (data, type, full, meta) {
+                    return '<select class="form-control" data-adjudication-proposal-economicsubmitted>' +
+                    			'<option selected>Seleccionar...</option>' +
+                    			'<option value="Si Presentó">Si Presentó</option>' +
+                    			'<option value="No Presentó">No Presentó</option>' +
+                    	   '</select>';
+                }
+    		},
+    		{
+    			targets: 4,
+                searchable: false,
+                orderable: false,
+                className: 'dt-center',
+                render: function (data, type, full, meta) {
+                	return '<input type="text" class="form-control" value="" data-adjudication-proposal-economicremark />';
+                }
+    		},
+    		{
+    			targets: 5,
+                searchable: false,
+                orderable: false,
+                className: 'dt-center',
+                render: function (data, type, full, meta) {
+                	return '<label data-adjudication-proposal-totalamount>$0.00</label>';
+                }
+    		},
+    		{
+    			targets: 6,
+                searchable: false,
+                orderable: false,
+                className: 'dt-center',
+                render: function (data, type, full, meta) {
+                	return '<label data-adjudication-proposal-status>Sin modificar</label>';
+                }
+    		}
+        ],
+        columns: [
+        	{ data: "supplier.name" },
+        	{ data: "" },
+        	{ data: "" },
+        	{ data: "" },
+        	{ data: "" },
+        	{ data: "" },
+        	{ data: "proposal.status" }
+        ]
     }), [Elysium.UI.Interfaces.ITable]);
     //DATable2
     var IDTA2DataTable = Elysium.Implements(new Elysium.UI.Entities.Table({
         selector: Attr.UI.DetailTATable2,
         responsive: true,
         paging: true,
-        columnDefs: [],
+        keys: true,
+        columnDefs: [
+        	{
+    			targets: 2,
+                searchable: false,
+                orderable: false,
+                className: 'dt-center',
+                render: function (data, type, full, meta) {
+                	return '<input type="number" min="0" step="0.05" class="form-control" value="' + full.unitPrice + '" data-adjudication-proposal-item-unitprice />';
+                }
+    		},
+        	{
+    			targets: 3,
+                searchable: false,
+                orderable: false,
+                className: 'dt-center',
+                render: function (data, type, full, meta) {
+                	return '<label data-adjudication-proposal-item-total>$' + (Math.round(full.totalAmount * 100) / 100).toFixed(2)  + '</label>';
+                }
+    		}
+        ],
+        columns: [
+        	{ data: "asset.name" },
+        	{ data: "annex.quantity" },
+        	{ data: "" },
+        	{ data: "" },
+        ]
     }), [Elysium.UI.Interfaces.ITable]);
     // Contract table
     var IContractTable = Elysium.Implements(new Elysium.UI.Entities.Table({
@@ -154,7 +255,11 @@ Elysium.App.Controllers.Areas.Award.CreationController = function (arguments) {
     var OpeningForm = Elysium.Implements(new Elysium.UI.Entities.Form(Attr.UI.OpeningFormOpening), [Elysium.UI.Interfaces.IForm]);
     // Emission Validation form
     var OpeningParsley = null;
-    
+    /*************************************/
+    /*                Proposal           */
+    /*************************************/
+    // Last cell on focus
+    var LastProposalCellOnFocus = null;
     /*******************************************************************************/
     /*                                   Methods                                   */
     /*******************************************************************************/
@@ -818,11 +923,11 @@ Elysium.App.Controllers.Areas.Award.CreationController = function (arguments) {
      * Method to check if is a valid file
      */
     var ValidFile = function (type) {
-        //switch (type) {
-        //    case 'application/vnd.ms-excel': return true;
-        //    case 'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet': return true;
-        //    default: return false;
-        //}
+       // switch (type) {
+       //     case 'application/vnd.ms-excel': return true;
+       //     case 'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet': return true;
+       //     default: return false;
+       // }
     	return true;
     }
     /**
@@ -1111,6 +1216,408 @@ Elysium.App.Controllers.Areas.Award.CreationController = function (arguments) {
     var OpenDetailTechnicalAperture = function() {
     	$(Attr.UI.ModalDetailTechnicalAperture ).modal("show");
     }
+    /**
+     * @name GetCompetitorsProposal
+     * @asbtract Method to load competitors when modal show
+     */    
+    var GetCompetitorsProposal = function() { 
+    	// Define hide function
+    	var hide = function() { ISpinner.Hide(Attr.UI.ModalDetailTechnicalAperture + ' .modal-dialog'); };
+    	// Show spinner
+    	ISpinner.Show(Attr.UI.ModalDetailTechnicalAperture + ' .modal-dialog');
+    	// request competitor data
+    	CompetitorService.GetByAdjudicationId(GLOBAL_ADJUDICATION.adjudicationId).then(
+			function(competitors) {
+				// request annex data
+				AnnexService.GetByAdjudicationId(GLOBAL_ADJUDICATION.adjudicationId).then(
+					function(annexs) {
+						// Loop to assign proposals
+						competitors.forEach(function(element, index, array) {
+							// Define proposal
+							element['proposal'] = {};
+							// Assign status
+							element['proposal']['status'] = 'Sin modificar';
+							// Assign items
+							element['items'] = [];
+							// loop in annex to get the data
+							annexs.forEach(function(annex, index, array) {
+								element['items'].push({
+									annexId: annex.annex.annexId,
+									unitPrice: 0,
+									totalAmount: 0,
+									annex: annex.annex,
+									asset: annex.asset
+								});
+							});
+						});
+						// Assign data to table
+						IDTA1DataTable.SetData(competitors);
+						// Hide spinner
+			            hide();
+					},
+					function(xhr){
+						// Show error
+			            Elysium.Directives.RequestError.ThrowXhr(xhr);
+			            // Hide spinner
+			            hide();
+					}
+				);
+			}, 
+			function(xhr){
+				// Show error
+	            Elysium.Directives.RequestError.ThrowXhr(xhr);
+	            // Hide spinner
+	            hide();
+			}
+		);
+    }
+    /**
+     * @name SetProposalFocus
+     * @abstract Method to set proposal on focus
+     */
+    var SetProposalFocus = function(e, datatable, cell) {
+    	// Set focus on element
+    	if($(cell.node()).children().length > 0) {
+    		$(cell.node()).children().select();
+    		$(cell.node()).children().focus();
+    	}
+    	// Remove selected
+    	$(cell.node()).parent().parent().find('.selected').removeClass('selected');
+    	// Set selected
+    	$(cell.node()).parent().addClass('selected');
+    	// trigger change to put items in table below or not :p
+    	$(cell.node()).parent().find("[data-adjudication-proposal-technicalsubmitted]").trigger('change');
+    	// Store the last cell on focus to put the total
+    	LastProposalCellOnFocus = cell; 
+    }
+    /**
+     * @name SetProposalData
+     * @abstract Method to set proposal data
+     */
+    var SetProposalData = function(e, datatable, cell) {
+    	// if node is checked get row and then data
+		var data = cell.row(cell.node()).data();
+		// Set data
+		data.proposal['technicalSubmitted'] = $(cell.node()).parent().find("[data-adjudication-proposal-technicalsubmitted]").val();
+		data.proposal['technicalRemark'] = $(cell.node()).parent().find("[data-adjudication-proposal-technicalremark]").val().trim();
+		data.proposal['economicSubmitted'] = $(cell.node()).parent().find("[data-adjudication-proposal-economicsubmitted]").val();
+		data.proposal['economicRemark'] = $(cell.node()).parent().find("[data-adjudication-proposal-economicremark]").val().trim();
+    }
+    /**
+     * @name ValidateProposalStatus
+     * @abstract Method to validate status
+     */
+    var ValidateProposalStatus = function(row, data) {
+    	// Check if both are with correct values
+    	if(data.proposal.technicalSubmitted == 'Si Presentó' && data.proposal.economicSubmitted == 'Si Presentó') {
+    		// Change status of row
+    		data.proposal.status = 'Cargar precios unitarios';
+    		$(row.node()).find("[data-adjudication-proposal-status]").text('Cargar precios unitarios');
+    		// Check if proposal is complete
+    		var flag = true;
+    		data.items.forEach(function(element, index, array) {
+    			if(element.unitPrice <= 0)
+    				flag = false;
+    		});
+    		if(flag) {
+    			data.proposal.status = 'Completa';
+        		$(row.node()).find("[data-adjudication-proposal-status]").text('Completa');
+    		}
+    		// Load items in the table below
+    		IDTA2DataTable.SetData(data.items);
+    	}
+    	else if(data.proposal.technicalSubmitted == 'No Presentó' && data.proposal.economicSubmitted == 'No Presentó') {
+    		// Change status of row
+    		data.proposal.status = 'Completada Sin Presentar';
+    		$(row.node()).find("[data-adjudication-proposal-status]").text('Completada Sin Presentar');
+    		// Load items in the table below
+    		IDTA2DataTable.SetData([]);
+    	}
+    	else if(data.proposal.technicalSubmitted == 'Si Presentó' && data.proposal.economicSubmitted == 'No Presentó') {
+    		// Change status of row
+    		data.proposal.status = 'Invalida';
+    		$(row.node()).find("[data-adjudication-proposal-status]").text('Invalida');
+    		// Load items in the table below
+    		IDTA2DataTable.SetData([]);
+    	}
+    	else if(data.proposal.technicalSubmitted == 'No Presentó' && data.proposal.economicSubmitted == 'Si Presentó') {
+    		// Change status of row
+    		data.proposal.status = 'Invalida';
+    		$(row.node()).find("[data-adjudication-proposal-status]").text('Invalida');
+    		// Load items in the table below
+    		IDTA2DataTable.SetData([]);
+    	}
+    	else if(data.proposal.technicalSubmitted == 'Si Presentó' && data.proposal.economicSubmitted == 'Seleccionar...') {
+    		// Change status of row
+    		data.proposal.status = 'Seleccionar Propuesta Economica';
+    		$(row.node()).find("[data-adjudication-proposal-status]").text('Seleccionar Propuesta Economica');
+    		// Load items in the table below
+    		IDTA2DataTable.SetData([]);
+    	}
+    	else if(data.proposal.technicalSubmitted == 'No Presentó' && data.proposal.economicSubmitted == 'Seleccionar...') {
+    		// Change status of row
+    		data.proposal.status = 'Seleccionar Propuesta Economica';
+    		$(row.node()).find("[data-adjudication-proposal-status]").text('Seleccionar Propuesta Economica');
+    		// Load items in the table below
+    		IDTA2DataTable.SetData([]);
+    	}
+    	else if(data.proposal.technicalSubmitted == 'Seleccionar...' && data.proposal.economicSubmitted == 'Si Presentó') {
+    		// Change status of row
+    		data.proposal.status = 'Seleccionar Propuesta Tecnica';
+    		$(row.node()).find("[data-adjudication-proposal-status]").text('Seleccionar Propuesta Tecnica');
+    		// Load items in the table below
+    		IDTA2DataTable.SetData([]);
+    	}
+    	else if(data.proposal.technicalSubmitted == 'Seleccionar...' && data.proposal.economicSubmitted == 'No Presentó') {
+    		// Change status of row
+    		data.proposal.status = 'Seleccionar Propuesta Tecnica';
+    		$(row.node()).find("[data-adjudication-proposal-status]").text('Seleccionar Propuesta Tecnica');
+    		// Load items in the table below
+    		IDTA2DataTable.SetData([]);
+    	}
+    	else if(data.proposal.technicalSubmitted == 'Seleccionar...' && data.proposal.economicSubmitted == 'Seleccionar...') {
+    		// Change status of row
+    		data.proposal.status = 'Sin modificar';
+    		$(row.node()).find("[data-adjudication-proposal-status]").text('Sin modificar');
+    		// Load items in the table below
+    		IDTA2DataTable.SetData([]);
+    	}
+    }
+    /**
+     * @name ProposalTechnicalValidation
+     * @abstract Method to check if enable the table below with data
+     */
+    var ProposalTechnicalValidation = function(object, row, data, event) {
+    	// Set data
+    	data.proposal['technicalSubmitted'] = $(row.node()).find('[data-adjudication-proposal-technicalsubmitted]').val();
+    	data.proposal['economicSubmitted'] = $(row.node()).find('[data-adjudication-proposal-economicsubmitted]').val();
+    	// Validate proposal
+    	ValidateProposalStatus(row, data);
+    }
+    /**
+     * @name ProposalEconomicValidation
+     * @abstract Method to check if enable the table below with data
+     */
+    var ProposalEconomicValidation = function(object, row, data, event) {
+    	// Set data
+    	data.proposal['technicalSubmitted'] = $(row.node()).find('[data-adjudication-proposal-technicalsubmitted]').val();
+    	data.proposal['economicSubmitted'] = $(row.node()).find('[data-adjudication-proposal-economicsubmitted]').val();
+    	// Validate proposal
+    	ValidateProposalStatus(row, data);
+    }
+    /**
+     * @name SetProposalItemFocus
+     * @abstract Method to set focus on item box
+     */
+    var SetProposalItemFocus = function(e, datatable, cell) {
+    	// Set focus on element
+		$(cell.node()).find("input").select();
+		$(cell.node()).find("input").focus();
+    }
+    /**
+     * @name SetProposalItemData
+     * @abstract Method to set data on item
+     */
+    var SetProposalItemData = function(e, datatable, cell) {
+    	// if node is checked get row and then data
+		var data = cell.row(cell.node()).data();
+		// Get unit price
+		var unitPrice = $(cell.node()).parent().find("[data-adjudication-proposal-item-unitprice]").val();
+		// Check if is valid numner
+		if(!isNaN(parseFloat(unitPrice)) && isFinite(unitPrice)) {
+			if(Number(unitPrice) > 0 && Number(unitPrice) < 2000000000) {
+				// Set unit price
+				data.unitPrice = Number(unitPrice);
+				// Set total
+				data.totalAmount = data.annex.quantity * data.unitPrice;
+				// Set text
+				$(cell.node()).parent().find("[data-adjudication-proposal-item-total]").text('$' + (Math.round(data.totalAmount * 100) / 100).toFixed(2));
+				// Calculate total global
+				var total = 0;
+				var flag = true;
+				var items = IDTA2DataTable.GetData();
+				items.forEach(function(item, index, array) {
+					total = total + item.totalAmount;
+					if(item.unitPrice <= 0)
+						flag = false;
+				});
+				$(LastProposalCellOnFocus.node()).parent().find('[data-adjudication-proposal-totalamount]').text('$' + (Math.round(total * 100) / 100).toFixed(2));
+				if(flag) {
+					$(LastProposalCellOnFocus.node()).parent().find("[data-adjudication-proposal-status]").text('Completa');
+					LastProposalCellOnFocus.rows().data().toArray()[LastProposalCellOnFocus.index().row].proposal.status = 'Completa';
+				}
+			}
+			else {
+				data.unitPrice = 0;
+				$(cell.node()).parent().find("[data-adjudication-proposal-item-unitprice]").val('0');
+			}
+		}
+		else {
+			data.unitPrice = 0;
+			$(cell.node()).parent().find("[data-adjudication-proposal-item-unitprice]").val('0');
+		}
+    }
+    /**
+     * @name UploadProposalFile
+     * @abstract Method to upload file
+     */
+    var UploadProposalFile = function() {
+    	// Check if are items to match
+    	if(IDTA2DataTable.GetData().length <= 0) {
+    		Elysium.UI.Entities.Notification.Warning({ text: "No ha seleccionado un competidor para cargar sus precios", time: Elysium.MsgTime })
+    		return;
+    	}
+    	// 1. Check if the input have a selected file
+        var file = $(Attr.UI.ProposalImportInput).get(0).files[0];
+        if (typeof file == "undefined") {
+        	Elysium.UI.Entities.Notification.Warning({ text: "Debe Seleccionar un archivo", time: Elysium.MsgTime })
+            return;
+        }
+        // 2. Check if the file is valid
+        if (!ValidFile(file.type)) {
+        	Elysium.UI.Entities.Notification.Warning({ text: "La extension del archivo es invalida", time: Elysium.MsgTime })
+            return;
+        }
+        // 3. Check the size
+        if (SizeFile(file.size)) {
+        	Elysium.UI.Entities.Notification.Warning({ text: "El tamaño del archivo debe ser menor o igual a 15Mb", time: Elysium.MsgTime })
+            return;
+        }
+        // Create form data to send
+        var formData = new FormData();
+        formData.append('file', file);
+        // Show confirmation dialog
+        Elysium.UI.Entities.MsgBox.DialogQuestion(
+            "Importar archivo",
+            "¿Desea cargar este archivo?",
+            function (resolve, reject) {
+                ProposalService.Upload(GLOBAL_ADJUDICATION.adjudicationId ,formData, HandlerProgressUpload).then(
+                    // On Success
+                    function (data) {
+                    	// Get data on table
+                    	var itemsData = IDTA2DataTable.GetData();
+                    	var total = 0;
+                    	// loop in item data 
+                    	itemsData.forEach(function(item, index, array) {
+                    		// loop in import data to set unit price
+                    		for(var i = 0; i < data.length; i++) {
+                    			if(item.annexId == data[i].item.annexId) {
+                    				item.unitPrice = data[i].item.unitPrice;
+                    				item.totalAmount = item.annex.quantity * item.unitPrice;
+                    				total = total + item.totalAmount; 
+                    				break;
+                    			}
+                    		}
+                    	});
+                    	// Set total
+        				$(LastProposalCellOnFocus.node()).parent().find('[data-adjudication-proposal-totalamount]').text('$' + (Math.round(total * 100) / 100).toFixed(2));
+        				// Set data again in table
+                    	IDTA2DataTable.SetData(itemsData);
+                    	// Check if all items are distinct of zero change status to complete
+                    	var flag = true;
+                    	for(var i = 0; i < itemsData.length; i++){
+                    		if(itemsData[i].unitPrice <= 0) {
+                    			flag = false;
+                    			break;
+                    		}
+                		}
+                    	if(flag) {
+                    		$(LastProposalCellOnFocus.node()).parent().find("[data-adjudication-proposal-status]").text('Completa');
+                    		LastProposalCellOnFocus.rows().data().toArray()[LastProposalCellOnFocus.index().row].proposal.status = 'Completa';
+                    	}
+                    	// Clean Input
+                    	CleanProposalInput();
+                    	// Close message
+                    	Elysium.UI.Entities.MsgBox.Close();
+                    	// Show success message
+                    	Elysium.UI.Entities.Notification.Success({ text: "El archivo se ha procesado correctamente", time: Elysium.NotificationTime });
+                    },
+                    // On Error
+                    function (xhr) {
+                    	// Close message
+                    	Elysium.UI.Entities.MsgBox.Close();
+                        // Show error
+                        Elysium.Directives.RequestError.ThrowXhr(xhr);
+                    }
+                );
+            }
+        );
+    	
+    }
+    /**
+     * Event fired when some file is selected
+     */
+    var SetProposalFileName = function () {
+        // Check if we have file
+        if (event.target.files.length > 0) {
+            // Read input file
+            var file = event.target.files[0];
+            $(Attr.UI.ProposalImportText).text(file.name);
+        }
+        else 
+            $(Attr.UI.ProposalImportText).text("Seleccionar archivo");
+    }
+    /**
+     * @name CleanInput
+     * @abstract Event fired when modal close
+     */
+    var CleanProposalInput = function() {
+    	$(Attr.UI.ProposalImportInput).val('');
+    	$(Attr.UI.ProposalImportText).text("Seleccionar archivo");
+    }
+    /**
+     * @name SaveProposal
+     * @abstract Method to save proposal
+     */
+    var SaveProposal = function() {
+    	// Get data from proposal table 
+    	var listProposal = IDTA1DataTable.GetData();
+    	// Loop in list to check if all are complete or ignored
+    	for(var i = 0; i < listProposal.length; i++) {
+    		if(listProposal[i].proposal.status != 'Completa' &&  listProposal[i].proposal.status != 'Completada Sin Presentar') {
+    			Elysium.UI.Entities.Notification.Warning({ text: "No ha completado las propuestas de los competidores", time: Elysium.MsgTime })
+    			return;
+    		}
+    	}
+    	// Loop to assign compertitor id
+    	listProposal.forEach(function(element, index, array) {
+    		element.proposal['competitorId'] = element.competitor.competitorId;
+    	});
+    	// Define params
+    	var params = {
+    		adjudicationId: GLOBAL_ADJUDICATION.adjudicationId,
+    		proposalCreationParams: listProposal
+    	}
+    	// Show confirmation dialog
+        Elysium.UI.Entities.MsgBox.DialogQuestion(
+            'Crear Detalle de Apertura',
+            '¿Desea guardar el detalle de apertura ?',
+            function () {    	            	
+            	// Send information to server
+            	ProposalService.Create(params).then(            	
+                    function (fileName) {
+                    	// Close message
+                    	Elysium.UI.Entities.MsgBox.Close();
+                        // Show success information
+                        Elysium.UI.Entities.Notification.Success({ text: "El detalle de apertura técnica económica  se ha creado correctamente", time: Elysium.NotificationTime });
+                        // Download file
+                    	ProposalService.Download(fileName);
+                        // Close modal
+                        $(Attr.UI.ModalDetailTechnicalAperture).modal("hide");
+                        // Disable button to show modal and enable second button
+                        $(Attr.UI.BtnDetailTechnicalAperture).prop('disabled', true);
+                    	$(Attr.UI.BtnComparativeChart).prop('disabled', false);
+                    },
+                    function (xhr) {
+                    	// Close message
+                    	Elysium.UI.Entities.MsgBox.Close();
+                        // Show error
+                        Elysium.Directives.RequestError.ThrowXhr(xhr);
+                    }
+                );
+            }
+        );
+    }
     /*************************************/
     /*           Comparative Chart       */
     /*************************************/
@@ -1176,7 +1683,7 @@ Elysium.App.Controllers.Areas.Award.CreationController = function (arguments) {
     	// Block buttons from bottom
     	$(Attr.UI.BtnInvitation).prop('disabled', true);
     	$(Attr.UI.BtnAppend).prop('disabled', true);
-    	//$(Attr.UI.BtnTechnicalAperture).prop('disabled', true);
+    	$(Attr.UI.BtnTechnicalAperture).prop('disabled', true);
     	$(Attr.UI.BtnDetailTechnicalAperture).prop('disabled', true);
     	$(Attr.UI.BtnComparativeChart).prop('disabled', true);
     	$(Attr.UI.BtnJudgment).prop('disabled', true);
@@ -1289,8 +1796,6 @@ Elysium.App.Controllers.Areas.Award.CreationController = function (arguments) {
 			        }), [Elysium.UI.Interfaces.IDateTimePicker]);
 					OpeningEventEndHourTimePicker.Initialize();
 					OpeningEventEndHourTimePicker.OnChangeEvt(OpeningEventEndHourTimePickerChange);
-					
-					
 					// failure issuance date picker
 					var OpeningFailureIssuanceDateDatePicker = Elysium.Implements(new Elysium.UI.Entities.DateTimePicker({
 			            selector: $(Attr.UI.OpeningFailureIssuanceDate),
@@ -1321,6 +1826,21 @@ Elysium.App.Controllers.Areas.Award.CreationController = function (arguments) {
 					OpeningParsley = $(Attr.UI.OpeningFormOpening).parsley().on('form:submit', OnSuccessOpening);
 					// Load competitors when modal show
 					$(Attr.UI.ModalTechnicalAperture).on('shown.bs.modal', GetCompetitors);
+					/************************************/
+			        /*               Proposal           */
+			        /************************************/
+					// Load competitors for proposal when modal show
+					$(Attr.UI.ModalDetailTechnicalAperture).on('shown.bs.modal', GetCompetitorsProposal);
+					// Bind events
+					IDTA1DataTable.OnCellFocus(SetProposalFocus);
+					IDTA1DataTable.OnCellBlur(SetProposalData);
+					IDTA1DataTable.OnEvent("change", "[data-adjudication-proposal-technicalsubmitted]", ProposalTechnicalValidation);
+					IDTA1DataTable.OnEvent("change", "[data-adjudication-proposal-economicsubmitted]", ProposalEconomicValidation);
+					IDTA2DataTable.OnCellFocus(SetProposalItemFocus);
+					IDTA2DataTable.OnCellBlur(SetProposalItemData);
+					$(Attr.UI.ProposalImporButton).click(UploadProposalFile);
+		        	$(Attr.UI.ProposalImportInput).change(SetProposalFileName);
+		        	$(Attr.UI.ProposalSave).click(SaveProposal);
 					// Hide spinner
 					hide();
 				}, hide);

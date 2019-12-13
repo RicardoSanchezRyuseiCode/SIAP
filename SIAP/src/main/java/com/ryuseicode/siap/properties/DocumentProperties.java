@@ -15,6 +15,10 @@ public class DocumentProperties {
 	 */
 	private String annex;
 	/**
+	 * Opening
+	 */
+	private String opening;	
+	/**
 	 * @return the invitation
 	 */
 	public String getInvitation() {
@@ -41,7 +45,18 @@ public class DocumentProperties {
 	public void setAnnex(String annex) {
 		this.annex = annex;
 	}
-	
-	
-	
+
+	/**
+	 * @return the opening
+	 */
+	public String getOpening() {
+		return opening;
+	}
+
+	/**
+	 * @param opening the opening to set
+	 */
+	public void setOpening(String opening) {
+		this.opening = opening;
+	}
 }
