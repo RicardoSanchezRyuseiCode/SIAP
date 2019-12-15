@@ -19,6 +19,10 @@ public class DocumentProperties {
 	 */
 	private String opening;	
 	/**
+	 * Comparative
+	 */
+	private String comparative;
+	/**
 	 * @return the invitation
 	 */
 	public String getInvitation() {
@@ -58,5 +62,19 @@ public class DocumentProperties {
 	 */
 	public void setOpening(String opening) {
 		this.opening = opening;
+	}
+
+	/**
+	 * @return the comparative
+	 */
+	public String getComparative() {
+		return comparative;
+	}
+
+	/**
+	 * @param comparative the comparative to set
+	 */
+	public void setComparative(String comparative) {
+		this.comparative = comparative;
 	}
 }

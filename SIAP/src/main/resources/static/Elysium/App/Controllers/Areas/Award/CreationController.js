@@ -18,6 +18,7 @@ Elysium.App.Controllers.Areas.Award.CreationController = function (arguments) {
 	var AssetService = Elysium.App.Services.Award.AssetService;
 	var OpeningService = Elysium.App.Services.Award.OpeningService;
 	var ProposalService = Elysium.App.Services.Award.ProposalService;
+	var QuotationService = Elysium.App.Services.Award.QuotationService;
 	// Util
 	var DateParserService = Elysium.App.Services.Util.DateParserService;
 	/*******************************************************************************/
@@ -211,12 +212,67 @@ Elysium.App.Controllers.Areas.Award.CreationController = function (arguments) {
         	{ data: "" },
         ]
     }), [Elysium.UI.Interfaces.ITable]);
-    // Contract table
-    var IContractTable = Elysium.Implements(new Elysium.UI.Entities.Table({
-        selector: Attr.UI.ContractTable,
+    // Quotation table
+    var IQuotationTable = Elysium.Implements(new Elysium.UI.Entities.Table({
+        selector: Attr.UI.QuotationTable,
         responsive: true,
         paging: true,
-        columnDefs: [],
+        keys: true,
+        columnDefs: [
+        	{
+    			targets: 1,
+                searchable: false,
+                orderable: false,
+                className: 'dt-center',
+                render: function (data, type, full, meta) {
+                	return '<input type="text" class="form-control" value="" data-adjudication-quotation-date />';
+                }
+    		},
+    		{
+    			targets: 2,
+                searchable: false,
+                orderable: false,
+                className: 'dt-center',
+                render: function (data, type, full, meta) {
+                	return '<input type="text" class="form-control" value="" data-adjudication-quotation-date-text  readonly="readonly" />';
+                }
+    		},
+    		{
+    			targets: 3,
+                searchable: false,
+                orderable: false,
+                className: 'dt-center',
+                render: function (data, type, full, meta) {
+                	return '<input type="text" class="form-control" value="" data-adjudication-quotation-creditcondition />';
+                }
+    		},
+    		{
+    			targets: 4,
+                searchable: false,
+                orderable: false,
+                className: 'dt-center',
+                render: function (data, type, full, meta) {
+                	return '<input type="text" class="form-control" value="" data-adjudication-quotation-deliveryterm />';
+                }
+    		},
+    		{
+    			targets: 5,
+                searchable: false,
+                orderable: false,
+                className: 'dt-center',
+                render: function (data, type, full, meta) {
+                	return '<label data-adjudication-quotation-status>' + full.quotationDetail.status + '</label>';
+                }
+    		}
+        ],
+        columns: [
+        	{ data: "supplier.name" },
+        	{ data: "" },
+        	{ data: "" },
+        	{ data: "" },
+        	{ data: "" },
+        	{ data: "" },
+        ],
     }), [Elysium.UI.Interfaces.ITable]);
     // Global adjudication
     var GLOBAL_ADJUDICATION = null;    
@@ -256,10 +312,17 @@ Elysium.App.Controllers.Areas.Award.CreationController = function (arguments) {
     // Emission Validation form
     var OpeningParsley = null;
     /*************************************/
-    /*                Proposal           */
+    /*         Proposal Variables        */
     /*************************************/
     // Last cell on focus
     var LastProposalCellOnFocus = null;
+    /*************************************/
+    /*        Quotation Variables        */
+    /*************************************/
+    // Form
+    var QuotationForm = Elysium.Implements(new Elysium.UI.Entities.Form(Attr.UI.QuotationForm), [Elysium.UI.Interfaces.IForm]);
+    // Validation form
+    var QuotationParsley = null;
     /*******************************************************************************/
     /*                                   Methods                                   */
     /*******************************************************************************/
@@ -1050,7 +1113,7 @@ Elysium.App.Controllers.Areas.Award.CreationController = function (arguments) {
      * @name parseDate
      * @abstract Method to parse date string
      */
-    var ParseDate = function(date, inputSelector, spinnerSelector) {
+    var ParseDate = function(date, inputSelector, spinnerSelector, callback) {
     	// Define hide function
     	var hide = function() { ISpinner.Hide(spinnerSelector); };
     	// Show spinner
@@ -1060,6 +1123,9 @@ Elysium.App.Controllers.Areas.Award.CreationController = function (arguments) {
 			function (response) {
 				// Set date text
 				$(inputSelector).val(response);
+				// execute callback
+				if(typeof callback != "undefined")
+					callback();
 				// Hide spinner
                 hide();
 			},
@@ -1491,7 +1557,7 @@ Elysium.App.Controllers.Areas.Award.CreationController = function (arguments) {
             "Importar archivo",
             "¿Desea cargar este archivo?",
             function (resolve, reject) {
-                ProposalService.Upload(GLOBAL_ADJUDICATION.adjudicationId ,formData, HandlerProgressUpload).then(
+                ProposalService.Upload(GLOBAL_ADJUDICATION.adjudicationId,formData, HandlerProgressUpload).then(
                     // On Success
                     function (data) {
                     	// Get data on table
@@ -1628,6 +1694,204 @@ Elysium.App.Controllers.Areas.Award.CreationController = function (arguments) {
     var OpenComparativeChart = function() {
     	$(Attr.UI.ModalComparativeChart).modal("show");
     }
+    /**
+     * @name Method to validate data
+     */
+    var ValidateData = function(data, row) {
+    	// Validate status
+		if(data.quotationDetail.quotationDate == "" || data.quotationDetail.creditCondition == "" || data.quotationDetail.deliveryTerm == "") {
+			data.quotationDetail.status = "Ingresar Datos";
+			row.find('[data-adjudication-quotation-status]').text("Ingresar Datos");
+		}
+		else {
+			data.quotationDetail.status = "Completa";
+			row.find('[data-adjudication-quotation-status]').text("Completa");
+		}
+    }
+    /**
+     * @name QuotationDetailDatePickerChange
+     * @abstract Event fired when quotation detail picker change
+     */
+    var QuotationDetailDatePickerChange = function(evt, date) {
+    	// Define hide function
+    	var hide = function() { ISpinner.Hide(Attr.UI.ModalComparativeChart + ' .modal-dialog'); };
+    	// Show spinner
+    	ISpinner.Show(Attr.UI.ModalComparativeChart + ' .modal-dialog');
+    	// Validate date
+    	QuotationService.ValidateDate({ adjudicationId : GLOBAL_ADJUDICATION.adjudicationId, quotationDate: date.format('YYYY-MM-DD') }).then(
+    		function() {
+    			// Hide spinner
+    			hide();
+    			// Parse date
+    			ParseDate(date, $(evt.target).parent().parent().find("[data-adjudication-quotation-date-text]"), Attr.UI.ModalComparativeChart + ' .modal-dialog', function() {
+    				// Get row and set data
+        			var data = IQuotationTable.GetRow($(evt.target).parent().parent()).data();
+        			data.quotationDetail.quotationDate = date.format('YYYY-MM-DD');
+        			data.quotationDetail.quotationDateText = $(evt.target).parent().parent().find("[data-adjudication-quotation-date-text]").val();
+        			// Validate data
+        			ValidateData(data, $(evt.target).parent().parent());
+    			});
+    			
+    		},
+    		function(xhr) {
+    			hide();
+    			// Clean date text
+    			$(evt.target).parent().parent().find("[data-adjudication-quotation-date-text]").val("");
+    			// Clean input
+    			$(evt.target).val("");
+    			// Clean data
+    			var data = IQuotationTable.GetRow($(evt.target).parent().parent()).data();
+    			data.quotationDetail.quotationDate = "";
+    			data.quotationDetail.quotationDateText = "";
+    			ValidateData(data, $(evt.target).parent().parent());
+                // Show error
+                Elysium.Directives.RequestError.ThrowXhr(xhr);
+    		}
+    	);
+    }
+    /**
+     * @name GetCompetitorsQuotation
+     * @abstract Method to get competitor for quotation
+     */
+    var GetCompetitorsQuotation = function() {
+    	// Define hide function
+    	var hide = function() { ISpinner.Hide(Attr.UI.ModalComparativeChart + ' .modal-dialog'); };
+    	// Show spinner
+    	ISpinner.Show(Attr.UI.ModalComparativeChart + ' .modal-dialog');
+    	// request competitor data
+    	CompetitorService.GetByAdjudicationId(GLOBAL_ADJUDICATION.adjudicationId).then(
+			function(competitors) {
+				// loop in array to add quotation object
+				competitors.forEach(function(element, index, array) {
+					element['quotationDetail'] = {
+						competitorId : element.competitor.competitorId,
+						quotationDate: "",
+						quotationDateText: "",
+						creditCondition: "",
+						deliveryTerm: "",
+						status: "Ingresar Datos"
+					};
+				});
+				// Set data on table
+				IQuotationTable.SetData(competitors);
+				// Enable date picker
+				var QuotationDetailDatePicker = Elysium.Implements(new Elysium.UI.Entities.DateTimePicker({
+		            selector: $("[data-adjudication-quotation-date]"),
+		            options: {
+		                format: 'DD-MM-YYYY',
+		                lang: 'es',
+		                time: false,
+		                date: true
+		            }
+		        }), [Elysium.UI.Interfaces.IDateTimePicker]);
+				QuotationDetailDatePicker.Initialize();
+				QuotationDetailDatePicker.OnChangeEvt(QuotationDetailDatePickerChange);
+				// hide 
+				hide();
+			}, 
+			function(xhr){
+				// Show error
+	            Elysium.Directives.RequestError.ThrowXhr(xhr);
+	            // Hide spinner
+	            hide();
+			}
+		);
+    }
+    /**
+     * @name SetQuotationFocus
+     * @abstract Method to set focus on input
+     */
+    var SetQuotationFocus = function(e, datatable, cell) {
+    	// Set focus on element
+		$(cell.node()).find("input").select();
+		$(cell.node()).find("input").focus();
+    }
+    /**
+     * @name SetQuotationData
+     * @abstract Method to set quotation data
+     */
+    var SetQuotationData = function(e, datatable, cell) {
+    	// Get data from row 
+		var data = cell.row(cell.node()).data();
+    	// Get row and then look for each input and get data
+		if($(cell.node()).parent().find('[data-adjudication-quotation-date]').val().trim() != "")
+			data.quotationDetail.quotationDate = moment($(cell.node()).parent().find('[data-adjudication-quotation-date]').val().trim(), 'DD-MM-YYYY').format('YYYY-MM-DD');
+		else 
+			data.quotationDetail.quotationDate = "";
+		// Set other data
+		data.quotationDetail.quotationDateText = $(cell.node()).parent().find('[data-adjudication-quotation-date-text]').val().trim();
+		data.quotationDetail.creditCondition = $(cell.node()).parent().find('[data-adjudication-quotation-creditcondition]').val().trim();
+		data.quotationDetail.deliveryTerm = $(cell.node()).parent().find('[data-adjudication-quotation-deliveryterm]').val().trim();
+		// Validate data
+		ValidateData(data, $(cell.node()).parent());
+    }
+    /**
+     * @name QuotationElaborationDatePickerChange
+     * @abstract Method to parse date
+     */
+    var QuotationElaborationDatePickerChange = function(evt, date) {
+    	ParseDate(date, Attr.UI.QuotationElaborationDateText, Attr.UI.ModalComparativeChart + ' .modal-dialog');
+    } 
+    /**
+     * @name OnSuccessQuotation
+     * @abstract Event fired when form validation success
+     */
+    var OnSuccessQuotation = function() {
+    	// Validate data on table
+    	var quotationDetail = IQuotationTable.GetData();
+    	// Loop to see if all data is complete
+    	for(var i = 0; i < quotationDetail.length; i++) {
+    		if (quotationDetail[i].quotationDetail.status != 'Completa') {
+    			Elysium.UI.Entities.Notification.Warning({ text: "No ha completado la informacion en la tabla", time: Elysium.NotificationTime });
+    			return false;
+    		}
+    	}
+    	// Create params
+    	var quotation = QuotationForm.GetValues();
+    	quotation.adjudicationId = GLOBAL_ADJUDICATION.adjudicationId;
+    	quotation.elaborationDate = moment(quotation.elaborationDate, 'DD-MM-YYYY').format('YYYY-MM-DD');
+    	// Loop to get quotation details
+    	var quotationDetails = [];
+    	quotationDetail.forEach(function(element, index, array) {
+    		quotationDetails.push(element.quotationDetail);
+    	});
+    	var params = {
+    		quotation : quotation,
+    		quotationDetails: quotationDetails
+    	};
+    	// Show confirmation dialog
+    	Elysium.UI.Entities.MsgBox.DialogQuestion(
+            'Crear cuadro comparativo',
+            '¿Desea proceder con la creación del cuadro comparativo?',
+            function () {
+            	// Send information to server
+            	QuotationService.Create(params).then(            	
+                    function (fileNames) {
+                    	// Close message
+                    	Elysium.UI.Entities.MsgBox.Close();
+                        // Show success information
+                        Elysium.UI.Entities.Notification.Success({ text: "El cuadro comparativo se ha creado correctamente", time: Elysium.NotificationTime });
+                        // Download files
+                        fileNames.forEach(function(fileName, index, array) {
+                        	QuotationService.Download(fileName);	
+                        });
+                        // Close modal
+                        $(Attr.UI.ModalComparativeChart).modal("hide");
+                        // Disable button to show modal and enable second button
+                        $(Attr.UI.BtnComparativeChart).prop('disabled', true);
+                    	$(Attr.UI.BtnJudgment).prop('disabled', false);
+                    },
+                    function (xhr) {
+                    	// Close message
+                    	Elysium.UI.Entities.MsgBox.Close();
+                        // Show error
+                        Elysium.Directives.RequestError.ThrowXhr(xhr);
+                    }
+                );
+            }
+        );
+    	return false;
+    }
     /*************************************/
     /*              Judgment              */
     /*************************************/
@@ -1679,14 +1943,14 @@ Elysium.App.Controllers.Areas.Award.CreationController = function (arguments) {
     	IAppendDataTable.Initialize();
     	IDTA1DataTable.Initialize();
     	IDTA2DataTable.Initialize();
-    	IContractTable.Initialize();
+    	IQuotationTable.Initialize();
     	// Block buttons from bottom
     	$(Attr.UI.BtnInvitation).prop('disabled', true);
     	$(Attr.UI.BtnAppend).prop('disabled', true);
     	$(Attr.UI.BtnTechnicalAperture).prop('disabled', true);
     	$(Attr.UI.BtnDetailTechnicalAperture).prop('disabled', true);
     	$(Attr.UI.BtnComparativeChart).prop('disabled', true);
-    	$(Attr.UI.BtnJudgment).prop('disabled', true);
+    	//$(Attr.UI.BtnJudgment).prop('disabled', true);
     	$(Attr.UI.BtnContract).prop('disabled', true);
     	$(Attr.UI.ContractBtnGenerate).prop('disabled', true);
     	// Bind events
@@ -1841,6 +2105,31 @@ Elysium.App.Controllers.Areas.Award.CreationController = function (arguments) {
 					$(Attr.UI.ProposalImporButton).click(UploadProposalFile);
 		        	$(Attr.UI.ProposalImportInput).change(SetProposalFileName);
 		        	$(Attr.UI.ProposalSave).click(SaveProposal);
+		        	/************************************/
+			        /*              Quotation           */
+			        /************************************/
+		        	// Load competitors for quotation when modal open
+					$(Attr.UI.ModalComparativeChart).on('shown.bs.modal', GetCompetitorsQuotation);
+					// Enabel Parsley
+					QuotationParsley = $(Attr.UI.QuotationForm).parsley().on('form:submit', OnSuccessQuotation);
+					// Enable table events
+					IQuotationTable.OnCellFocus(SetQuotationFocus);
+					IQuotationTable.OnCellBlur(SetQuotationData);
+					// Enable elaboration date picker
+					var QuotationElaborationDatePicker = Elysium.Implements(new Elysium.UI.Entities.DateTimePicker({
+			            selector: $(Attr.UI.QuotationElaborationDate),
+			            options: {
+			                format: 'DD-MM-YYYY',
+			                lang: 'es',
+			                minDate: moment(),
+			                time: false,
+			                date: true
+			            }
+			        }), [Elysium.UI.Interfaces.IDateTimePicker]);
+					QuotationElaborationDatePicker.Initialize();
+					QuotationElaborationDatePicker.OnChangeEvt(QuotationElaborationDatePickerChange);
+					
+					
 					// Hide spinner
 					hide();
 				}, hide);

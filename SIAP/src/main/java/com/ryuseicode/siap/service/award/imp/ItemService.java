@@ -37,6 +37,9 @@ public class ItemService implements IItemService {
 	 * @return
 	 */
 	public void save(List<Item> items) { 
+		for(Item item : items) {
+			item.setActive(1);
+		}
 		this.itemRepository.save(items);
 		
 	}

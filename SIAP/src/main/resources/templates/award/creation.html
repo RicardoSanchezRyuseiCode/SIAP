@@ -264,7 +264,7 @@
 		                    					</div>
 		                    					<div class="row mt-3">
 			                    					<div class="col-md-4">
-			                    						<button type="button" id="ComparativeChart" class="btn waves-effect waves-light btn-light btn-block">Cuadro Comparativa</button>
+			                    						<button type="button" id="ComparativeChart" class="btn waves-effect waves-light btn-light btn-block">Cuadro Comparativo</button>
 			                    					</div>
 			                    					<div class="col-md-4">
 			                    						<button type="button" id="Judgment" class="btn waves-effect waves-light btn-light btn-block">Fallo</button>
@@ -405,6 +405,7 @@
 		<script type="text/javascript" th:src="@{/Elysium/App/Services/Award/AnnexService.js}"></script>
 		<script type="text/javascript" th:src="@{/Elysium/App/Services/Award/OpeningService.js}"></script>
 		<script type="text/javascript" th:src="@{/Elysium/App/Services/Award/ProposalService.js}"></script>
+		<script type="text/javascript" th:src="@{/Elysium/App/Services/Award/QuotationService.js}"></script>
 		<script type="text/javascript" th:src="@{/Elysium/App/Services/Util/DateParserService.js}"></script>		
 		<script type="text/javascript" th:src="@{/Elysium/App/Interfaces/IController.js}"></script>
 		<script type="text/javascript" th:src="@{/Elysium/App/Controllers/Areas/Award/CreationController.js}"></script>		
@@ -478,7 +479,11 @@
 		                ProposalImportInput: "#ProposalImportInput",
 		                ProposalImportText: "#ProposalImportText",
 		                ProposalImporButton: "#ProposalImporButton",
-		                ProposalSave: "#ProposalSave"
+		                ProposalSave: "#ProposalSave",
+		                QuotationTable: "#ComparativeChartTable",
+		                QuotationForm: "#QuotationForm",
+		                QuotationElaborationDate: "#elaborationDate",
+		                QuotationElaborationDateText: "#elaborationDateText"
 		            }
 		        }), [Elysium.App.Interfaces.IController]);
 		        // Initialize controller

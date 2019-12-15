@@ -12,77 +12,135 @@
 			            </div>
 			            <div class="modal-body">
 			                <div class="row">
-			                    <div class="col-md-12">                        
-				                    <form class="m-t-25">
-				                    	<div class="row">
-				                    		<div class="col-md-1"></div>
-				                    		<div class="col-md-10">
-				                    			<div class="table-responsive">
-					                                <table id="ComparativeChartTable" class="table table-striped table-bordered ">
-					                                    <thead>
-					                                        <tr>
-					                                            <th>Proveedor</th>
-					                                            <th>Fecha de la cotización</th>
-					                                            <th>Condiciones de crédito</th>
-					                                            <th>Plazo de entrega</th>
-					                                            <th>Dia</th>
-					                                            <th>Mes</th>
-					                                            <th>Año</th>
-					                                        </tr>
-					                                    </thead>
-					                                    <tbody>
-					                                        
-					                                    </tbody>
-					                                </table>
-					                            </div>   
-					                            <hr />
-					                            <div class="row">
-                   									<div class="col-md-3 text-right mb-2">
-                   										<label for="address" class="control-label mt-2">Fecha de elaboración</label>
-                   									</div>
-                   									<div class="col-md-3">
-                   										<input type="text" class="form-control" />
-                   									</div>
-                   									<div class="col-md-6">
-                   										<input type="text" class="form-control" readonly="readonly" />
-                   									</div>
-                   								</div>
-                   								<div class="row">
-                   									<div class="col-md-3 text-right mb-2">
-                   										<label for="address" class="control-label mt-2">Nombre Requirente</label>
-                   									</div>
-                   									<div class="col-md-9">
-                   										<input type="text" class="form-control" />
-                   									</div>
-                   								</div>
-                   								<div class="row">
-                   									<div class="col-md-3 text-right mb-2">
-                   										<label for="address" class="control-label mt-2">Puesto Requirente</label>
-                   									</div>
-                   									<div class="col-md-9">
-                   										<input type="text" class="form-control" />
-                   									</div>
-                   								</div>
-                   								<div class="row">
-                   									<div class="col-md-3 text-right mb-2">
-                   										<label for="address" class="control-label mt-2">Nombre Vo.Bo.</label>
-                   									</div>
-                   									<div class="col-md-9">
-                   										<input type="text" class="form-control" />
-                   									</div>
-                   								</div>
-					                            <hr></hr>
+			                    <div class="col-md-12">      
+			                    	<div class="row">
+			                    		<div class="col-md-1"></div>
+			                    		<div class="col-md-10">
+			                    			<div class="table-responsive">
+				                                <table id="ComparativeChartTable" class="table table-striped table-bordered " style="width:100%">
+				                                    <thead>
+				                                        <tr>
+				                                            <th>Proveedor</th>
+				                                            <th>Fecha de la cotización</th>
+				                                            <th>Fecha en texto</th>
+				                                            <th>Condiciones de crédito</th>
+				                                            <th>Plazo de entrega</th>
+				                                            <th>Estatus</th>
+				                                        </tr>
+				                                    </thead>
+				                                    <tbody>
+				                                        
+				                                    </tbody>
+				                                </table>
+				                            </div>   
+				                            <hr />
+				                            <form id="QuotationForm">
+				                            	<div class="row">
+                  									<div class="col-md-3 text-right mb-2">
+                  										<label for="elaborationDate" class="control-label mt-2">Fecha de elaboración</label>
+                  									</div>
+                  									<div class="col-md-3">
+                  										<input 
+                  											id="elaborationDate" 
+                  											name="elaborationDate" 
+                  											type="text" 
+                  											class="form-control"
+                  											data-parsley-required="true"
+			                                    			data-parsley-required-message="Debe seleccionar una fecha de elaboración" 
+                 										/>
+                  									</div>
+                  									<div class="col-md-6">
+                  										<input id="elaborationDateText" name="elaborationDateText" type="text" class="form-control" readonly="readonly" />
+                  									</div>
+                  								</div>
+                  								<div class="row">
+                  									<div class="col-md-3 text-right mb-2">
+                  										<label for="demanding" class="control-label mt-2">Nombre Requirente</label>
+                  									</div>
+                  									<div class="col-md-9">
+                  										<input 
+                  											id="demanding" 
+                  											name="demanding" 
+                  											type="text" 
+                  											class="form-control"
+                  											data-parsley-required="true"
+			                                    			data-parsley-required-message="Debe ingresar el nombre del requirente"
+						                                    data-parsley-minlength="1"
+						                                    data-parsley-minlength-message="La longitud minima es de 1 caracter"
+						                                    data-parsley-maxlength="250"
+						                                    data-parsley-maxlength-message="La longitud maxima es de 250 caracteres" 
+                 										/>
+                  									</div>
+                  								</div>
+                  								<div class="row">
+                  									<div class="col-md-3 text-right mb-2">
+                  										<label for="demandingJob" class="control-label mt-2">Puesto Requirente</label>
+                  									</div>
+                  									<div class="col-md-9">
+                  										<input 
+                  											id="demandingJob" 
+                  											name="demandingJob" 
+                  											type="text" 
+                  											class="form-control" 
+                  											data-parsley-required="true"
+			                                    			data-parsley-required-message="Debe ingresar el puesto de trabajo del requirente"
+						                                    data-parsley-minlength="1"
+						                                    data-parsley-minlength-message="La longitud minima es de 1 caracter"
+						                                    data-parsley-maxlength="250"
+						                                    data-parsley-maxlength-message="La longitud maxima es de 250 caracteres"	
+                  										/>
+                  									</div>
+                  								</div>
+                  								<div class="row">
+                  									<div class="col-md-3 text-right mb-2">
+                  										<label for="authorizer" class="control-label mt-2">Nombre Vo.Bo.</label>
+                  									</div>
+                  									<div class="col-md-9">
+                  										<input 
+                  											id="authorizer" 
+                  											name="authorizer" 
+                  											type="text" 
+                  											class="form-control"
+                  											data-parsley-required="true"
+			                                    			data-parsley-required-message="Debe ingresar un nombre"
+						                                    data-parsley-minlength="1"
+						                                    data-parsley-minlength-message="La longitud minima es de 1 caracter"
+						                                    data-parsley-maxlength="250"
+						                                    data-parsley-maxlength-message="La longitud maxima es de 250 caracteres"	 
+                  										/>
+                  									</div>
+                  								</div>
+                  								<div class="row">
+                  									<div class="col-md-3 text-right mb-2">
+                  										<label for="authorizerJob" class="control-label mt-2">Puesto Vo.Bo.</label>
+                  									</div>
+                  									<div class="col-md-9">
+                  										<input 
+                  											id="authorizerJob" 
+                  											name="authorizerJob" 
+                  											type="text" 
+                  											class="form-control"
+                  											data-parsley-required="true"
+			                                    			data-parsley-required-message="Debe ingresar un nombre"
+						                                    data-parsley-minlength="1"
+						                                    data-parsley-minlength-message="La longitud minima es de 1 caracter"
+						                                    data-parsley-maxlength="250"
+						                                    data-parsley-maxlength-message="La longitud maxima es de 250 caracteres"	 
+                  										/>
+                  									</div>
+                  								</div>
+				                            	<hr></hr>
 					                            <div class="row">
 			                                    	<div class="offset-md-9 col-md-3">
-			                                    		<button id="Continue" type="button" class="btn btn-primary waves-effect waves-light btn-block">
+			                                    		<button type="Submit" class="btn btn-primary waves-effect waves-light btn-block">
 			                                    			<span class="fas fa-save"></span> Guardar
 			                                    		</button>
 			                                    	</div>
 			                                    </div>   
-				                    		</div>
-				                    		<div class="col-md-1"></div>
-				                    	</div>	   
-				                    </form>
+		                                    </form>
+			                    		</div>
+			                    		<div class="col-md-1"></div>
+			                    	</div>	   
 			                    </div>
 			                </div>
 			            </div>
