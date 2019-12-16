@@ -1,5 +1,6 @@
 package com.ryuseicode.siap.service.award.intf;
 
+import java.time.LocalDateTime;
 import java.util.List;
 
 import com.ryuseicode.siap.entity.award.Adjudication;
@@ -30,4 +31,12 @@ public interface IAdjudicationService {
 	 * @param adjudication
 	 */
 	void save(Adjudication adjudication) throws Exception;
+	/**
+	 * @name updateCloseDate
+	 * {@summary Method to update close date }
+	 * @param adjudicationId
+	 * @param closeDate
+	 * @return
+	 */
+	void updateCloseDate(int adjudicationId, LocalDateTime closeDate) throws Exception;
 }

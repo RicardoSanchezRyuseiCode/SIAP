@@ -323,6 +323,11 @@ Elysium.App.Controllers.Areas.Award.CreationController = function (arguments) {
     var QuotationForm = Elysium.Implements(new Elysium.UI.Entities.Form(Attr.UI.QuotationForm), [Elysium.UI.Interfaces.IForm]);
     // Validation form
     var QuotationParsley = null;
+    /*************************************/
+    /*        Judgment Variables        */
+    /*************************************/
+    // Validation form
+    var JudgmentParsley = null;
     /*******************************************************************************/
     /*                                   Methods                                   */
     /*******************************************************************************/
@@ -1195,7 +1200,7 @@ Elysium.App.Controllers.Areas.Award.CreationController = function (arguments) {
      * @abstract Event fired when time picker change
      */
     var OpeningFailureIssuanceHourTimePickerChange = function(evt, date) {
-    	ParseTime(date, Attr.UI.OpeningFailureIssuanceHourText, Attr.UI.ModalTechnicalAperture + ' .modal-dialog')
+    	ParseTime(date, Attr.UI.OpeningFailureIssuanceHourText, Attr.UI.ModalTechnicalAperture + ' .modal-dialog');
     }  
     /**
      * @name GetCompetitors
@@ -1902,6 +1907,68 @@ Elysium.App.Controllers.Areas.Award.CreationController = function (arguments) {
     var OpenJudgment = function() {
     	$(Attr.UI.ModalJudgment).modal("show");    	
     }
+    /**
+     * @name JudgmentDatePickerChange
+     * @abstract Method to parse date
+     */
+    var JudgmentDatePickerChange = function(evt, date) {
+    	ParseDate(date, Attr.UI.JudgmentCloseDateText, Attr.UI.ModalJudgment + ' .modal-dialog');
+    }
+    /**
+     * @name JudgmentHourPickerChange
+     * @abstract Method to parse time
+     */
+    var JudgmentHourPickerChange = function(evt, date) {
+    	ParseTime(date, Attr.UI.JudgmentCloseHourText, Attr.UI.ModalJudgment + ' .modal-dialog');
+    }
+    /**
+     * @name OnSuccessJudgment
+     * @abstract Method to save judgment
+     */
+    var OnSuccessJudgment = function() {
+    	// Get data
+    	var adjudicationCloseParam = {
+    		adjudicationId : GLOBAL_ADJUDICATION.adjudicationId,
+    		closeDate: moment($(Attr.UI.JudgmentCloseDate).val().trim() + " " + $(Attr.UI.JudgmentCloseHour).val().trim(), "DD-MM-YYYY HH:mm").format("YYYY-MM-DDTHH:mm")
+    	}
+    	// Check if date is valie
+    	if(moment($(Attr.UI.JudgmentCloseDate).val().trim(), "DD-MM-YYYY").diff(moment(), 'days') > 20) {
+    		Elysium.UI.Entities.Notification.Warning({ text: "Fecha de finalización del evento no puede ser mayor a 20 días de la fecha actual", time: Elysium.NotificationTime });
+    		return false;
+    	}
+    	// Show confirmation dialog
+    	Elysium.UI.Entities.MsgBox.DialogQuestion(
+            'Crear cuadro comparativo',
+            '¿Desea proceder con la creación del cuadro comparativo?',
+            function () {
+            	// Send information to server
+            	AdjudicationService.Close(adjudicationCloseParam).then(            	
+                    function (fileNames) {
+                    	// Close message
+                    	Elysium.UI.Entities.MsgBox.Close();
+                        // Show success information
+                        Elysium.UI.Entities.Notification.Success({ text: "El fallo se ha creado correctamente", time: Elysium.NotificationTime });
+                        // Download files
+                        fileNames.forEach(function(fileName, index, array) {
+                        	AdjudicationService.Download(fileName);	
+                        });
+                        // Close modal
+                        $(Attr.UI.ModalJudgment).modal("hide");
+                        // Disable button to show modal and enable second button
+                        $(Attr.UI.BtnJudgment).prop('disabled', true);
+                    	$(Attr.UI.BtnContract).prop('disabled', false);
+                    },
+                    function (xhr) {
+                    	// Close message
+                    	Elysium.UI.Entities.MsgBox.Close();
+                        // Show error
+                        Elysium.Directives.RequestError.ThrowXhr(xhr);
+                    }
+                );
+            }
+        );    	
+    	return false;
+    }
     /*************************************/
     /*              Contract             */
     /*************************************/
@@ -2128,6 +2195,39 @@ Elysium.App.Controllers.Areas.Award.CreationController = function (arguments) {
 			        }), [Elysium.UI.Interfaces.IDateTimePicker]);
 					QuotationElaborationDatePicker.Initialize();
 					QuotationElaborationDatePicker.OnChangeEvt(QuotationElaborationDatePickerChange);
+					/************************************/
+			        /*               Judgment           */
+			        /************************************/
+					// Enable Parsley
+					JudgmentParsley = $(Attr.UI.JudgmentForm).parsley().on('form:submit', OnSuccessJudgment);
+					// Enable JudgmentDatePicker
+					var JudgmentDatePicker = Elysium.Implements(new Elysium.UI.Entities.DateTimePicker({
+			            selector: $(Attr.UI.JudgmentCloseDate),
+			            options: {
+			                format: 'DD-MM-YYYY',
+			                lang: 'es',
+			                minDate: moment(),
+			                time: false,
+			                date: true
+			            }
+			        }), [Elysium.UI.Interfaces.IDateTimePicker]);
+					JudgmentDatePicker.Initialize();
+					JudgmentDatePicker.OnChangeEvt(JudgmentDatePickerChange);
+					// Enable JudgmentHourPicker
+					var JudgmentHourPicker = Elysium.Implements(new Elysium.UI.Entities.DateTimePicker({
+			            selector: $(Attr.UI.JudgmentCloseHour),
+			            options: {
+			                format: 'HH:mm',
+			                lang: 'es',
+			                time: true,
+			                date: false
+			            }
+			        }), [Elysium.UI.Interfaces.IDateTimePicker]);
+					JudgmentHourPicker.Initialize();
+					JudgmentHourPicker.OnChangeEvt(JudgmentHourPickerChange);
+					
+					
+					
 					
 					
 					// Hide spinner

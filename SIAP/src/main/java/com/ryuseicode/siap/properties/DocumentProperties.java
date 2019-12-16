@@ -23,6 +23,10 @@ public class DocumentProperties {
 	 */
 	private String comparative;
 	/**
+	 * Judgment
+	 */
+	private String judgment;
+	/**
 	 * @return the invitation
 	 */
 	public String getInvitation() {
@@ -76,5 +80,19 @@ public class DocumentProperties {
 	 */
 	public void setComparative(String comparative) {
 		this.comparative = comparative;
+	}
+
+	/**
+	 * @return the judgment
+	 */
+	public String getJudgment() {
+		return judgment;
+	}
+
+	/**
+	 * @param judgment the judgment to set
+	 */
+	public void setJudgment(String judgment) {
+		this.judgment = judgment;
 	}
 }

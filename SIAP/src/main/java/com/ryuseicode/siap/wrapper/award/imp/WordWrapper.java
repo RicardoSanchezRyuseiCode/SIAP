@@ -7,6 +7,7 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
+import org.apache.poi.xwpf.usermodel.ParagraphAlignment;
 import org.apache.poi.xwpf.usermodel.XWPFDocument;
 import org.apache.poi.xwpf.usermodel.XWPFParagraph;
 import org.apache.poi.xwpf.usermodel.XWPFRun;
@@ -21,7 +22,7 @@ import com.ryuseicode.siap.entity.award.DocumentVariable;
  * @author Ricardo Sanchez Romero (ricardo.sanchez@ryuseicode.com)
  * @since Dec 7, 2019
  */
-public class DocumentWrapper {
+public class WordWrapper {
 	/**
 	 * RETURN_TYPE_STRING
 	 */
@@ -37,7 +38,7 @@ public class DocumentWrapper {
 	/**
 	 * Default constructor
 	 */
-	public DocumentWrapper() { }
+	public WordWrapper() { }
 	/**
 	 * @name ReplaceString
 	 * {@summary Method to replace String }
@@ -186,6 +187,75 @@ public class DocumentWrapper {
 			// Close file input stream
 			fileInputStream.close();	
 		}
-		
 	} 
+	/**
+	 * @name createParagraph
+	 * {@summary Method to create paragraph }
+	 * @param document
+	 * @param paragraphAlignment
+	 * @param text
+	 */
+	public void createParagraph(XWPFDocument document, ParagraphAlignment paragraphAlignment, String text) {
+		// Create paragraph
+		XWPFParagraph paragraph = document.createParagraph();
+		// Set alignment
+		paragraph.setAlignment(paragraphAlignment);
+		// Create run
+        XWPFRun run = paragraph.createRun();
+        // Set text
+        run.setText(text);
+	}	
+	/**
+	 * @name setRowCotent
+	 * {@summary Method to set row content }
+	 * @param rowContent
+	 * @param tableRow
+	 */
+	private void setRowHeaderCotent(List<String> rowContent, XWPFTableRow tableRow) {
+		int index = 0;
+		for(String columnContent: rowContent) {
+			if(index == 0) {
+				tableRow.getCell(0).setText(columnContent);
+			}
+			else {
+				tableRow.addNewTableCell().setText(columnContent);
+			}
+			index++;
+		}
+	}
+	/**
+	 * @name setRowCotent
+	 * {@summary Method to set row content }
+	 * @param rowContent
+	 * @param tableRow
+	 */
+	private void setRowCotent(List<String> rowContent, XWPFTableRow tableRow) {
+		int index = 0;
+		for(String columnContent: rowContent) {
+			tableRow.getCell(index).setText(columnContent);
+			index++;
+		}
+	}
+	/**
+	 * @name createTable
+	 * {@summary Method to create table }
+	 * @param document
+	 * @param tableHeaders
+	 * @param tableBody
+	 */
+	public void createTable(XWPFDocument document, List<String> tableHeaders, List<List<String>> tableBody) {
+		// Create table
+		XWPFTable table = document.createTable();
+		// Get first row
+		XWPFTableRow tableHeaderRow = table.getRow(0);
+		// Create headers
+		this.setRowHeaderCotent(tableHeaders, tableHeaderRow);
+		// Loop in table body to add rows
+		for(List<String> rowContent : tableBody) {
+			// Create row
+			XWPFTableRow tableRow = table.createRow();
+			// Loop in columng
+			this.setRowCotent(rowContent, tableRow);
+		}
+	}
 }

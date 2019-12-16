@@ -77,4 +77,19 @@ public class AdjudicationService implements IAdjudicationService {
 		// Save adjudication
 		this.adjudicationRepository.save(adjudication);
 	}
+	/**
+	 * @name updateCloseDate
+	 * {@summary Method to update close date }
+	 * @param adjudicationId
+	 * @param closeDate
+	 * @return
+	 */
+	public void updateCloseDate(int adjudicationId, LocalDateTime closeDate) throws Exception {
+		// Check if procedure number not exit
+		if(this.adjudicationRepository.getById(adjudicationId) == null) {
+			throw new ServiceException("No se encontro la adjudicación a actualizar");
+		}
+		// Close adjudication
+		this.adjudicationRepository.updateCloseDate(adjudicationId, closeDate);
+	}
 }

@@ -1,6 +1,7 @@
 package com.ryuseicode.siap.repository.award.imp;
 
 import java.sql.Timestamp;
+import java.time.LocalDateTime;
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -111,5 +112,17 @@ public class AdjudicationRepository implements IAdjudicationRepository {
                 "insert into ADJUDICATION (procedurenumber, contracttype, modality, sourceorigin, adjudicationtype, amount, status, creationdate, active) values(?,?,?,?,?,?,?,?,?)",
                 adjudication.getProcedureNumber(), adjudication.getContractType(), adjudication.getModality(), adjudication.getSourceOrigin(), adjudication.getAdjudicationType(), 
                 adjudication.getAmount(), adjudication.getStatus(), adjudication.getCreationDate(), adjudication.getActive());
+	}
+	/**
+	 * @name updateCloseDate
+	 * {@summary Method to update close date }
+	 * @param adjudicationId
+	 * @param closeDate
+	 * @return
+	 */
+	public int updateCloseDate(int adjudicationId, LocalDateTime closeDate) {
+		return jdbcTemplate.update(
+                "update ADJUDICATION set closedate = ? where adjudicationId = ?",
+                closeDate, adjudicationId);
 	}
 }

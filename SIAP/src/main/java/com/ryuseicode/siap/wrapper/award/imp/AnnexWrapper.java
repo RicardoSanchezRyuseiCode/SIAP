@@ -48,7 +48,7 @@ import com.ryuseicode.siap.wrapper.award.intf.IAnnexWrapper;
  */
 @Service
 @Transactional
-public class AnnexWrapper extends DocumentWrapper implements IAnnexWrapper  {
+public class AnnexWrapper extends WordWrapper implements IAnnexWrapper  {
 	/**
 	 * IDENTIFIER
 	 */

@@ -144,6 +144,47 @@ Elysium.App.Services.Award.AdjudicationService = (function () {
         // return promise
         return deferred.promise();
     };
+    /**
+     * @name Close
+     * @abstract Method to update an user
+     */
+    var Close = function (adjudicationCloseParam) {
+        // Define promise
+        var deferred = new $.Deferred();
+        // Get type and url
+        var url = Api + '/close';
+        var type = 'POST';
+        var objJson = JSON.stringify(adjudicationCloseParam);
+        $.ajax({
+            // tipo de llamado
+            type: type,
+            // url del llamado a ajax
+            url: url,
+            // obtener siempre los datos mas actualizados
+            cache: false,
+            // content type
+            contentType: 'application/json; charset=utf-8',
+            // data
+            data: objJson,
+            // funcion en caso de exito
+            success: function (data, textStatus, jqXHR) {
+                deferred.resolve(data);
+            },
+            // funcion en caso de error
+            error: function (xhr, status, error) {
+                deferred.reject(xhr);
+            }
+        });
+        // return promise
+        return deferred.promise();
+    };
+    /**
+     * @name Download
+     * @abstract Method to download files
+     */
+    var Download = function (fileName) {
+    	window.open(Api + '/download/' + fileName, '_blank');
+    }
     /**********************************************/
     /*                 Encapsulate                */
     /**********************************************/
@@ -151,6 +192,8 @@ Elysium.App.Services.Award.AdjudicationService = (function () {
     	Get: Get,
     	GetByProcedureNumber: GetByProcedureNumber,
     	Save: Save,
-    	ValidateAmount: ValidateAmount
+    	ValidateAmount: ValidateAmount,
+    	Close: Close,
+    	Download: Download
     };
 }());

@@ -39,7 +39,7 @@ import com.ryuseicode.siap.wrapper.award.intf.IInvitationWrapper;
  */
 @Service
 @Transactional
-public class InvitationWrapper extends DocumentWrapper implements IInvitationWrapper {
+public class InvitationWrapper extends WordWrapper implements IInvitationWrapper {
 	/**
 	 * Identifier
 	 */
