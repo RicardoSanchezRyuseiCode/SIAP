@@ -212,6 +212,8 @@ public class AnnexWrapper extends WordWrapper implements IAnnexWrapper  {
  		this.adjudicationDocumentService.Save(new AdjudicationDocument(0, adjudication.getAdjudicationId(), IDENTIFIER, new File(pathDocument).getName(), pathDocument) );
  		// Save step
  		this.adjudicationStepService.Save(new AdjudicationStep(0, adjudication.getAdjudicationId(), IDENTIFIER, LocalDateTime.now()));
+ 		// Update status
+ 		this.adjudicationService.updateStatus(adjudication.getAdjudicationId(), AdjudicationService.STATUS_OPENING);
         // Return Path
 		return new File(pathDocument).getName();
 	}

@@ -3,6 +3,8 @@ package com.ryuseicode.siap.wrapper.award.imp;
 import java.io.FileInputStream;
 import java.io.FileOutputStream;
 import java.lang.reflect.Method;
+import java.time.LocalDateTime;
+import java.time.format.DateTimeFormatter;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -31,6 +33,14 @@ public class WordWrapper {
 	 * RETURN_TYPE_INT
 	 */
 	private static final String RETURN_TYPE_INT = "int";
+	/**
+	 * RETURN_TYPE_DOUBLE
+	 */
+	private static final String RETURN_TYPE_DOUBLE = "double";
+	/**
+	 * RETURN_TYPE_LOCALDATE_TIME
+	 */
+	private static final String RETURN_TYPE_LOCALDATETIME = "LocalDateTime";
 	/**
 	 * Default value
 	 */
@@ -71,6 +81,34 @@ public class WordWrapper {
 		return text.replace(variable, String.valueOf(newValue));
 	}
 	/**
+	 * @name ReplaceDouble
+	 * @param text
+	 * @param variable
+	 * @param value
+	 * @return
+	 */
+	private String ReplaceDouble(String text, String variable, Object value) {
+		// Cast value to int
+		double newValue = (double)value;
+		// Replace value
+		return text.replace(variable, String.format("%.2f",newValue));
+	}
+	/**
+	 * @name ReplaceLocalDateTime
+	 * @param text
+	 * @param variable
+	 * @param value
+	 * @return
+	 */
+	private String ReplaceLocalDateTime(String text, String variable, Object value) {
+		// Cast value to int
+		LocalDateTime newValue = (LocalDateTime)value;
+		// Define formatter
+		DateTimeFormatter formatter = DateTimeFormatter.ofPattern("dd-MM-yyyy HH:mm:ss");
+		// Replace value
+		return text.replace(variable, newValue.format(formatter));
+	}
+	/**
 	 * Method to set document variables
 	 * @param text
 	 * @param documentVariables
@@ -85,7 +123,7 @@ public class WordWrapper {
 		for(DocumentVariable documentVariable : documentVariables)
 		{
 			// Check if text contains variable
-			if(text.contains(documentVariable.getVariable())) {
+			if(text.toLowerCase().trim().contains(documentVariable.getVariable().toLowerCase()) || text.equals(documentVariable.getVariable())) {
 				// if document contains variable, check if we have the type
 				if(mapSources.containsKey(documentVariable.getClassName())) {
 					// Get method definition
@@ -107,6 +145,12 @@ public class WordWrapper {
 							break;
 						case RETURN_TYPE_INT:
 							textResult = ReplaceInt(text,documentVariable.getVariable(), invokeResult);
+							break;
+						case RETURN_TYPE_DOUBLE:
+							textResult = ReplaceDouble(text,documentVariable.getVariable(), invokeResult);
+							break;
+						case RETURN_TYPE_LOCALDATETIME:
+							textResult = ReplaceLocalDateTime(text,documentVariable.getVariable(), invokeResult);
 							break;
 					}	
 				}
@@ -148,7 +192,7 @@ public class WordWrapper {
                 List<XWPFRun> runs = paragraph.getRuns();
                 if (runs != null) {
                     for (XWPFRun run : runs) {
-                        String text = run.getText(0);
+                    	String text = run.getText(0);
                         if (text != null) {
                             text = SetDocumentVariables(text, documentVariables, mapSources);
                         }
@@ -156,6 +200,7 @@ public class WordWrapper {
                     }
                 }
             }
+			
 			// Loop in tables of document
 			for (XWPFTable tbl : document.getTables()) {
                 for (XWPFTableRow row : tbl.getRows()) {

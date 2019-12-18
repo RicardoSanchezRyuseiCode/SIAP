@@ -27,6 +27,10 @@ public class DocumentProperties {
 	 */
 	private String judgment;
 	/**
+	 * Contract
+	 */
+	private String contract;
+	/**
 	 * @return the invitation
 	 */
 	public String getInvitation() {
@@ -94,5 +98,19 @@ public class DocumentProperties {
 	 */
 	public void setJudgment(String judgment) {
 		this.judgment = judgment;
+	}
+
+	/**
+	 * @return the contract
+	 */
+	public String getContract() {
+		return contract;
+	}
+
+	/**
+	 * @param contract the contract to set
+	 */
+	public void setContract(String contract) {
+		this.contract = contract;
 	}
 }

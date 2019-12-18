@@ -20,6 +20,13 @@ public interface ICompetitorRepository {
 	 */
 	List<CompetitorParamOutput> getByAdjudicationId(int adjudicationId);
 	/**
+	 * @name getByCompetitorId
+	 * {@summary Method to get by competitorId }
+	 * @param competitorId
+	 * @return
+	 */
+	CompetitorParamOutput getByCompetitorId(int competitorId);
+	/**
 	 * @name Save
 	 * {@summary Method to save a competitor }
 	 * @param competitor

@@ -12,6 +12,7 @@ import com.ryuseicode.siap.entity.award.AdjudicationStep;
 import com.ryuseicode.siap.entity.award.Emission;
 import com.ryuseicode.siap.entity.award.Opening;
 import com.ryuseicode.siap.exception.ServiceException;
+import com.ryuseicode.siap.service.award.imp.AdjudicationService;
 import com.ryuseicode.siap.service.award.imp.AdjudicationStepService;
 import com.ryuseicode.siap.service.award.imp.EmissionService;
 import com.ryuseicode.siap.service.award.imp.OpeningService;
@@ -29,6 +30,11 @@ public class OpeningWrapper implements IOpeningWrapper {
 	 * Identifier
 	 */
 	private static final String IDENTIFIER = "OPENING";
+	/**
+	 * AdjudicationStepService
+	 */
+	@Autowired
+	private AdjudicationService adjudicationService;
 	/**
 	 * AdjudicationStepService
 	 */
@@ -69,6 +75,7 @@ public class OpeningWrapper implements IOpeningWrapper {
 		this.openingService.save(opening);
 		// Save step
 		this.adjudicationStepService.Save(new AdjudicationStep(0, opening.getAdjudicationId(), IDENTIFIER, LocalDateTime.now()));
-		
+		// Update status
+		this.adjudicationService.updateStatus(opening.getAdjudicationId(), AdjudicationService.STATUS_DETAIL);
 	}	
 }

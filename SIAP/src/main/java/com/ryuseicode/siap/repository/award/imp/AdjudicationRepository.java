@@ -44,6 +44,57 @@ public class AdjudicationRepository implements IAdjudicationRepository {
                                 rs.getString("status"),
                                 new Timestamp(rs.getDate("creationdate").getTime()).toLocalDateTime(),
                                 rs.getDate("closedate") != null ? new Timestamp(rs.getDate("closedate").getTime()).toLocalDateTime() : null,
+                                rs.getDate("enddate") != null ? new Timestamp(rs.getDate("enddate").getTime()).toLocalDateTime() : null,
+                                rs.getInt("active")
+                        )
+        );
+	}
+	/**
+	 * @name getPending
+	 * {@summary Method to get Pending }
+	 * @return
+	 */
+	public List<Adjudication> getPending() {
+		return jdbcTemplate.query(
+                "select * from ADJUDICATION where finishdate is null and Active = 1 ",
+                (rs, rowNum) ->
+                        new Adjudication(
+                        		rs.getInt("adjudicationid"),
+                                rs.getString("procedurenumber"),
+                                rs.getString("contracttype"),
+                                rs.getString("modality"),
+                                rs.getString("sourceorigin"),
+                                rs.getString("adjudicationtype"),
+                                rs.getDouble("amount"),
+                                rs.getString("status"),
+                                new Timestamp(rs.getDate("creationdate").getTime()).toLocalDateTime(),
+                                rs.getDate("closedate") != null ? new Timestamp(rs.getDate("closedate").getTime()).toLocalDateTime() : null,
+                                rs.getDate("finishdate") != null ? new Timestamp(rs.getDate("finishdate").getTime()).toLocalDateTime() : null,
+                                rs.getInt("active")
+                        )
+        );
+	}
+	/**
+	 * @name getFinished
+	 * {@summary Method to get finished }
+	 * @return
+	 */
+	public List<Adjudication> getFinished() {
+		return jdbcTemplate.query(
+                "select * from ADJUDICATION where finishdate is not null and Active = 1 ",
+                (rs, rowNum) ->
+                        new Adjudication(
+                        		rs.getInt("adjudicationid"),
+                                rs.getString("procedurenumber"),
+                                rs.getString("contracttype"),
+                                rs.getString("modality"),
+                                rs.getString("sourceorigin"),
+                                rs.getString("adjudicationtype"),
+                                rs.getDouble("amount"),
+                                rs.getString("status"),
+                                new Timestamp(rs.getDate("creationdate").getTime()).toLocalDateTime(),
+                                rs.getDate("closedate") != null ? new Timestamp(rs.getDate("closedate").getTime()).toLocalDateTime() : null,
+                                rs.getDate("finishdate") != null ? new Timestamp(rs.getDate("finishdate").getTime()).toLocalDateTime() : null,
                                 rs.getInt("active")
                         )
         );
@@ -70,6 +121,7 @@ public class AdjudicationRepository implements IAdjudicationRepository {
                                 rs.getString("status"),
                                 new Timestamp(rs.getDate("creationdate").getTime()).toLocalDateTime(),
                                 rs.getDate("closedate") != null ? new Timestamp(rs.getDate("closedate").getTime()).toLocalDateTime() : null,
+                                rs.getDate("finishdate") != null ? new Timestamp(rs.getDate("finishdate").getTime()).toLocalDateTime() : null,
                                 rs.getInt("active")
                         )
         );
@@ -97,6 +149,7 @@ public class AdjudicationRepository implements IAdjudicationRepository {
                                 rs.getString("status"),
                                 new Timestamp(rs.getDate("creationdate").getTime()).toLocalDateTime(),
                                 rs.getDate("closedate") != null ? new Timestamp(rs.getDate("closedate").getTime()).toLocalDateTime() : null,
+                                rs.getDate("finishdate") != null ? new Timestamp(rs.getDate("finishdate").getTime()).toLocalDateTime() : null,
                                 rs.getInt("active")
                         )
         );
@@ -114,6 +167,15 @@ public class AdjudicationRepository implements IAdjudicationRepository {
                 adjudication.getAmount(), adjudication.getStatus(), adjudication.getCreationDate(), adjudication.getActive());
 	}
 	/**
+	 * @name updateStatus
+	 * @abstract Method to update status
+	 */
+	public int updateStatus(int adjudicationId, String status) {
+		return jdbcTemplate.update(
+                "update ADJUDICATION set status = ? where adjudicationId = ?",
+                status, adjudicationId);
+	}
+	/**
 	 * @name updateCloseDate
 	 * {@summary Method to update close date }
 	 * @param adjudicationId
@@ -124,5 +186,28 @@ public class AdjudicationRepository implements IAdjudicationRepository {
 		return jdbcTemplate.update(
                 "update ADJUDICATION set closedate = ? where adjudicationId = ?",
                 closeDate, adjudicationId);
+	}
+	/**
+	 * @name updateEndDate
+	 * {@adjudication updateEndDate }
+	 * @param adjudicationId
+	 * @param endDate
+	 * @return
+	 */
+	public int updateFinishDate(int adjudicationId, LocalDateTime finishDate) {
+		return jdbcTemplate.update(
+                "update ADJUDICATION set finishdate = ? where adjudicationId = ?",
+                finishDate, adjudicationId);
+	}
+	/**
+	 * @name Delete
+	 * {@summary Method to delete adjudication}
+	 * @param adjudicationId
+	 * @throws Exception
+	 */
+	public int delete(int adjudicationId) {
+		return jdbcTemplate.update(
+                "update ADJUDICATION set active = ? where adjudicationId = ?",
+                0, adjudicationId);
 	}
 }

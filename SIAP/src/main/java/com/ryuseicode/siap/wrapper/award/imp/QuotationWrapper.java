@@ -593,6 +593,8 @@ public class QuotationWrapper implements IQuotationWrapper {
 		}
 		// Save step
  		this.adjudicationStepService.Save(new AdjudicationStep(0, adjudication.getAdjudicationId(), IDENTIFIER, LocalDateTime.now()));
+ 		// Update status
+ 	 	this.adjudicationService.updateStatus(adjudication.getAdjudicationId(), AdjudicationService.STATUS_FAILURE);
  		// return filename
 		return fileNames;
 	}

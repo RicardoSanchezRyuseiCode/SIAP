@@ -86,6 +86,11 @@ public class Adjudication {
 	@JsonFormat(pattern="yyyy-MM-dd HH:mm:ss")
 	private LocalDateTime  closeDate;
 	/**
+	 * EndDate
+	 */
+	@JsonFormat(pattern="yyyy-MM-dd HH:mm:ss")
+	private LocalDateTime finishDate;
+	/**
 	 * Active
 	 */
 	private int active;
@@ -102,7 +107,7 @@ public class Adjudication {
 	 * @param creationDate
 	 * @param active
 	 */
-	public Adjudication(int adjudicationId, String procedureNumber, String contractType, String modality, String sourceOrigin, String adjudicationType, double amount, String status, LocalDateTime  creationDate, LocalDateTime  closeDate, int active) {
+	public Adjudication(int adjudicationId, String procedureNumber, String contractType, String modality, String sourceOrigin, String adjudicationType, double amount, String status, LocalDateTime  creationDate, LocalDateTime  closeDate, LocalDateTime finishDate, int active) {
 		this.setAdjudicationId(adjudicationId);
 		this.setProcedureNumber(procedureNumber);
 		this.setContractType(contractType);
@@ -113,6 +118,7 @@ public class Adjudication {
 		this.setStatus(status);
 		this.setCreationDate(creationDate);
 		this.setCloseDate(closeDate);
+		this.setFinishDate(finishDate);
 		this.setActive(active);
 	}
 	/**
@@ -246,5 +252,17 @@ public class Adjudication {
 	 */
 	public void setActive(int active) {
 		this.active = active;
+	}
+	/**
+	 * @return the endDate
+	 */
+	public LocalDateTime getFinishDate() {
+		return finishDate;
+	}
+	/**
+	 * @param endDate the endDate to set
+	 */
+	public void setFinishDate(LocalDateTime finishDate) {
+		this.finishDate = finishDate;
 	}
 }

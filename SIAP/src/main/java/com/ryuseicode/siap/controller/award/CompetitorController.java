@@ -16,8 +16,10 @@ import org.springframework.web.server.ResponseStatusException;
 
 import com.ryuseicode.siap.exception.ServiceException;
 import com.ryuseicode.siap.paraminput.award.CompetitorCreationParam;
+import com.ryuseicode.siap.paramoutput.award.CompetitorContractStatusParamOutput;
 import com.ryuseicode.siap.paramoutput.award.CompetitorParamOutput;
 import com.ryuseicode.siap.service.award.imp.CompetitorService;
+import com.ryuseicode.siap.wrapper.award.imp.CompetitorWrapper;
 /**
  * @name CompetitorController
  * {@summary Controller to expose endpoints of Competitor }
@@ -32,6 +34,11 @@ public class CompetitorController {
 	@Autowired
 	private CompetitorService competitorService;
 	/**
+	 * CompetitorWrapper
+	 */
+	@Autowired
+	private CompetitorWrapper competitorWrapper;
+	/**
 	 * @name getByAdjudicationId
 	 * {@summary Method to get a collection of competitor }
 	 * @param adjudicationId
@@ -41,6 +48,17 @@ public class CompetitorController {
 	@GetMapping(path = "/award/competitor/getByAdjudicationId/{adjudicationId}", produces = "application/json")
 	public List<CompetitorParamOutput> getByAdjudicationId(@PathVariable("adjudicationId") int adjudicationId) {
 		return this.competitorService.getByAdjudicationId(adjudicationId);
+	}
+	/**
+	 * getWinnersByAdjudicationId
+	 * {@summary Method to get competitors winners for adjudication and the status of competitor}
+	 * @param adjudicationId
+	 * @return
+	 */
+	@ResponseBody
+	@GetMapping(path = "/award/competitor/getWinnersByAdjudicationId/{adjudicationId}", produces = "application/json")
+	public List<CompetitorContractStatusParamOutput> getWinnersByAdjudicationId(@PathVariable("adjudicationId") int adjudicationId) {
+		return this.competitorWrapper.getWinnersByAdjudicationId(adjudicationId);
 	}
 	/**
 	 * @name post

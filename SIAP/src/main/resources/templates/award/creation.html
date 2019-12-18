@@ -104,8 +104,11 @@
 									                                        <h6 class="card-subtitle">Estatus</h6></div>
 									                                    <div class="col-12">
 									                                        <div class="progress">
-									                                            <div class="progress-bar bg-primary" role="progressbar" style="width: 85%; height: 6px;" aria-valuenow="10" aria-valuemin="0" aria-valuemax="100"></div>
+									                                            <div id="progressBar" class="progress-bar bg-primary" role="progressbar" style="width: 0%; height: 6px;" aria-valuenow="10" aria-valuemin="0" aria-valuemax="100"></div>
 									                                        </div>
+									                                        
+									                                        
+									                                        
 									                                    </div>
 									                                </div>
 									                            </div>
@@ -213,7 +216,7 @@
 	                                    							>
 		                    											<option selected>Seleccionar contrato</option>
 		                    											<option value="Bienes/Abierto">Bienes/Abierto</option>
-		                    											<option value="Bienes/Cerrrado">Bienes/Cerrrado</option>
+		                    											<option value="Bienes/Cerrado">Bienes/Cerrrado</option>
 		                    											<option value="Prestación de servicios">Prestación de servicios</option>
 		                    										</select>
 		                    									</div>
@@ -271,6 +274,17 @@
 			                    					</div>
 			                    					<div class="col-md-4">
 			                    						<button type="button" id="BtnContract" class="btn waves-effect waves-light btn-light btn-block">Contrato</button>
+			                    					</div>
+		                    					</div>
+		                    					<div class="row mt-3">
+			                    					<div class="col-md-4">
+			                    						
+			                    					</div>
+			                    					<div class="col-md-4">
+			                    						<button type="button" id="newAdjudication" class="btn waves-effect waves-light btn-primary btn-block">Nueva Adjudicación</button>
+			                    					</div>
+			                    					<div class="col-md-4">
+			                    						
 			                    					</div>
 		                    					</div>
 				                                
@@ -357,6 +371,7 @@
 		<script type="text/javascript" th:src="@{/Xtreme/extra-libs/DataTablesV4/KeyTable-2.5.1/js/keyTable.bootstrap4.min.js}"></script>
 		<script type="text/javascript" th:src="@{/Xtreme/libs/spectrum/datatables.min.js}"></script>
 		<script type="text/javascript" th:src="@{/Xtreme/libs/spectrum/spectrum.js}"></script>
+		<script type="text/javascript" th:src="@{/Xtreme/extra-libs/prism/prism.js}"></script>
 		<!-- ====================================================================================== -->
 		<!-- =								         Elysium	     					          = -->
 		<!-- ====================================================================================== -->
@@ -406,6 +421,8 @@
 		<script type="text/javascript" th:src="@{/Elysium/App/Services/Award/OpeningService.js}"></script>
 		<script type="text/javascript" th:src="@{/Elysium/App/Services/Award/ProposalService.js}"></script>
 		<script type="text/javascript" th:src="@{/Elysium/App/Services/Award/QuotationService.js}"></script>
+		<script type="text/javascript" th:src="@{/Elysium/App/Services/Award/ContractService.js}"></script>
+		<script type="text/javascript" th:src="@{/Elysium/App/Services/Award/AdjudicationDocumentService.js}"></script>
 		<script type="text/javascript" th:src="@{/Elysium/App/Services/Util/DateParserService.js}"></script>		
 		<script type="text/javascript" th:src="@{/Elysium/App/Interfaces/IController.js}"></script>
 		<script type="text/javascript" th:src="@{/Elysium/App/Controllers/Areas/Award/CreationController.js}"></script>		
@@ -417,15 +434,19 @@
 		<!-- ============================================================== -->
 		<!--                            Script of page                      -->
 		<!-- ============================================================== -->		
-		<script>
+		<script th:inline="javascript">
 		    /**
 		     * Entry point of app
 		     */
 		    $(document).ready(function () {
 		        // Define controller
 		        var controller = Elysium.Implements(new Elysium.App.Controllers.Areas.Award.CreationController({
+		        	Params: {
+		        		AdjudicationId: /*[[${adjudicationId}]]*/ '0' 
+		        	},
 		            UI: {
 		                MainPanel: "#content",
+		                ProgressBar: "#progressBar",
 		                ModalInvitation: "#ModalInvitation",
 		                ModalAppend: "#ModalAppend",
 		                ModalTechnicalAperture: "#ModalTechnicalAperture",
@@ -444,10 +465,6 @@
 		                AppendTable: "#AppendTable",
 		                DetailTATable1: "#DetailTATable1",
 		                DetailTATable2: "#DetailTATable2",
-		                ContractTable: "#ContractTable",
-		                ContractSelection: "#ContractSelection",
-		                ContractData: "#ContractData",
-		                ContractBtnGenerate: "#BtnGenerateContract",
 		                FormAdjudicationStatus: "[data-elysium-adjudication-status]",
 		                FormAdjudication: "#FormAdjudication",
 		                EmissionForm: "#emisionForm",
@@ -488,7 +505,27 @@
 		                JudgmentCloseDate:"#closeDate",
 		                JudgmentCloseDateText:"#closeDateText",
 		                JudgmentCloseHour:"#closeHour",
-	                	JudgmentCloseHourText:"#closeHourText",
+	                	JudgmentCloseHourText:"#closeHourText",	                	
+	                	ContractTable: "#ContractTable",
+		                ContractSelection: "#ContractSelection",
+		                ContractData: "#ContractData",
+		                ContractBtnGenerate: "#BtnGenerateContract",
+		                ContractAwardedProvided: "#AwardedProvider",
+		                ContractPhysicalPerson: "#physicalPerson",
+		                ContractForm: "#ContractForm",
+		                ContractLegalDate: "#legalDate",
+		                ContractLegalDateText: "#legalDateText",
+		                ContractLegalAgentDate: "#legalAgentDate",
+		                ContractLegalAgentDateText: "#legalAgentDateText",
+		                ContractDueDate: "#dueDate",
+		                ContractDueDateText: "#dueDateText",
+		                ContractMaxAmount: "#maxAmount",
+		                ContractMinAmount: "#minAmount",
+		                ContractDeposit: "#deposit",
+		                ContractDepositPercent: "#depositPercent",
+		                ContractDepositInAdvance: "#depositInAdvance",
+		                ContractDepositCb: "#depositPercentCb",
+		                NewAdjudication: "#newAdjudication"
 		            }
 		        }), [Elysium.App.Interfaces.IController]);
 		        // Initialize controller

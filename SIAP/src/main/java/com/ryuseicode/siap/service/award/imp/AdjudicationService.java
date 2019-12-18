@@ -22,7 +22,14 @@ public class AdjudicationService implements IAdjudicationService {
 	/**
 	 * Status In Process
 	 */
-	private static final String STATUS_IN_PROCESS = "En proceso";
+	public static final String STATUS_INVITATION = "Invitación";
+	public static final String STATUS_ANNEX = "Anexo";
+	public static final String STATUS_OPENING = "Apertura Técnica-Económica";
+	public static final String STATUS_DETAIL = "Detalle Apertura Técnica-Económica";
+	public static final String STATUS_QUOTATION = "Cuadro Comparativo";
+	public static final String STATUS_FAILURE = "Fallo";
+	public static final String STATUS_CONTRACT = "Contrato";
+	public static final String STATUS_FINISHED = "Completada";
 	/**
 	 * Status Complete
 	 */
@@ -41,6 +48,22 @@ public class AdjudicationService implements IAdjudicationService {
 	 */
 	public List<Adjudication> get() {
 		return this.adjudicationRepository.get();
+	}
+	/**
+	 * @name getPending
+	 * {@summary Method to get Pending }
+	 * @return
+	 */
+	public List<Adjudication> getPending() {
+		return this.adjudicationRepository.getPending();
+	}
+	/**
+	 * @name getFinished
+	 * {@summary Method to get finished }
+	 * @return
+	 */
+	public List<Adjudication> getFinished() {
+		return this.adjudicationRepository.getFinished();
 	}
 	/**
 	 * @name GetById
@@ -72,10 +95,25 @@ public class AdjudicationService implements IAdjudicationService {
 		}
 		// Set default data
 		adjudication.setCreationDate(LocalDateTime.now());
-		adjudication.setStatus(AdjudicationService.STATUS_IN_PROCESS);
+		adjudication.setStatus(AdjudicationService.STATUS_INVITATION);
 		adjudication.setActive(1);
 		// Save adjudication
 		this.adjudicationRepository.save(adjudication);
+	}
+	/**
+	 * @name updateStatus
+	 * {@summary Method to update status}
+	 * @param adjudicationId
+	 * @param status
+	 * @return
+	 */
+	public void updateStatus(int adjudicationId, String status) throws Exception {
+		// Check if procedure number not exit
+		if(this.adjudicationRepository.getById(adjudicationId) == null) {
+			throw new ServiceException("No se encontro la adjudicación a actualizar");
+		}
+		// Close adjudication
+		this.adjudicationRepository.updateStatus(adjudicationId, status);
 	}
 	/**
 	 * @name updateCloseDate
@@ -91,5 +129,35 @@ public class AdjudicationService implements IAdjudicationService {
 		}
 		// Close adjudication
 		this.adjudicationRepository.updateCloseDate(adjudicationId, closeDate);
+	}
+	/**
+	 * @name updateFinishDate
+	 * {@summary Method to update finish date }
+	 * @param adjudicationId
+	 * @param finishDate
+	 * @throws Exception
+	 */
+	public void updateFinishDate(int adjudicationId, LocalDateTime finishDate) throws Exception {
+		// Check if procedure number not exit
+		if(this.adjudicationRepository.getById(adjudicationId) == null) {
+			throw new ServiceException("No se encontro la adjudicación a actualizar");
+		}
+		// Close adjudication
+		this.adjudicationRepository.updateFinishDate(adjudicationId, finishDate);
+	}
+	
+	/**
+	 * @name Delete
+	 * {@summary Method to delete adjudication}
+	 * @param adjudicationId
+	 * @throws Exception
+	 */
+	public void delete(int adjudicationId) throws Exception {
+		// Check if procedure number not exit
+		if(this.adjudicationRepository.getById(adjudicationId) == null) {
+			throw new ServiceException("No se encontro la adjudicación a eliminar");
+		}
+		// Close adjudication
+		this.adjudicationRepository.delete(adjudicationId);
 	}
 }

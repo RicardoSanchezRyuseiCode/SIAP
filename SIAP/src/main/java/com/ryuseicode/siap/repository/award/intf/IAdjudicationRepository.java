@@ -19,6 +19,18 @@ public interface IAdjudicationRepository {
 	 */
 	List<Adjudication> get();
 	/**
+	 * @name getPending
+	 * {@summary Method to get Pending }
+	 * @return
+	 */
+	List<Adjudication> getPending();
+	/**
+	 * @name getFinished
+	 * {@summary Method to get finished }
+	 * @return
+	 */
+	List<Adjudication> getFinished();
+	/**
 	 * @name GetById
 	 * {@summary Method to get an adjudication by id }
 	 * @param adjudicationId
@@ -39,6 +51,14 @@ public interface IAdjudicationRepository {
 	 */
 	int save(Adjudication adjudication);
 	/**
+	 * @name updateStatus
+	 * {@summary Method to update status}
+	 * @param adjudicationId
+	 * @param status
+	 * @return
+	 */
+	int updateStatus(int adjudicationId, String status);
+	/**
 	 * @name updateCloseDate
 	 * {@summary Method to update close date }
 	 * @param adjudicationId
@@ -46,4 +66,19 @@ public interface IAdjudicationRepository {
 	 * @return
 	 */
 	int updateCloseDate(int adjudicationId, LocalDateTime closeDate);
+	/**
+	 * @name updateEndDate
+	 * {@summary Method to update end date }
+	 * @param adjudicationId
+	 * @param endDate
+	 * @return
+	 */
+	int updateFinishDate(int adjudicationId, LocalDateTime finishDate);	
+	/**
+	 * @name Delete
+	 * {@summary Method to delete adjudication}
+	 * @param adjudicationId
+	 * @throws Exception
+	 */
+	int delete(int adjudicationId);
 }

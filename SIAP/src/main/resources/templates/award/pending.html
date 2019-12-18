@@ -96,6 +96,7 @@
 			                                            <th>Contrato</th>
 			                                            <th>Origen del recurso</th>
 			                                            <th>Estatus</th>
+			                                            <th>Acciones</th>
 			                                        </tr>
 			                                    </thead>
 			                                    <tbody>
@@ -104,7 +105,7 @@
 			                                </table>
 			                            </div>
 			                            <hr/>
-			                            <div class="row">
+			                            <!-- <div class="row">
 	                                    	<div class="offset-md-8 col-md-2">
 	                                    		<button id="Continue" type="button" class="btn btn-primary waves-effect waves-light btn-block">
 	                                    			<span class="fas fa-play"></span> Continuar
@@ -115,7 +116,7 @@
 	                                    			<span class="fas fa-times"></span> Borrar procedimiento
 	                                    		</button>
 	                                    	</div>
-	                                    </div>				                 					
+	                                    </div> -->				                 					
                     				</div>
                     				<!-- Card body -->
                     			</div>
@@ -215,7 +216,8 @@
 		<script type="text/javascript" th:src="@{/Elysium/UI/Entities/ReportViewer.js}"></script>
 		<script type="text/javascript" th:src="@{/Elysium/UI/Entities/Stylesheet.js}"></script>
 		<script type="text/javascript" th:src="@{/Elysium/UI/Entities/Calendar.js}"></script>
-		<script type="text/javascript" th:src="@{/Elysium/Directives/RequestError.js}"></script>		
+		<script type="text/javascript" th:src="@{/Elysium/Directives/RequestError.js}"></script>
+		<script type="text/javascript" th:src="@{/Elysium/App/Services/Award/AdjudicationService.js}"></script>		
 		<script type="text/javascript" th:src="@{/Elysium/App/Interfaces/IController.js}"></script>
 		<script type="text/javascript" th:src="@{/Elysium/App/Controllers/Areas/Award/PendingController.js}"></script>
 		<script type="text/javascript" th:src="@{/Elysium/App/Globals/BrdcstChGlobals.js}"></script>
@@ -234,7 +236,7 @@
 		        // Define controller
 		        var controller = Elysium.Implements(new Elysium.App.Controllers.Areas.Award.PendingController({
 		            UI: {
-		                MainPanel: ".container-fluid",
+		                MainPanel: "#content",
 		                DataTable: "#PendingTable"
 		            }
 		        }), [Elysium.App.Interfaces.IController]);

@@ -3,6 +3,7 @@ package com.ryuseicode.siap.controller.award;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 
 /**
  * @name UserController
@@ -18,7 +19,8 @@ public class AwardController {
 	 * @return
 	 */
 	@RequestMapping("/award/creation")
-	public String creation(Model model) {
+	public String creation(@RequestParam(name="adjudicationId", required=false, defaultValue= "0") String adjudicationId, Model model) {
+	  model.addAttribute("adjudicationId", adjudicationId);
 	  return "award/creation";
 	}
 	/**

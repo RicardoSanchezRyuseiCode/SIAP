@@ -54,6 +54,10 @@ public class AdjudicationWrapper extends WordWrapper implements IAdjudicationWra
 	 */
 	private static final String IDENTIFIER = "JUDGMENT";
 	/**
+	 * IDENTIFIER_FINISHED
+	 */
+	private static final String IDENTIFIER_FINISHED = "FINISHED";
+	/**
 	 * LIMIT_FEDERAL_DIRECT
 	 */
 	private static final double LIMIT_FEDERAL_DIRECT  = 179000;
@@ -387,6 +391,8 @@ public class AdjudicationWrapper extends WordWrapper implements IAdjudicationWra
 		}
 		// Save step
 		this.adjudicationStepService.Save(new AdjudicationStep(0, adjudication.getAdjudicationId(), IDENTIFIER, LocalDateTime.now()) );
+		// Update status
+ 	 	this.adjudicationService.updateStatus(adjudication.getAdjudicationId(), AdjudicationService.STATUS_CONTRACT);
 		// return document names
 		return documentNames;
 	}
@@ -425,4 +431,20 @@ public class AdjudicationWrapper extends WordWrapper implements IAdjudicationWra
 		// Create document
 		return createDocument(adjudication, institution, emission, opening,  competitorOutputParams, dicProposalByCompetitorId, dicItemsByProposalId);
 	}
+	/**
+	 * @name finishAdjudication
+	 * {@summary Method to finish adjudication}
+	 * @param adjudicationId
+	 * @throws Exception
+	 */
+	public void finishAdjudication(int adjudicationId) throws Exception
+	{
+		// Close adjudication
+		this.adjudicationService.updateFinishDate(adjudicationId, LocalDateTime.now());
+		// Save step
+		this.adjudicationStepService.Save(new AdjudicationStep(0, adjudicationId, IDENTIFIER_FINISHED, LocalDateTime.now()) );
+		// Update status
+ 	 	this.adjudicationService.updateStatus(adjudicationId, AdjudicationService.STATUS_FINISHED);
+	}
+	
 }

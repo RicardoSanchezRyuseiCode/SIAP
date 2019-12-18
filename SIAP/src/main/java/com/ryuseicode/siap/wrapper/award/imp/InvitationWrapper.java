@@ -152,6 +152,8 @@ public class InvitationWrapper extends WordWrapper implements IInvitationWrapper
 		this.adjudicationDocumentService.Save(adjudicationDocuments);
 		// Save step
 		this.adjudicationStepService.Save(new AdjudicationStep(0, adjudication.getAdjudicationId(), IDENTIFIER, LocalDateTime.now()));
+		// Update status
+ 		this.adjudicationService.updateStatus(adjudication.getAdjudicationId(), AdjudicationService.STATUS_ANNEX);
 		// return path of document
 		return documentPaths;
 	}

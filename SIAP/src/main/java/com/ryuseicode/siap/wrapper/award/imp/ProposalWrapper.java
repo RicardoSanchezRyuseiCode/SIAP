@@ -374,6 +374,8 @@ public class ProposalWrapper implements IProposalWrapper {
  		this.adjudicationDocumentService.Save(new AdjudicationDocument(0, adjudication.getAdjudicationId(), IDENTIFIER, new File(pathDocument).getName(), pathDocument) );
  		// Save step
  		this.adjudicationStepService.Save(new AdjudicationStep(0, adjudication.getAdjudicationId(), IDENTIFIER, LocalDateTime.now()));
+ 		// Update status
+ 		this.adjudicationService.updateStatus(opening.getAdjudicationId(), AdjudicationService.STATUS_QUOTATION);
 		// Return file name
 		return new File(pathDocument).getName();
 	}

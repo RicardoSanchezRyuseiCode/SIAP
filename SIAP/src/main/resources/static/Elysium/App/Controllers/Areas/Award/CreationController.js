@@ -19,6 +19,8 @@ Elysium.App.Controllers.Areas.Award.CreationController = function (arguments) {
 	var OpeningService = Elysium.App.Services.Award.OpeningService;
 	var ProposalService = Elysium.App.Services.Award.ProposalService;
 	var QuotationService = Elysium.App.Services.Award.QuotationService;
+	var ContractService = Elysium.App.Services.Award.ContractService;
+	var AdjudicationDocumentService = Elysium.App.Services.Award.AdjudicationDocumentService;
 	// Util
 	var DateParserService = Elysium.App.Services.Util.DateParserService;
 	/*******************************************************************************/
@@ -274,6 +276,58 @@ Elysium.App.Controllers.Areas.Award.CreationController = function (arguments) {
         	{ data: "" },
         ],
     }), [Elysium.UI.Interfaces.ITable]);
+    
+    // Contract table
+    var IContractTable = Elysium.Implements(new Elysium.UI.Entities.Table({
+        selector: Attr.UI.ContractTable,
+        responsive: true,
+        paging: true,
+        keys: true,
+        columnDefs: [
+        	{
+    			targets: 1,
+                searchable: false,
+                orderable: false,
+                className: 'dt-center',
+                render: function (data, type, full, meta) {
+                	return '<label>$ ' + full.cost + '</label>';
+                }
+    		},
+    		{
+    			targets: 2,
+                searchable: false,
+                orderable: false,
+                className: 'dt-center',
+                render: function (data, type, full, meta) {
+                	if(full.haveContract)
+                		return '<label>Generado</label>';
+                	else
+                		return '<label>Pendiente</label>';
+                }
+    		},
+    		{
+    			targets: 3,
+                searchable: false,
+                orderable: false,
+                className: 'dt-center',
+                render: function (data, type, full, meta) {
+                	if(!full.haveContract)
+                		return '<button class="btn btn-primary" data-elysium-adjudication-contract-show-generate>' +
+                					'<span class="fas fa-file-alt"></span> Generar Contrato' +
+                			   '</button>';
+                	else
+                		return '';
+                }
+    		}
+    		
+        ],
+        columns: [
+        	{ data: "supplier.name" },
+        	{ data: "" },
+        	{ data: "" },
+        	{ data: "" }
+        ],
+    }), [Elysium.UI.Interfaces.ITable]);
     // Global adjudication
     var GLOBAL_ADJUDICATION = null;    
     /*************************************/
@@ -378,6 +432,128 @@ Elysium.App.Controllers.Areas.Award.CreationController = function (arguments) {
     /*             Adjudication          */
     /*************************************/
     /**
+     * @name SetAdjudicationStatus
+     * @abstract Method to set adjudication status
+     */
+    var SetAdjudicationStatus = function() {
+    	// Set progress
+		switch(GLOBAL_ADJUDICATION.status) {
+			case "Invitación":
+				$(Attr.UI.ProgressBar).css('width', '12.5%')
+				break;
+			case "Anexo":
+				$(Attr.UI.ProgressBar).css('width', '25%')
+				break;
+			case "Apertura Técnica-Económica": 
+				$(Attr.UI.ProgressBar).css('width', '37.5%')
+				break;
+			case "Detalle Apertura Técnica-Económica": 
+				$(Attr.UI.ProgressBar).css('width', '50%')
+				break;
+			case "Cuadro Comparativo": 
+				$(Attr.UI.ProgressBar).css('width', '62.5%')
+				break;
+			case "Fallo": 
+				$(Attr.UI.ProgressBar).css('width', '75%')
+				break;
+			case "Contrato": 
+				$(Attr.UI.ProgressBar).css('width', '87.5%')
+				break;
+			case "Completada": 
+				$(Attr.UI.ProgressBar).css('width', '100%')
+				break;
+		}
+    }
+    /**
+     * @name EnableAdjudicationButtonByStatus
+     * @abstract Method enable adjudication buttons by status
+     */
+    var EnableAdjudicationButtonByStatus = function() {
+    	// Set progress
+		switch(GLOBAL_ADJUDICATION.status) {
+			case "Invitación":
+				$(Attr.UI.BtnInvitation).prop('disabled', false);
+				break;
+			case "Anexo":
+				$(Attr.UI.BtnAppend).prop('disabled', false);
+				break;
+			case "Apertura Técnica-Económica": 
+				$(Attr.UI.BtnTechnicalAperture).prop('disabled', false);
+				break;
+			case "Detalle Apertura Técnica-Económica": 
+				$(Attr.UI.BtnDetailTechnicalAperture).prop('disabled', false);
+				break;
+			case "Cuadro Comparativo": 
+				$(Attr.UI.BtnComparativeChart).prop('disabled', false);
+				break;
+			case "Fallo": 
+				$(Attr.UI.BtnJudgment).prop('disabled', false);
+				break;
+			case "Contrato": 
+				$(Attr.UI.BtnContract).prop('disabled', false);
+				break;
+		}
+    }
+    /**
+     * @name GetAdjudicationByProcedureNumber
+     * @abstract Method to get adjudication by procedure number
+     */
+    var GetAdjudicationByProcedureNumber = function(procedureNumber) {
+    	var deferred = new $.Deferred();
+    	// Get the definition of adjudication saved
+    	AdjudicationService.GetByProcedureNumber(procedureNumber).then(
+			function(adjudication) {
+				// Assign global adjudication
+    			GLOBAL_ADJUDICATION = adjudication;
+    			// Set status
+    			$(Attr.UI.FormAdjudicationStatus).text(GLOBAL_ADJUDICATION.status);
+    			// Set adjudication ststua
+    			SetAdjudicationStatus();
+    			// resolve promice
+				deferred.resolve();
+			},
+			function (xhr) {
+				deferred.reject(xhr);
+			}
+		);
+    	// return promise
+        return deferred.promise();
+    }
+    /**
+     * @name GetAdjudicationByAdjudicationId
+     * @asbtrct Method to get adjudication by id
+     */
+    var GetAdjudicationByAdjudicationId = function(adjudicationId) {
+    	var deferred = new $.Deferred();
+    	// Get the definition of adjudication saved
+    	AdjudicationService.GetById(adjudicationId).then(
+			function(adjudication) {
+				// Assign global adjudication
+    			GLOBAL_ADJUDICATION = adjudication;
+    			// Set status
+    			$(Attr.UI.FormAdjudicationStatus).text(GLOBAL_ADJUDICATION.status);
+    			// Set adjudication ststua
+    			SetAdjudicationStatus();
+    			// Enable button
+    			EnableAdjudicationButtonByStatus();
+    			// Set adjudication information form
+    			FormAdjudication.SetValues(GLOBAL_ADJUDICATION);
+    			// Set elements on read only
+                $(Attr.UI.FormAdjudication).find("input").prop('disabled', true);
+                $(Attr.UI.FormAdjudication).find("select").prop('disabled', true);
+                $(Attr.UI.FormAdjudication).find("button").prop('disabled', true);
+    			// resolve promice
+				deferred.resolve();
+			},
+			function (xhr) {
+				deferred.reject(xhr);
+			}
+		);
+    	// return promise
+        return deferred.promise();
+    }
+    
+    /**
      * @name OnSuccessAdjudication
      * @abstract Event fired when adjudication form validation success
      */
@@ -400,12 +576,8 @@ Elysium.App.Controllers.Areas.Award.CreationController = function (arguments) {
     	            	AdjudicationService.Save(adjudication).then(
     	                    function () {
     	                    	// Get the definition of adjudication saved
-    	                    	AdjudicationService.GetByProcedureNumber(adjudication.procedureNumber).then(
-    	                    		function (adjudicationSaved) {
-    	                    			// Assign global adjudication
-    	                    			GLOBAL_ADJUDICATION = adjudicationSaved;
-    	                    			// Set status
-    	                    			$(Attr.UI.FormAdjudicationStatus).text(GLOBAL_ADJUDICATION.status);
+    	                    	GetAdjudicationByProcedureNumber(adjudication.procedureNumber).then(
+    	                    		function () {
     	                    			// Close message
     	    	                    	Elysium.UI.Entities.MsgBox.Close();
     	    	                        // Show success information
@@ -710,19 +882,30 @@ Elysium.App.Controllers.Areas.Award.CreationController = function (arguments) {
             	// Send information to server
             	InvitationService.Create(GLOBAL_ADJUDICATION.adjudicationId).then(            	
                     function (fileNames) {
-                    	// Close message
-                    	Elysium.UI.Entities.MsgBox.Close();
-                        // Show success information
-                        Elysium.UI.Entities.Notification.Success({ text: "La invitación se ha creado correctamente", time: Elysium.NotificationTime });
-                        // Loop in collection to download file
-                        fileNames.forEach(function(element, index, array) {
-                        	InvitationService.Download(element);
-                        });
-                        // Close modal
-                        $(Attr.UI.ModalInvitation).modal("hide");
-                        // Disable button to show modal and enable second button
-                        $(Attr.UI.BtnInvitation).prop('disabled', true);
-                    	$(Attr.UI.BtnAppend).prop('disabled', false);
+                    	// Get the definition of adjudication saved
+                    	GetAdjudicationByProcedureNumber(GLOBAL_ADJUDICATION.procedureNumber).then(
+                			function() {
+                				// Close message
+                            	Elysium.UI.Entities.MsgBox.Close();
+                                // Show success information
+                                Elysium.UI.Entities.Notification.Success({ text: "La invitación se ha creado correctamente", time: Elysium.NotificationTime });
+                                // Loop in collection to download file
+                                fileNames.forEach(function(element, index, array) {
+                                	AdjudicationDocumentService.Download(element);
+                                });
+                                // Close modal
+                                $(Attr.UI.ModalInvitation).modal("hide");
+                                // Disable button to show modal and enable second button
+                                $(Attr.UI.BtnInvitation).prop('disabled', true);
+                            	$(Attr.UI.BtnAppend).prop('disabled', false);
+                			}, 
+                			function(xhr) {
+                				// Close message
+                            	Elysium.UI.Entities.MsgBox.Close();
+                                // Show error
+                                Elysium.Directives.RequestError.ThrowXhr(xhr);
+                			}
+            			);
                     },
                     function (xhr) {
                     	// Close message
@@ -954,17 +1137,28 @@ Elysium.App.Controllers.Areas.Award.CreationController = function (arguments) {
     	            	// Send information to server
     	            	AnnexService.Create(param).then(            	
     	                    function (fileName) {
-    	                    	// Close message
-    	                    	Elysium.UI.Entities.MsgBox.Close();
-    	                        // Show success information
-    	                        Elysium.UI.Entities.Notification.Success({ text: "El anexo se ha creado correctamente", time: Elysium.NotificationTime });
-    	                        // Download file
-	                        	AnnexService.Download(fileName);
-    	                        // Close modal
-    	                        $(Attr.UI.ModalAppend).modal("hide");
-    	                        // Disable button to show modal and enable second button
-    	                        $(Attr.UI.BtnAppend).prop('disabled', true);
-    	                    	$(Attr.UI.BtnTechnicalAperture).prop('disabled', false);
+    	                    	// Get the definition of adjudication saved
+    	                    	GetAdjudicationByProcedureNumber(GLOBAL_ADJUDICATION.procedureNumber).then(
+	                    			function() {
+	                    				// Close message
+	        	                    	Elysium.UI.Entities.MsgBox.Close();
+	        	                        // Show success information
+	        	                        Elysium.UI.Entities.Notification.Success({ text: "El anexo se ha creado correctamente", time: Elysium.NotificationTime });
+	        	                        // Download file
+	        	                        AdjudicationDocumentService.Download(fileName);
+	        	                        // Close modal
+	        	                        $(Attr.UI.ModalAppend).modal("hide");
+	        	                        // Disable button to show modal and enable second button
+	        	                        $(Attr.UI.BtnAppend).prop('disabled', true);
+	        	                    	$(Attr.UI.BtnTechnicalAperture).prop('disabled', false);
+	                    			},
+	                    			function(xhr) {
+	                    				// Close message
+	        	                    	Elysium.UI.Entities.MsgBox.Close();
+	        	                        // Show error
+	        	                        Elysium.Directives.RequestError.ThrowXhr(xhr);
+	                    			}
+                    			);
     	                    },
     	                    function (xhr) {
     	                    	// Close message
@@ -1256,15 +1450,26 @@ Elysium.App.Controllers.Areas.Award.CreationController = function (arguments) {
             	// Send information to server
             	OpeningService.Save(opening).then(            	
                     function () {
-                    	// Close message
-                    	Elysium.UI.Entities.MsgBox.Close();
-                        // Show success information
-                        Elysium.UI.Entities.Notification.Success({ text: "La apertura técnica económica  se ha creado correctamente", time: Elysium.NotificationTime });
-                        // Close modal
-                        $(Attr.UI.ModalTechnicalAperture).modal("hide");
-                        // Disable button to show modal and enable second button
-                        $(Attr.UI.BtnTechnicalAperture).prop('disabled', true);
-                    	$(Attr.UI.BtnDetailTechnicalAperture).prop('disabled', false);
+                    	// Get the definition of adjudication saved
+                    	GetAdjudicationByProcedureNumber(GLOBAL_ADJUDICATION.procedureNumber).then(
+                    		function() {
+                    			// Close message
+                            	Elysium.UI.Entities.MsgBox.Close();
+                                // Show success information
+                                Elysium.UI.Entities.Notification.Success({ text: "La apertura técnica económica  se ha creado correctamente", time: Elysium.NotificationTime });
+                                // Close modal
+                                $(Attr.UI.ModalTechnicalAperture).modal("hide");
+                                // Disable button to show modal and enable second button
+                                $(Attr.UI.BtnTechnicalAperture).prop('disabled', true);
+                            	$(Attr.UI.BtnDetailTechnicalAperture).prop('disabled', false);
+                    		},
+                    		function(xhr) {
+                    			// Close message
+                            	Elysium.UI.Entities.MsgBox.Close();
+                                // Show error
+                                Elysium.Directives.RequestError.ThrowXhr(xhr);
+                    		}
+                    	);
                     },
                     function (xhr) {
                     	// Close message
@@ -1667,17 +1872,28 @@ Elysium.App.Controllers.Areas.Award.CreationController = function (arguments) {
             	// Send information to server
             	ProposalService.Create(params).then(            	
                     function (fileName) {
-                    	// Close message
-                    	Elysium.UI.Entities.MsgBox.Close();
-                        // Show success information
-                        Elysium.UI.Entities.Notification.Success({ text: "El detalle de apertura técnica económica  se ha creado correctamente", time: Elysium.NotificationTime });
-                        // Download file
-                    	ProposalService.Download(fileName);
-                        // Close modal
-                        $(Attr.UI.ModalDetailTechnicalAperture).modal("hide");
-                        // Disable button to show modal and enable second button
-                        $(Attr.UI.BtnDetailTechnicalAperture).prop('disabled', true);
-                    	$(Attr.UI.BtnComparativeChart).prop('disabled', false);
+                    	// Get the definition of adjudication saved
+                    	GetAdjudicationByProcedureNumber(GLOBAL_ADJUDICATION.procedureNumber).then(
+                			function() {
+                				// Close message
+                            	Elysium.UI.Entities.MsgBox.Close();
+                                // Show success information
+                                Elysium.UI.Entities.Notification.Success({ text: "El detalle de apertura técnica económica  se ha creado correctamente", time: Elysium.NotificationTime });
+                                // Download file
+                                AdjudicationDocumentService.Download(fileName);
+                                // Close modal
+                                $(Attr.UI.ModalDetailTechnicalAperture).modal("hide");
+                                // Disable button to show modal and enable second button
+                                $(Attr.UI.BtnDetailTechnicalAperture).prop('disabled', true);
+                            	$(Attr.UI.BtnComparativeChart).prop('disabled', false);
+                			},
+                			function(xhr) {
+                				// Close message
+                            	Elysium.UI.Entities.MsgBox.Close();
+                                // Show error
+                                Elysium.Directives.RequestError.ThrowXhr(xhr);
+                			}
+            			);
                     },
                     function (xhr) {
                     	// Close message
@@ -1702,7 +1918,7 @@ Elysium.App.Controllers.Areas.Award.CreationController = function (arguments) {
     /**
      * @name Method to validate data
      */
-    var ValidateData = function(data, row) {
+    var ValidateDataComparativeChart = function(data, row) {
     	// Validate status
 		if(data.quotationDetail.quotationDate == "" || data.quotationDetail.creditCondition == "" || data.quotationDetail.deliveryTerm == "") {
 			data.quotationDetail.status = "Ingresar Datos";
@@ -1734,7 +1950,7 @@ Elysium.App.Controllers.Areas.Award.CreationController = function (arguments) {
         			data.quotationDetail.quotationDate = date.format('YYYY-MM-DD');
         			data.quotationDetail.quotationDateText = $(evt.target).parent().parent().find("[data-adjudication-quotation-date-text]").val();
         			// Validate data
-        			ValidateData(data, $(evt.target).parent().parent());
+        			ValidateDataComparativeChart(data, $(evt.target).parent().parent());
     			});
     			
     		},
@@ -1748,7 +1964,7 @@ Elysium.App.Controllers.Areas.Award.CreationController = function (arguments) {
     			var data = IQuotationTable.GetRow($(evt.target).parent().parent()).data();
     			data.quotationDetail.quotationDate = "";
     			data.quotationDetail.quotationDateText = "";
-    			ValidateData(data, $(evt.target).parent().parent());
+    			ValidateDataComparativeChart(data, $(evt.target).parent().parent());
                 // Show error
                 Elysium.Directives.RequestError.ThrowXhr(xhr);
     		}
@@ -1828,7 +2044,7 @@ Elysium.App.Controllers.Areas.Award.CreationController = function (arguments) {
 		data.quotationDetail.creditCondition = $(cell.node()).parent().find('[data-adjudication-quotation-creditcondition]').val().trim();
 		data.quotationDetail.deliveryTerm = $(cell.node()).parent().find('[data-adjudication-quotation-deliveryterm]').val().trim();
 		// Validate data
-		ValidateData(data, $(cell.node()).parent());
+		ValidateDataComparativeChart(data, $(cell.node()).parent());
     }
     /**
      * @name QuotationElaborationDatePickerChange
@@ -1872,19 +2088,30 @@ Elysium.App.Controllers.Areas.Award.CreationController = function (arguments) {
             	// Send information to server
             	QuotationService.Create(params).then(            	
                     function (fileNames) {
-                    	// Close message
-                    	Elysium.UI.Entities.MsgBox.Close();
-                        // Show success information
-                        Elysium.UI.Entities.Notification.Success({ text: "El cuadro comparativo se ha creado correctamente", time: Elysium.NotificationTime });
-                        // Download files
-                        fileNames.forEach(function(fileName, index, array) {
-                        	QuotationService.Download(fileName);	
-                        });
-                        // Close modal
-                        $(Attr.UI.ModalComparativeChart).modal("hide");
-                        // Disable button to show modal and enable second button
-                        $(Attr.UI.BtnComparativeChart).prop('disabled', true);
-                    	$(Attr.UI.BtnJudgment).prop('disabled', false);
+                    	// Get the definition of adjudication saved
+                    	GetAdjudicationByProcedureNumber(GLOBAL_ADJUDICATION.procedureNumber).then(
+                    		function() {
+                    			// Close message
+                            	Elysium.UI.Entities.MsgBox.Close();
+                                // Show success information
+                                Elysium.UI.Entities.Notification.Success({ text: "El cuadro comparativo se ha creado correctamente", time: Elysium.NotificationTime });
+                                // Download files
+                                fileNames.forEach(function(fileName, index, array) {
+                                	AdjudicationDocumentService.Download(fileName);	
+                                });
+                                // Close modal
+                                $(Attr.UI.ModalComparativeChart).modal("hide");
+                                // Disable button to show modal and enable second button
+                                $(Attr.UI.BtnComparativeChart).prop('disabled', true);
+                            	$(Attr.UI.BtnJudgment).prop('disabled', false);
+                    		},
+                    		function(xhr) {
+                    			// Close message
+                            	Elysium.UI.Entities.MsgBox.Close();
+                                // Show error
+                                Elysium.Directives.RequestError.ThrowXhr(xhr);
+                    		}
+                    	);
                     },
                     function (xhr) {
                     	// Close message
@@ -1938,25 +2165,36 @@ Elysium.App.Controllers.Areas.Award.CreationController = function (arguments) {
     	}
     	// Show confirmation dialog
     	Elysium.UI.Entities.MsgBox.DialogQuestion(
-            'Crear cuadro comparativo',
-            '¿Desea proceder con la creación del cuadro comparativo?',
+            'Crear fallo',
+            '¿Desea proceder con la creación del fallo?',
             function () {
             	// Send information to server
             	AdjudicationService.Close(adjudicationCloseParam).then(            	
                     function (fileNames) {
-                    	// Close message
-                    	Elysium.UI.Entities.MsgBox.Close();
-                        // Show success information
-                        Elysium.UI.Entities.Notification.Success({ text: "El fallo se ha creado correctamente", time: Elysium.NotificationTime });
-                        // Download files
-                        fileNames.forEach(function(fileName, index, array) {
-                        	AdjudicationService.Download(fileName);	
-                        });
-                        // Close modal
-                        $(Attr.UI.ModalJudgment).modal("hide");
-                        // Disable button to show modal and enable second button
-                        $(Attr.UI.BtnJudgment).prop('disabled', true);
-                    	$(Attr.UI.BtnContract).prop('disabled', false);
+                    	// Get the definition of adjudication saved
+                    	GetAdjudicationByProcedureNumber(GLOBAL_ADJUDICATION.procedureNumber).then(
+                    		function() {
+                    			// Close message
+                            	Elysium.UI.Entities.MsgBox.Close();
+                                // Show success information
+                                Elysium.UI.Entities.Notification.Success({ text: "El fallo se ha creado correctamente", time: Elysium.NotificationTime });
+                                // Download files
+                                fileNames.forEach(function(fileName, index, array) {
+                                	AdjudicationDocumentService.Download(fileName);	
+                                });
+                                // Close modal
+                                $(Attr.UI.ModalJudgment).modal("hide");
+                                // Disable button to show modal and enable second button
+                                $(Attr.UI.BtnJudgment).prop('disabled', true);
+                            	$(Attr.UI.BtnContract).prop('disabled', false);
+                    		},
+                    		function(xhr){
+                    			// Close message
+                            	Elysium.UI.Entities.MsgBox.Close();
+                                // Show error
+                                Elysium.Directives.RequestError.ThrowXhr(xhr);
+                    		}
+                    	);
                     },
                     function (xhr) {
                     	// Close message
@@ -1972,6 +2210,11 @@ Elysium.App.Controllers.Areas.Award.CreationController = function (arguments) {
     /*************************************/
     /*              Contract             */
     /*************************************/
+    var GLOBAL_CONTRACT_TO_GENERATE = null;
+    
+    var ContractForm = Elysium.Implements(new Elysium.UI.Entities.Form(Attr.UI.ContractForm), [Elysium.UI.Interfaces.IForm]);
+    
+    var ContractParsley = null;
     /**
      * @name OpenContract
      * @abstract Method to open modal contract
@@ -1986,6 +2229,263 @@ Elysium.App.Controllers.Areas.Award.CreationController = function (arguments) {
     var ShowContractData = function() {
     	$(Attr.UI.ContractSelection).hide();
     	$(Attr.UI.ContractData).show();
+    }
+    /**
+     * @name HideContractData
+     * @abstract Method to hide contract data form
+     */
+    var HideContractData = function() {
+    	$(Attr.UI.ContractSelection).show();
+    	$(Attr.UI.ContractData).hide();
+    }
+    /**
+     * @name GetWinnerCompetitors
+     * @abstract Method to get winner competitors
+     */
+    var GetWinnerCompetitors = function() {
+    	// Define promise
+    	var deferred = new $.Deferred();
+    	// Request data
+    	CompetitorService.GetWinnersByAdjudicationId(GLOBAL_ADJUDICATION.adjudicationId).then(
+			function(data) {
+	    		// Set data on tale
+				IContractTable.SetData(data);
+				// resolve promise
+				deferred.resolve();
+			}, 
+			function(xhr){
+				// Show error
+	            Elysium.Directives.RequestError.ThrowXhr(xhr);
+			}
+		);
+    	// Return promise
+    	return deferred.promise();	
+    }
+    /**
+     * @name RefreshWinnerCompetitors
+     * @abstract Method to refresh winner competitors
+     */
+    var RefreshWinnerCompetitors = function () {
+    	// Define hide spinner
+    	var hide = function() { ISpinner.Hide(Attr.UI.ModalContract + " .modal-dialog"); };
+    	// Show spinner
+    	ISpinner.Show(Attr.UI.ModalContract + " .modal-dialog");
+    	// Get data 
+    	GetWinnerCompetitors().then(function() {
+    		// Get data from table
+    		var data = IContractTable.GetData();
+    		// Check if all have contract
+    		var flag = true;
+    		for(var i = 0; i < data.length; i++) {
+    			if(data[i].haveContract == false) {
+    				flag = false;
+    				break;
+    			}
+    		}
+    		if(flag == true) {
+    			// Update finishes
+    			AdjudicationService.Finish(GLOBAL_ADJUDICATION.adjudicationId).then(
+					function() {
+						// Get the definition of adjudication saved
+                    	GetAdjudicationByProcedureNumber(GLOBAL_ADJUDICATION.procedureNumber).then(
+                    		function() {
+                    			$(Attr.UI.NewAdjudication).show();
+        		    			$(Attr.UI.ModalContract).modal("hide");
+                    		},
+                    		function(xhr) {
+                    			// Show error
+        			            Elysium.Directives.RequestError.ThrowXhr(xhr);
+                    		}
+                    	);
+					},
+					function (xhr) {
+						// Show error
+			            Elysium.Directives.RequestError.ThrowXhr(xhr);
+					}
+				); 
+    		}
+    		hide();
+    	} ,hide);
+    }
+    /**
+     * @name ShowGenerateContract
+     * @abstract Method to show generate contract
+     */
+    var ShowGenerateContract = function(object, row, data, event) {
+    	// Assign contract to generate
+    	GLOBAL_CONTRACT_TO_GENERATE = data;
+    	// Clean form
+    	ContractForm.Clean();
+        // Reset parsley
+    	ContractParsley.reset();
+    	// Set awarder provided
+    	$(Attr.UI.ContractAwardedProvided).val(data.supplier.name);
+    	// Check the contracy type
+    	if(data.adjudication.contractType.indexOf('Abierto') >= 0) {
+    		$('[data-elysium-contract-open-enabled]').prop('disabled', false);
+    		$('[data-elysium-contract-open-disabled]').prop('disabled', true);
+    		$(Attr.UI.ContractMaxAmount).val(data.cost);
+    		$(Attr.UI.ContractMinAmount).val((Math.round((Number(data.cost) * 0.4) * 100) / 100).toFixed(2));
+    	}
+    	else if(data.adjudication.contractType.indexOf('Cerrado') >= 0) {
+    		$('[data-elysium-contract-closed-enabled]').prop('disabled', false);
+    		$('[data-elysium-contract-closed-disabled]').prop('disabled', true);
+    		$(Attr.UI.ContractMaxAmount).val(data.cost);
+    	}
+    	$(Attr.UI.ContractDeposit).val((Math.round((Number(data.cost) * 0.1) * 100) / 100).toFixed(2));
+    	// Hide table panel
+    	ShowContractData();
+    }
+    /**
+     * @name ContractPhysicalPersonClick
+     * @abstract Event fired when ContractPhysicalPerson is click 
+     */
+    var ContractPhysicalPersonClick = function() {
+    	// Check if checkbox is selected
+    	if($(Attr.UI.ContractPhysicalPerson).is(":checked")) {
+    		// disable controls
+    		$('[data-elysium-contract-moral-person]').prop('disabled', true);
+    		$('[data-elysium-contract-physical-person]').prop('disabled', false);
+    	}
+    	else {
+    		$('[data-elysium-contract-moral-person]').prop('disabled', false);
+    		$('[data-elysium-contract-physical-person]').prop('disabled', true);
+    	}
+    	// Destroy parsley
+    	$(Attr.UI.ContractForm).parsley().destroy();
+    	// Bind contractParsley
+		ContractParsley = $(Attr.UI.ContractForm).parsley({ excluded: "input[type=button], input[type=submit], input[type=reset], input[type=hidden], [disabled], :hidden" }).on('form:submit', OnContractSuccess);
+    }
+    /**
+     * @name ContractLegalDatePickerChange
+     * @abstract Event fired when date picker change
+     */
+    var ContractLegalDatePickerChange = function(evt, date) {
+    	ParseDate(date, Attr.UI.ContractLegalDateText, Attr.UI.ModalContract + ' .modal-dialog');
+    }
+    /**
+     * @name ContractLegalAgentDatePickerChange
+     * @Event Event fired when date picker change
+     */
+    var ContractLegalAgentDatePickerChange = function(evt, date) {
+    	ParseDate(date, Attr.UI.ContractLegalAgentDateText, Attr.UI.ModalContract + ' .modal-dialog');
+    }
+    /**
+     * @name ContractDueDatePickerChange
+     * @abstract Event fired when date picker change
+     */
+    var ContractDueDatePickerChange = function(evt, date) {
+    	ParseDate(date, Attr.UI.ContractDueDateText, Attr.UI.ModalContract + ' .modal-dialog');
+    }
+    /**
+     * @name CalculateDeposit
+     * @abstract Method to calculate deposito
+     */
+    var CalculateDeposit = function() {
+    	// Get max amount
+    	var maxAmount = $(Attr.UI.ContractMaxAmount).val().trim();
+    	// Set deposit
+    	$(Attr.UI.ContractDeposit).val((Math.round((maxAmount * 0.1) * 100) / 100).toFixed(2));
+    }
+    /**
+     * @name CalculateDepositInAdvance
+     * @abstract Method to calculate deposit in advance
+     */
+    var CalculateDepositInAdvance = function() {
+    	// Get max amount
+    	var maxAmount = $(Attr.UI.ContractMaxAmount).val().trim();
+    	// Get percent
+    	var percent = Number($(this).val()) / 100;
+    	// Set deposit
+    	$(Attr.UI.ContractDepositInAdvance).val((Math.round((maxAmount * percent) * 100) / 100).toFixed(2));
+    }
+    /**
+     * @name ContractDepositCbClick
+     * @abstract Method for vlaidate contract deposit
+     */
+    var ContractDepositCbClick = function() {
+    	if($(this).prop('disabled') == false) {
+    		if($(this).is(":checked")) 
+	    		$(Attr.UI.ContractDepositPercent).prop('disabled', false);
+	    	else
+	    		$(Attr.UI.ContractDepositPercent).prop('disabled', true);
+    		
+    		// Destroy parsley
+        	$(Attr.UI.ContractForm).parsley().destroy();
+        	// Bind contractParsley
+    		ContractParsley = $(Attr.UI.ContractForm).parsley({ excluded: "input[type=button], input[type=submit], input[type=reset], input[type=hidden], [disabled], :hidden" }).on('form:submit', OnContractSuccess);
+    	}	
+    }
+    /**
+     * @name OnContractSuccess
+     * @abstract Event fired when validation success
+     */
+    var OnContractSuccess = function() { 
+    	// Get data
+    	var contract = ContractForm.GetValues();
+    	// Get addiotional fields
+    	if(!$(Attr.UI.ContractPhysicalPerson).is(":checked")) {
+    		contract["legalDate"] = moment($(Attr.UI.ContractLegalDate).val().trim(), "DD-MM-YYYY").format('YYYY-MM-DD');
+    		contract["legalDateText"] = $(Attr.UI.ContractLegalDateText).val().trim()
+			contract["legalAgentDate"] = moment($(Attr.UI.ContractLegalAgentDate).val().trim(), "DD-MM-YYYY").format('YYYY-MM-DD'); 
+			contract["legalAgentDateText"] = $(Attr.UI.ContractLegalAgentDateText).val().trim()    		
+    	}
+    	contract["dueDate"] = moment($(Attr.UI.ContractDueDate).val().trim(), "DD-MM-YYYY").format('YYYY-MM-DD');
+		contract["dueDateText"] = $(Attr.UI.ContractDueDateText).val().trim();
+		contract['adjudicationId'] = GLOBAL_ADJUDICATION.adjudicationId;
+		contract['competitorId'] =  GLOBAL_CONTRACT_TO_GENERATE.competitor.competitorId;
+		contract['deposit'] = $(Attr.UI.ContractDeposit).val().trim();
+		if($(Attr.UI.ContractDepositCb).is(":checked")) {
+			contract['depositPercent'] = $(Attr.UI.ContractDepositPercent).val();
+			contract['depositInAdvance'] = $(Attr.UI.ContractDepositInAdvance).val();
+		}
+		contract['maxAmount'] = $(Attr.UI.ContractMaxAmount).val().trim();
+		contract['minAmount'] = $(Attr.UI.ContractMinAmount).val().trim();
+		contract['physicalPerson'] = $(Attr.UI.ContractPhysicalPerson).is(":checked") ? 1 : 0;
+		// Check min amount
+		if($(Attr.UI.ContractMaxAmount).prop('disabled') == false && Number(contract.minAmount) > Number((Math.round((contract.maxAmount * 0.4) * 100) / 100).toFixed(2))) {
+			Elysium.UI.Entities.Notification.Warning({ text: "El monto minimo no puede ser mayor al 40% del monto maximo", time: Elysium.NotificationTime });
+			return false;
+		}
+    	// Show confirmation dialog
+        Elysium.UI.Entities.MsgBox.DialogQuestion(
+            'Generar contrato',
+            '¿Desea generar el contrato del proveedor?',
+            function () {
+            	// Send information to server
+                ContractService.Create(contract).then(
+                    function (fileName) {
+                    	// Close message
+                    	Elysium.UI.Entities.MsgBox.Close();
+                        // Show success information
+                        Elysium.UI.Entities.Notification.Success({ text: "El contrato se ha generado correctamente", time: Elysium.NotificationTime });
+                        // Download file
+                        AdjudicationDocumentService.Download(fileName);	
+                        // Hide panel contract and show table panel
+                        HideContractData();
+                        // Disable button
+                        $(Attr.UI.BtnContract).prop('disabled', true);
+                        // Refresh table 
+                        RefreshWinnerCompetitors();
+                        
+                    },
+                    function (xhr) {
+                    	// Close message
+                    	Elysium.UI.Entities.MsgBox.Close();
+                        // Show error
+                        Elysium.Directives.RequestError.ThrowXhr(xhr);
+                    }
+                );
+            }
+        );
+    	return false;
+    }
+    /**
+     * @name NewAdjudicationClick
+     * @astract Method to reload page
+     */
+    var NewAdjudicationClick = function() {
+    	location.reload();
     }
     /************************************/
     /*              Initialize          */
@@ -2011,15 +2511,17 @@ Elysium.App.Controllers.Areas.Award.CreationController = function (arguments) {
     	IDTA1DataTable.Initialize();
     	IDTA2DataTable.Initialize();
     	IQuotationTable.Initialize();
+    	IContractTable.Initialize();
     	// Block buttons from bottom
     	$(Attr.UI.BtnInvitation).prop('disabled', true);
     	$(Attr.UI.BtnAppend).prop('disabled', true);
     	$(Attr.UI.BtnTechnicalAperture).prop('disabled', true);
     	$(Attr.UI.BtnDetailTechnicalAperture).prop('disabled', true);
     	$(Attr.UI.BtnComparativeChart).prop('disabled', true);
-    	//$(Attr.UI.BtnJudgment).prop('disabled', true);
+    	$(Attr.UI.BtnJudgment).prop('disabled', true);
     	$(Attr.UI.BtnContract).prop('disabled', true);
-    	$(Attr.UI.ContractBtnGenerate).prop('disabled', true);
+    	$(Attr.UI.NewAdjudication).hide();
+    	$(Attr.UI.NewAdjudication).click(NewAdjudicationClick);
     	// Bind events
     	$(Attr.UI.BtnInvitation).click(OpenInvitation);
     	$(Attr.UI.BtnAppend).click(OpenAppend);
@@ -2028,7 +2530,6 @@ Elysium.App.Controllers.Areas.Award.CreationController = function (arguments) {
     	$(Attr.UI.BtnComparativeChart).click(OpenComparativeChart);
     	$(Attr.UI.BtnJudgment).click(OpenJudgment);
     	$(Attr.UI.BtnContract).click(OpenContract);    	
-    	$(Attr.UI.ContractBtnGenerate).click(ShowContractData);
     	// Enable extra validators
     	ControllerValidators();
     	/************************************/
@@ -2225,13 +2726,74 @@ Elysium.App.Controllers.Areas.Award.CreationController = function (arguments) {
 			        }), [Elysium.UI.Interfaces.IDateTimePicker]);
 					JudgmentHourPicker.Initialize();
 					JudgmentHourPicker.OnChangeEvt(JudgmentHourPickerChange);
+					/************************************/
+			        /*              Contract            */
+			        /************************************/
+					// Load competitors when modal show
+					$(Attr.UI.ModalContract).on('shown.bs.modal', RefreshWinnerCompetitors);
+					// Bind event on table
+					IContractTable.OnEvent("click", "[data-elysium-adjudication-contract-show-generate]", ShowGenerateContract);
+					// Bind event for physical person checkbox
+					$(Attr.UI.ContractPhysicalPerson).click(ContractPhysicalPersonClick);
+					// Bind calculate deposit
+					$(Attr.UI.ContractMaxAmount).blur(CalculateDeposit);
+					// Bind calculate deposit in advance
+					$(Attr.UI.ContractDepositPercent).change(CalculateDepositInAdvance);
+					// Bind contract deposit cb
+					$(Attr.UI.ContractDepositCb).click(ContractDepositCbClick);
+					// Bind datepickers
+					var ContractLegalDatePicker = Elysium.Implements(new Elysium.UI.Entities.DateTimePicker({
+			            selector: $(Attr.UI.ContractLegalDate),
+			            options: {
+			                format: 'DD-MM-YYYY',
+			                lang: 'es',
+			                minDate: moment(),
+			                time: false,
+			                date: true
+			            }
+			        }), [Elysium.UI.Interfaces.IDateTimePicker]);
+					ContractLegalDatePicker.Initialize();
+					ContractLegalDatePicker.OnChangeEvt(ContractLegalDatePickerChange);
 					
+					var ContractLegalAgentDatePicker = Elysium.Implements(new Elysium.UI.Entities.DateTimePicker({
+			            selector: $(Attr.UI.ContractLegalAgentDate),
+			            options: {
+			                format: 'DD-MM-YYYY',
+			                lang: 'es',
+			                minDate: moment(),
+			                time: false,
+			                date: true
+			            }
+			        }), [Elysium.UI.Interfaces.IDateTimePicker]);
+					ContractLegalAgentDatePicker.Initialize();
+					ContractLegalAgentDatePicker.OnChangeEvt(ContractLegalAgentDatePickerChange);
 					
-					
-					
-					
-					// Hide spinner
-					hide();
+					var ContractDueDatePicker = Elysium.Implements(new Elysium.UI.Entities.DateTimePicker({
+			            selector: $(Attr.UI.ContractDueDate),
+			            options: {
+			                format: 'DD-MM-YYYY',
+			                lang: 'es',
+			                minDate: moment(),
+			                time: false,
+			                date: true
+			            }
+			        }), [Elysium.UI.Interfaces.IDateTimePicker]);
+					ContractDueDatePicker.Initialize();
+					ContractDueDatePicker.OnChangeEvt(ContractDueDatePickerChange);
+					// Bind contractParsley
+					ContractParsley = $(Attr.UI.ContractForm).parsley({ excluded: "input[type=button], input[type=submit], input[type=reset], input[type=hidden], [disabled], :hidden" }).on('form:submit', OnContractSuccess);
+					/************************************/
+			        /*            Preoload values       */
+			        /************************************/
+					// Check if we need to preload
+					if(Attr.Params.AdjudicationId > 0) {
+						// Get adjudication by id
+						GetAdjudicationByAdjudicationId(Attr.Params.AdjudicationId).then(hide, hide);
+					}
+					else {
+						// Hide spinner
+						hide();
+					}
 				}, hide);
 			}, hide
 		);

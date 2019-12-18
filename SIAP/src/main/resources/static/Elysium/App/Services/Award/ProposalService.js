@@ -89,19 +89,11 @@ Elysium.App.Services.Award.ProposalService = (function () {
         // return promise
         return deferred.promise();
     }
-    /**
-     * @name Download
-     * @abstract Method to download files
-     */
-    var Download = function (fileName) {
-    	window.open(Api + '/download/' + fileName, '_blank');
-    }
     /**********************************************/
     /*                 Encapsulate                */
     /**********************************************/
     return {
     	Create: Create,
-    	Upload: Upload,
-    	Download: Download
+    	Upload: Upload
     };
 }());

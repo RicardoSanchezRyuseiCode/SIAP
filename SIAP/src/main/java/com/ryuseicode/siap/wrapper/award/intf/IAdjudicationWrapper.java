@@ -26,4 +26,11 @@ public interface IAdjudicationWrapper {
 	 * @return
 	 */
 	List<String> closeAdjudication(int adjudicationId, LocalDateTime closeDate) throws Exception;
+	/**
+	 * @name finishAdjudication
+	 * {@summary Method to finish adjudication }
+	 * @param adjudicationId
+	 * @throws Exception
+	 */
+	void finishAdjudication(int adjudicationId) throws Exception;
 }

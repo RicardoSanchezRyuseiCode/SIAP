@@ -8,16 +8,11 @@ import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.List;
 
-import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
 import org.apache.commons.io.FilenameUtils;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.core.io.ByteArrayResource;
-import org.springframework.core.io.Resource;
-import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
-import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -29,12 +24,10 @@ import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.multipart.MultipartFile;
 import org.springframework.web.server.ResponseStatusException;
 
-import com.ryuseicode.siap.entity.award.AdjudicationDocument;
 import com.ryuseicode.siap.exception.ServiceException;
 import com.ryuseicode.siap.paraminput.award.AnnexCreationParam;
 import com.ryuseicode.siap.paramoutput.award.AnnexParamOutput;
 import com.ryuseicode.siap.properties.FolderProperties;
-import com.ryuseicode.siap.service.award.imp.AdjudicationDocumentService;
 import com.ryuseicode.siap.service.award.imp.AnnexService;
 import com.ryuseicode.siap.wrapper.award.imp.AnnexWrapper;
 /**
@@ -55,11 +48,6 @@ public class AnnexController {
 	 */
 	@Autowired
 	private AnnexWrapper annexWrapper;
-	/**
-	 * AdjudicationDocumentService
-	 */
-	@Autowired
-	private AdjudicationDocumentService adjudicationDocumentService;
 	/**
 	 * folderProperties
 	 */
@@ -130,34 +118,6 @@ public class AnnexController {
 	    }
 	    catch (Exception ex) {
 	    	throw new ResponseStatusException(HttpStatus.INTERNAL_SERVER_ERROR, String.format("Error al crear adjudicación: %s", ex.getMessage()));
-	    }
-	}
-	/**
-	 * @name download
-	 * {@summary Method to download annex file}
-	 * @param fileName
-	 * @param request
-	 * @return
-	 */
-	@ResponseBody
-	@GetMapping(path = "/award/annex/download/{fileName:.+}")
-	public ResponseEntity<Resource> download(@PathVariable("fileName") String fileName, HttpServletRequest request) {
-		try {
-			// Get document
-			AdjudicationDocument adjudicationDocument =  adjudicationDocumentService.GetByName(fileName);
-			// Get file content
-			String contentType = request.getServletContext().getMimeType(adjudicationDocument.getPath());
-			if(contentType == null) {
-	            contentType = "application/octet-stream";
-	        }
-			// return the resource
-			return ResponseEntity.ok()
-	                .contentType(MediaType.parseMediaType(contentType))
-	                .header(HttpHeaders.CONTENT_DISPOSITION, "attachment; filename=\"" + fileName + "\"")
-	                .body(new ByteArrayResource(Files.readAllBytes(Paths.get(adjudicationDocument.getPath()))));	
-	    }
-	    catch (Exception ex) {
-	    	throw new ResponseStatusException(HttpStatus.INTERNAL_SERVER_ERROR, String.format("Error al descargar anexo: %s", ex.getMessage()));
 	    }
 	}
 }

@@ -34,6 +34,15 @@ public class CompetitorService implements ICompetitorService {
 		return this.competitorRepository.getByAdjudicationId(adjudicationId);
 	}
 	/**
+	 * @name getByCompetitorId
+	 * {@summary Method to get by competitorId }
+	 * @param competitorId
+	 * @return
+	 */
+	public CompetitorParamOutput getByCompetitorId(int competitorId) {
+		return this.competitorRepository.getByCompetitorId(competitorId);
+	}
+	/**
 	 * @name Save
 	 * {@summary Method to save a list of competitors }
 	 * @param competitors

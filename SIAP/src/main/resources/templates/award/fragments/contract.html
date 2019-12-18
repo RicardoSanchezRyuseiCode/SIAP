@@ -8,7 +8,7 @@
 			        <div class="modal-content">
 			            <div class="modal-header">
 			                <h4 class="modal-title">Contrato</h4>
-			                <button type="button" class="close" data-dismiss="modal" aria-hidden="true">×</button>
+			                
 			            </div>
 			            <div class="modal-body">
 			                <div class="row">
@@ -17,12 +17,13 @@
 			                    		<div class="col-md-1"></div>
 			                    		<div class="col-md-10">				                    			
 				                           <div class="table-responsive">
-				                                <table id="ContractTable" class="table table-striped table-bordered ">
+				                                <table id="ContractTable" class="table table-striped table-bordered " style="width:100%">
 				                                    <thead>
 				                                        <tr>
 				                                            <th>Proveedor</th>
 				                                            <th>Total</th>
 				                                            <th>Contrato</th>
+				                                            <th>Acciones</th>
 				                                        </tr>
 				                                    </thead>
 				                                    <tbody>
@@ -31,54 +32,143 @@
 				                                </table>
 				                            </div>
 				                            <hr/>
+				                            <!--
 				                            <div class="row">
 		                                    	<div class="offset-md-9 col-md-3">
 		                                    		<button id="BtnGenerateContract" type="button" class="btn btn-primary waves-effect waves-light btn-block">
 		                                    			<span class="fas fa-print"></span> Crear Contrato
 		                                    		</button>
-		                                    	</div>
-		                                    </div>				     
+		                                    	</div> 
+		                                    </div>
+		                                    -->			     
 			                    		</div>
 			                    		<div class="col-md-1"></div>
 			                    	</div>
 			                    	<div class="row" id="ContractData" style="display:none">
 			                    		<div class="col-md-1"></div>
 			                    		<div class="col-md-10">
-			                    			<form>
+			                    			<form id="ContractForm">
 			                    				<div class="row">
                    									<div class="col-md-12 form-group">
                    										<label for="AwardedProvider" class="control-label mt-2">Proveedor Adjudicado</label>
-                   										<input type="text" class="form-control" id="AwardedProvider" name="AwardedProvider" placeholder="Proveedor Adjudicado"/>
+                   										<input type="text" class="form-control" id="AwardedProvider" name="AwardedProvider" placeholder="Proveedor Adjudicado" readonly="readonly" />
                    									</div>
                    								</div>
                    								<div class="row">
                    									<div class="col-md-6 form-group">
-                   										<label for="RfcAwardedProvider" class="control-label mt-2">RFC Proveedor Adjudicado</label>
-                   										<input type="text" class="form-control" id="RfcAwardedProvider" name="RfcAwardedProvider" placeholder="RFC Proveedor Adjudicado"/>
+                   										<label for="taxId" class="control-label mt-2">RFC Proveedor Adjudicado</label>
+                   										<input 
+                   											type="text" 
+                   											class="form-control" 
+                   											id="taxId" 
+                   											name="taxId" 
+                   											placeholder="RFC Proveedor Adjudicado"
+                   											data-parsley-required="true"
+			                                    			data-parsley-required-message="Debe ingresar el RFC"
+						                                    data-parsley-minlength="1"
+						                                    data-parsley-minlength-message="La longitud minima es de 1 caracter"
+						                                    data-parsley-maxlength="35"
+						                                    data-parsley-maxlength-message="La longitud maxima es de 35 caracteres"
+                 										/>
                    									</div>
                    									<div class="col-md-6 form-group">
-                   										<label for="ProvideEmail" class="control-label mt-2">Correo Electronico</label>
-                   										<input type="email" class="form-control" id="ProvideEmail" name="ProvideEmail" placeholder="Correo Electronico"/>
+                   										<label for="email" class="control-label mt-2">Correo Electronico</label>
+                   										<input 
+                   											type="email"
+                   										    class="form-control" 
+                   										    id="email" 
+                   										    name="email" 
+                   										    placeholder="Correo Electronico"
+                   										    data-parsley-required="true"
+			                                    			data-parsley-required-message="Debe ingresar un correo electronico"
+                   										    data-parsley-type="email"
+                   										    data-parsley-type-message="Debe ingresar un correo electronico valido"
+                   										    data-parsley-minlength="1"
+						                                    data-parsley-minlength-message="La longitud minima es de 1 caracter"
+						                                    data-parsley-maxlength="150"
+						                                    data-parsley-maxlength-message="La longitud maxima es de 150 caracteres"
+                   										/>
                    									</div>
                    								</div>
                    								<div class="row">
                    									<div class="col-md-6 form-group">
-                   										<label for="ResourceSource" class="control-label mt-2">Fuente del recurso</label>
-                   										<input type="text" class="form-control" id="ResourceSource" name="ResourceSource" placeholder="Fuente del recurso"/>
+                   										<label for="sourceResource" class="control-label mt-2">Fuente del recurso</label>
+                   										<input 
+                   											type="text" 
+                   											class="form-control" 
+                   											id="sourceResource" 
+                   											name="sourceResource" 
+                   											placeholder="Fuente del recurso"                   											
+                   											data-parsley-required="true"
+			                                    			data-parsley-required-message="Debe ingresar la fuente del recurso"
+                   										    data-parsley-minlength="1"
+						                                    data-parsley-minlength-message="La longitud minima es de 1 caracter"
+						                                    data-parsley-maxlength="250"
+						                                    data-parsley-maxlength-message="La longitud maxima es de 250 caracteres"                   											
+                   										/>
                    									</div>
                    									<div class="col-md-6 form-group">
-                   										<label for="MaxAmount" class="control-label mt-2">Monto Maximo</label>
-                   										<input type="number" step="1" min="1" class="form-control" id="MaxAmount" name="MaxAmount" placeholder="Monto Maximo"/>
+                   										<label for="maxAmount" class="control-label mt-2">Monto Maximo</label>
+                   										<input 
+                   											type="number" 
+                   											step="0.01" 
+                   											min="0.01"
+                   											max="2000000000" 
+                   											class="form-control" 
+                   											id="maxAmount" 
+                   											name="maxAmount" 
+                   											placeholder="Monto Maximo"
+                   											data-parsley-required="true"
+			                                    			data-parsley-required-message="Debe ingresar un monto maximo"
+			                                    			data-parsley-type="number"
+															data-parsley-type-message="El monto debe ser numerico mayor o igual a 0.01 y menor que 2,000,000,000.00"									                                    
+						                                    data-parsley-gte="0.01"
+						                                    data-parsley-gte-message="El mondo debe ser mayor o igual a 0.01"
+						                                    data-parsley-lte="2000000000"
+						                                    data-parsley-lte-message="El mondo debe ser menor o igual a 2,000,000,000.00" 
+						                                    data-elysium-contract-open-enabled
+						                                    data-elysium-contract-closed-disabled  
+						                                 />
                    									</div>
                    								</div>
                    								<div class="row">
                    									<div class="col-md-6 form-group">
-                   										<label for="NumberPartitions" class="control-label mt-2">Número de partidas</label>
-                   										<input type="text" class="form-control" id="NumberPartitions" name="NumberPartitions" placeholder="Número de partidas"/>
+                   										<label for="numberMatch" class="control-label mt-2">Número de partidas</label>
+                   										<input 
+                   											type="text"
+                   											class="form-control" 
+                   											id="numberMatch" 
+                   											name="numberMatch" 
+                   											placeholder="Número de partidas"
+                   											data-parsley-required="true"
+			                                    			data-parsley-required-message="Debe ingresar un número de partidas"
+                   										    data-parsley-minlength="1"
+						                                    data-parsley-minlength-message="La longitud minima es de 1 caracter"
+						                                    data-parsley-maxlength="250"
+						                                    data-parsley-maxlength-message="La longitud maxima es de 250 caracteres"
+                   										/>
                    									</div>
                    									<div class="col-md-6 form-group">
-                   										<label for="MinAmount" class="control-label mt-2">Monto Minimo</label>
-                   										<input type="number" step="1" min="1" class="form-control" id="MinAmount" name="MinAmount" placeholder="Monto minimo"/>
+                   										<label for="minAmount" class="control-label mt-2">Monto Minimo</label>
+                   										<input 
+                   											type="number" 
+                   											step="0.01" 
+                   											min="0.01" 
+                   											class="form-control" 
+                   											id="minAmount" 
+                   											name="minAmount" 
+                   											placeholder="Monto minimo"
+                   											data-parsley-required="true"
+			                                    			data-parsley-required-message="Debe ingresar un monto minimo"
+			                                    			data-parsley-type="number"
+															data-parsley-type-message="El monto debe ser numerico mayor o igual a 0.01 y menor que 2,000,000,000.00"									                                    
+						                                    data-parsley-gte="0.01"
+						                                    data-parsley-gte-message="El mondo debe ser mayor o igual a 0.01"
+						                                    data-parsley-lte="2000000000"
+						                                    data-parsley-lte-message="El mondo debe ser menor o igual a 2,000,000,000.00"
+						                                    data-elysium-contract-open-enabled
+						                                    data-elysium-contract-closed-disabled
+                   										/>
                    									</div>
                    								</div>
                    								<hr/>
@@ -86,20 +176,56 @@
                    								<div class="row">
                    									<div class="col-md-12 form-group">
                  										<div class="custom-control custom-checkbox mb-3">
-						                                    <input type="checkbox" id="PhysicalPerson" name="PhysicalPerson" class="custom-control-input">
-						                                    <label class="custom-control-label" for="PhysicalPerson">Persona Física</label>
+						                                    <input type="checkbox" id="physicalPerson" name="physicalPerson" class="custom-control-input">
+						                                    <label class="custom-control-label" for="physicalPerson">Persona Física</label>
 						                                </div>
-                 										<input type="text" class="form-control" id="DataPhysicalPerson" name="DataPhysicalPerson" placeholder="Datos persona física" disabled/>
+                 										<input 
+                 											type="text" 
+                 											class="form-control" 
+                 											id="physicalPersonData" 
+                 											name="physicalPersonData" 
+                 											placeholder="Datos persona física" 
+                 											disabled="disabled"
+                 											data-parsley-required="true"
+			                                    			data-parsley-required-message="Debe ingresar los datos de la persona física"
+                   										    data-parsley-minlength="1"
+						                                    data-parsley-minlength-message="La longitud minima es de 1 caracter"
+						                                    data-parsley-maxlength="250"
+						                                    data-parsley-maxlength-message="La longitud maxima es de 250 caracteres"
+						                                    data-elysium-contract-physical-person
+                 										/>
                    									</div>
                    								</div>
                    								<div class="row">
                    									<div class="col-md-6 form-group">
-                   										<label for="PublicDeed" class="control-label mt-2">Escritura pública número</label>
-                   										<input type="text" class="form-control" id="PublicDeed" name="PublicDeed" placeholder="Escritura pública número"/>
+                   										<label for="lagalDeedNumber" class="control-label mt-2">Escritura pública número</label>
+                   										<input 
+                   											type="text" 
+                   											class="form-control" 
+                   											id="legalDeedNumber" 
+                   											name="legalDeedNumber" 
+                   											placeholder="Escritura pública número"
+                   											data-parsley-required="true"
+			                                    			data-parsley-required-message="Debe ingresar el número de la escritura pública"
+                   										    data-parsley-minlength="1"
+						                                    data-parsley-minlength-message="La longitud minima es de 1 caracter"
+						                                    data-parsley-maxlength="150"
+						                                    data-parsley-maxlength-message="La longitud maxima es de 150 caracteres"
+						                                    data-elysium-contract-moral-person
+                   										/>
                    									</div>
                    									<div class="col-md-6 form-group">
-                   										<label for="State" class="control-label mt-2">Estado</label>
-                   										<select type="text" class="form-control" id="State" name="State">
+                   										<label for="legalState" class="control-label mt-2">Estado</label>
+                   										<select 
+                   											type="text" 
+                   											class="form-control" 
+                   											id="legalState" 
+                   											name="legalState"
+                   											data-parsley-required="true"
+                                   							data-parsley-select="Seleccionar Estado"
+                                   							data-parsley-select-message="Debe seleccionar un estado"
+                                   							data-elysium-contract-moral-person	                    											
+		                                    			>
 																<option selected>Seleccionar Estado</option>
 	                    										<option value="Aguascalientes">Aguascalientes</option>
 																<option value="Baja California">Baja California</option>
@@ -138,34 +264,90 @@
                    								</div>
                    								<div class="row">
                    									<div class="col-md-6 form-group">
-                   										<label for="PublicNotary" class="control-label mt-2">Notario público número</label>
-                   										<input type="text" class="form-control" id="PublicNotary" name="PublicNotary" placeholder="Notario público número"/>
+                   										<label for="legalNotaryNumber" class="control-label mt-2">Notario público número</label>
+                   										<input 
+                   											type="text" 
+                   											class="form-control" 
+                   											id="legalNotaryNumber" 
+                   											name="legalNotaryNumber" 
+                   											placeholder="Notario público número"
+                   											data-parsley-required="true"
+			                                    			data-parsley-required-message="Debe ingresar el número del notario público"
+                   										    data-parsley-minlength="1"
+						                                    data-parsley-minlength-message="La longitud minima es de 1 caracter"
+						                                    data-parsley-maxlength="150"
+						                                    data-parsley-maxlength-message="La longitud maxima es de 150 caracteres"
+						                                    data-elysium-contract-moral-person
+                   										/>
                    									</div>
                    									<div class="col-md-6 form-group">
-                   										<label for="Municipality" class="control-label mt-2">Municipality</label>
-                   										<input type="text" class="form-control" id="Municipality" name="Municipality" placeholder="Municipio"/>
+                   										<label for="legalCity" class="control-label mt-2">Municipio</label>
+                   										<input 
+                   											type="text" 
+                   											class="form-control" 
+                   											id="legalCity" 
+                   											name="legalCity" 
+                   											placeholder="Municipio"
+                   											data-parsley-required="true"
+			                                    			data-parsley-required-message="Debe ingresar un municipio"
+                   										    data-parsley-minlength="1"
+						                                    data-parsley-minlength-message="La longitud minima es de 1 caracter"
+						                                    data-parsley-maxlength="50"
+						                                    data-parsley-maxlength-message="La longitud maxima es de 50 caracteres"
+						                                    data-elysium-contract-moral-person
+                   										/>
                    									</div>
                    								</div>
                    								<div class="row">
                    									<div class="col-md-4">
-                   										<label for="address" class="control-label mt-2">Fecha</label>
-                   										<input type="text" class="form-control" />
+                   										<label for="legalDate" class="control-label mt-2">Fecha</label>
+                   										<input 
+                   											id="legalDate" 
+                   											name="legalDate" 
+                   											type="text" 
+                   											class="form-control"
+                   											data-parsley-required="true"
+			                                    			data-parsley-required-message="Debe ingresar una fecha" 
+			                                    			data-elysium-contract-moral-person
+                   										/>
                    									</div>
                    									<div class="col-md-8">
-                   										<label for="address" class="control-label mt-2">&nbsp;</label>
-                   										<input type="text" class="form-control" readonly="readonly" />
+                   										<label for="legalDateText" class="control-label mt-2">&nbsp;</label>
+                   										<input id="legalDateText" name="legalDateText" type="text" class="form-control" disabled="disabled" />
                    									</div>
                    								</div>
                    								<hr/>
                    								<h5>Datos de acreditación de personal el representante de la persona jurídica</h5>
                    								<div class="row">
                    									<div class="col-md-6 form-group">
-                   										<label for="PublicDeed" class="control-label mt-2">Escritura pública número</label>
-                   										<input type="text" class="form-control" id="PublicDeed" name="PublicDeed" placeholder="Escritura pública número"/>
+                   										<label for="legalAgentDeedNumber" class="control-label mt-2">Escritura pública número</label>
+                   										<input 
+                   											id="legalAgentDeedNumber" 
+                   											name="legalAgentDeedNumber" 
+                   											type="text" 
+                   											class="form-control" 
+                   											placeholder="Escritura pública número"
+                   											data-parsley-required="true"
+			                                    			data-parsley-required-message="Debe ingresar el número de escritura pública"
+                   										    data-parsley-minlength="1"
+						                                    data-parsley-minlength-message="La longitud minima es de 1 caracter"
+						                                    data-parsley-maxlength="150"
+						                                    data-parsley-maxlength-message="La longitud maxima es de 150 caracteres"
+						                                    data-elysium-contract-moral-person
+                   										/>
                    									</div>
                    									<div class="col-md-6 form-group">
-                   										<label for="State" class="control-label mt-2">Estado</label>
-                   										<select type="text" class="form-control" id="State" name="State">
+                   										<label for="legalAgentState" class="control-label mt-2">Estado</label>
+                   										<select 
+                   											type="text" 
+                   											class="form-control" 
+                   											id="legalAgentState" 
+                   											name="legalAgentState"
+                   											data-parsley-required="true"
+                                   							data-parsley-select="Seleccionar Estado"
+                                   							data-parsley-select-message="Debe seleccionar un estado"
+                                   							data-elysium-contract-moral-person
+                   										>
 																<option selected>Seleccionar Estado</option>
 	                    										<option value="Aguascalientes">Aguascalientes</option>
 																<option value="Baja California">Baja California</option>
@@ -204,56 +386,196 @@
                    								</div>
                    								<div class="row">
                    									<div class="col-md-6 form-group">
-                   										<label for="PublicNotary" class="control-label mt-2">Notario público número</label>
-                   										<input type="text" class="form-control" id="PublicNotary" name="PublicNotary" placeholder="Notario público número"/>
+                   										<label for="legalAgentNotaryNumber" class="control-label mt-2">Notario público número</label>
+                   										<input 
+                   											id="legalAgentNotaryNumber"
+                   											name="legalAgentNotaryNumber" 
+                   											type="text" 
+                   											class="form-control" 
+                   											placeholder="Notario público número"
+                   											data-parsley-required="true"
+			                                    			data-parsley-required-message="Debe ingresar el número del notario público"
+                   										    data-parsley-minlength="1"
+						                                    data-parsley-minlength-message="La longitud minima es de 1 caracter"
+						                                    data-parsley-maxlength="150"
+						                                    data-parsley-maxlength-message="La longitud maxima es de 150 caracteres"
+						                                    data-elysium-contract-moral-person
+                   										/>
                    									</div>
                    									<div class="col-md-6 form-group">
-                   										<label for="Municipality" class="control-label mt-2">Municipality</label>
-                   										<input type="text" class="form-control" id="Municipality" name="Municipality" placeholder="Municipio"/>
+                   										<label for="legalAgentCity" class="control-label mt-2">Municipio</label>
+                   										<input 
+                   											id="legalAgentCity" 
+                   											name="legalAgentCity" 
+                   											type="text" 
+                   											class="form-control" 
+                   											placeholder="Municipio"
+                   											data-parsley-required="true"
+			                                    			data-parsley-required-message="Debe ingresar un municipio"
+                   										    data-parsley-minlength="1"
+						                                    data-parsley-minlength-message="La longitud minima es de 1 caracter"
+						                                    data-parsley-maxlength="50"
+						                                    data-parsley-maxlength-message="La longitud maxima es de 50 caracteres"
+						                                    data-elysium-contract-moral-person
+                   										/>
                    									</div>
                    								</div>
                    								<div class="row">
                    									<div class="col-md-4">
-                   										<label for="address" class="control-label mt-2">Fecha</label>
-                   										<input type="text" class="form-control" />
+                   										<label for="legalAgentDate" class="control-label mt-2">Fecha</label>
+                   										<input 
+                   											id="legalAgentDate" 
+                   											name="legalAgentDate" 
+                   											type="text" 
+                   											class="form-control"
+                   											data-parsley-required="true"
+			                                    			data-parsley-required-message="Debe ingresar una fecha" 
+			                                    			data-elysium-contract-moral-person
+                   										/>
                    									</div>
                    									<div class="col-md-8">
-                   										<label for="address" class="control-label mt-2">&nbsp;</label>
-                   										<input type="text" class="form-control" readonly="readonly" />
+                   										<label for="legalAgentDateText" class="control-label mt-2">&nbsp;</label>
+                   										<input id="legalAgentDateText" name="legalAgentDateText" type="text" class="form-control" disabled="disabled" />
                    									</div>
                    								</div>
                    								<hr />
+                   								
                    								<div class="row">
-                   									<div class="col-md-3 text-right mb-2">
-                   										<label for="address" class="control-label mt-2">Fianza contrato</label>
-                   									</div>
-                   									<div class="col-md-9">
-                   										<input type="text" class="form-control" id="Address" name="Address" placeholder="Fianza contrato">
+                   									<div class="col-md-12 form-group">
+                 										<div class="custom-control custom-checkbox mb-3">
+						                                    <input 
+						                                    	type="checkbox" 
+						                                    	id="depositPercentCb" 
+						                                    	name="depositPercentCb" 
+						                                    	class="custom-control-input"
+						                                    	data-elysium-contract-open-disabled      
+                                   								data-elysium-contract-closed-enabled    
+						                                    >
+						                                    <label class="custom-control-label" for="depositPercentCb">Anticipo</label>
+						                                </div>
+						                                <select 
+                   											type="text" 
+                   											class="form-control" 
+                   											id="depositPercent" 
+                   											name="depositPercent"
+                   											data-parsley-required="true"
+                                   							data-parsley-select="Seleccionar Porcentaje"
+                                   							data-parsley-select-message="Debe seleccionar un porcentaje" 
+                                   							data-elysium-contract-open-disabled      
+                                   							data-elysium-contract-closed-disabled          											
+		                                    			>
+		                                    				<option selected>Seleccionar Porcentaje</option>
+		                                    				<option value="0">00</option>
+		                                    				<option value="5">05</option>
+		                                    				<option value="10">10</option>
+		                                    				<option value="15">15</option>
+		                                    				<option value="20">20</option>
+		                                    				<option value="25">25</option>
+		                                    				<option value="30">30</option>
+		                                    				<option value="35">35</option>
+		                                    				<option value="40">40</option>
+		                                    				<option value="45">45</option>
+		                                    				<option value="50">50</option>
+		                                    			</select>
                    									</div>
                    								</div>
+                   								
                    								<div class="row">
                    									<div class="col-md-3 text-right mb-2">
-                   										<label for="address" class="control-label mt-2">Fecha de vencimiento del contrato</label>
+                   										<label for="deposit" class="control-label mt-2">Fianza contrato</label>
+                   									</div>
+                   									<div class="col-md-9">
+                   										<input 
+                   											id="deposit" 
+                   											name="deposit" 
+                   											type="number"
+                   											min="0.01"
+                   											step="0.01" 
+                   											class="form-control" 
+                   											placeholder="Fianza contrato"
+                   											readonly="readonly"
+                   											data-parsley-required="true"
+			                                    			data-parsley-required-message="Debe ingresar un deposito"
+			                                    			data-parsley-type="number"
+															data-parsley-type-message="El deposito debe ser numerico mayor o igual a 0.01 y menor que 2,000,000,000.00"									                                    
+						                                    data-parsley-gte="0.01"
+						                                    data-parsley-gte-message="El deposito debe ser mayor o igual a 0.01"
+						                                    data-parsley-lte="2000000000"
+						                                    data-parsley-lte-message="El mondo debe ser menor o igual a 2,000,000,000.00" 
+                   										/>
+                   									</div>
+                   								</div>
+                   								
+                   								<div class="row">
+                   									<div class="col-md-3 text-right mb-2">
+                   										<label for="depositInAdvance" class="control-label mt-2">Fianza anticipo</label>
+                   									</div>
+                   									<div class="col-md-9">
+                   										<input 
+                   											id="depositInAdvance" 
+                   											name="depositInAdvance" 
+                   											type="number"
+                   											min="0.01"
+                   											step="0.01" 
+                   											class="form-control" 
+                   											placeholder="Fianza contrato"
+                   											readonly="readonly"
+                   											data-parsley-required="true"
+			                                    			data-parsley-required-message="Debe ingresar un deposito"
+			                                    			data-parsley-type="number"
+															data-parsley-type-message="El deposito debe ser numerico mayor o igual a 0.01 y menor que 2,000,000,000.00"									                                    
+						                                    data-parsley-gte="0.01"
+						                                    data-parsley-gte-message="El deposito debe ser mayor o igual a 0.01"
+						                                    data-parsley-lte="2000000000"
+						                                    data-parsley-lte-message="El mondo debe ser menor o igual a 2,000,000,000.00"
+						                                    data-elysium-contract-open-disabled
+						                                    data-elysium-contract-closed-disabled
+                   										/>
+                   									</div>
+                   								</div>
+                   								
+                   								<div class="row">
+                   									<div class="col-md-3 text-right mb-2">
+                   										<label for="dueDate" class="control-label mt-2">Fecha de vencimiento del contrato</label>
                    									</div>
                    									<div class="col-md-3">
-                   										<input type="text" class="form-control" />
+                   										<input 
+                   											id="dueDate" 
+                   											name="dueDate" 
+                   											type="text" 
+                   											class="form-control"
+                   											data-parsley-required="true"
+			                                    			data-parsley-required-message="Debe ingresar una fecha" 
+                   										/>
                    									</div>
                    									<div class="col-md-6">
-                   										<input type="text" class="form-control" readonly="readonly" />
+                   										<input id="dueDateText" name="dueDateText" type="text" class="form-control" readonly="readonly" />
                    									</div>
                    								</div>
                    								<div class="row">
                    									<div class="col-md-3 text-right mb-2">
-                   										<label for="address" class="control-label mt-2">Personalidad y nombre del proveedor ganador</label>
+                   										<label for="winnerName" class="control-label mt-2">Personalidad y nombre del proveedor ganador</label>
                    									</div>
                    									<div class="col-md-9">
-                   										<input type="text" class="form-control" id="Address" name="Address" placeholder="Personalidad y nombre del proveedor ganador">
+                   										<input 
+                   											id="winnerName" 
+                   											name="winnerName" 
+                   											type="text" 
+                   											class="form-control" 
+                   											placeholder="Personalidad y nombre del proveedor ganador"
+                   											data-parsley-required="true"
+			                                    			data-parsley-required-message="Debe ingresar la personalidad y nombre del proveedor ganador"
+                   										    data-parsley-minlength="1"
+						                                    data-parsley-minlength-message="La longitud minima es de 1 caracter"
+						                                    data-parsley-maxlength="250"
+						                                    data-parsley-maxlength-message="La longitud maxima es de 250 caracteres" 
+                   										/>
                    									</div>
                    								</div>
                    								<hr/>
 					                            <div class="row">
 			                                    	<div class="offset-md-9 col-md-3">
-			                                    		<button id="Continue" type="button" class="btn btn-primary waves-effect waves-light btn-block">
+			                                    		<button type="submit" class="btn btn-primary waves-effect waves-light btn-block">
 			                                    			<span class="fas fa-save"></span> Guardar
 			                                    		</button>
 			                                    	</div>
@@ -262,9 +584,6 @@
 			                    		</div>
 			                    		<div class="col-md-1"></div>
 			                    	</div>
-			                    	
-			                    		   
-				                    
 			                    </div>
 			                </div>
 			            </div>

@@ -58,6 +58,38 @@ public class CompetitorRepository implements ICompetitorRepository {
         );
 	}
 	/**
+	 * @name getByCompetitorId
+	 * {@summary Method to get by competitorId }
+	 * @param competitorId
+	 * @return
+	 */
+	public CompetitorParamOutput getByCompetitorId(int competitorId) {
+		List<CompetitorParamOutput> result = jdbcTemplate.query(
+                "select * from competitor c inner join supplier s on c.supplierid = s.supplierid where c.competitorid = ? and c.active = 1 and s.active = 1",
+                new Object[] { competitorId },
+                (rs, rowNum) ->
+                	new CompetitorParamOutput(
+                        new Competitor(
+                        		rs.getInt(1),
+                        		rs.getInt(2),
+                        		rs.getInt(3),
+                                rs.getString(4),
+                                rs.getInt(5)
+                        ),
+                        new Supplier(
+                        		rs.getInt(6),
+                        		rs.getString(7),
+                        		rs.getString(8),
+                        		rs.getString(9),
+                        		rs.getString(10),
+                        		rs.getString(11),
+                        		rs.getInt(12)
+                		)
+                    )
+        );
+		return result.size() > 0 ? result.get(0) : null;
+	}
+	/**
 	 * @name Save
 	 * {@summary Method to save a competitor }
 	 * @param competitor

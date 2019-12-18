@@ -1,39 +1,36 @@
 /**
- * @name SupplierService
+ * @name AdjudicationDocumentService
  * @abstract Service class
  * @author Ricardo Sanchez Romero (ricardo.sanchez@ryuseicode.com)
- * @CreationDate 2019-12-01
+ * @CreationDate 2019-11-30
  */
-Elysium.App.Services.Award.InvitationService = (function () {
+Elysium.App.Services.Award.AdjudicationDocumentService = (function () {
     /**********************************************/
     /*                   Variables                */
     /**********************************************/
-    var Api = '/award/invitation';
+    var Api = '/award/adjudicationDocument';
     /**********************************************/
     /*                   Methods                  */
     /**********************************************/
+    
     /**
-     * @name Save
-     * @abstract Method to update an user
+     * @name GetById
+     * @abstract Method to get by id
      */
-    var Create = function (adjudicationId) {
+    var GetByAdjudicationId = function (adjudicationId) {
         // Define promise
         var deferred = new $.Deferred();
-        // Get type and url
-        var url = Api + '/create';
-        var type = 'POST';
-        var objJson = JSON.stringify(adjudicationId);
+        // Check Access        
+        var url = Api + '/getByAdjudicationId/' + adjudicationId;
         $.ajax({
             // tipo de llamado
-            type: type,
+            type: 'GET',
             // url del llamado a ajax
             url: url,
             // obtener siempre los datos mas actualizados
             cache: false,
-            // content type
-            contentType: 'application/json; charset=utf-8',
-            // data
-            data: objJson,
+            // tipo de datos de regreso
+            dataType: "json",
             // funcion en caso de exito
             success: function (data, textStatus, jqXHR) {
                 deferred.resolve(data);
@@ -46,10 +43,18 @@ Elysium.App.Services.Award.InvitationService = (function () {
         // return promise
         return deferred.promise();
     };
+    /**
+     * @name Download
+     * @abstract Method to download files
+     */
+    var Download = function (fileName) {
+    	window.open(Api + '/download/' + fileName, '_blank');
+    }
     /**********************************************/
     /*                 Encapsulate                */
     /**********************************************/
     return {
-    	Create: Create
+    	GetByAdjudicationId: GetByAdjudicationId,
+    	Download: Download
     };
 }());
