@@ -8,7 +8,7 @@ Elysium.App.Services.Award.SupplierService = (function () {
     /**********************************************/
     /*                   Variables                */
     /**********************************************/
-    var Api = '/award/supplier';
+    var Api = Elysium.AppHost + 'award/supplier';
     /**********************************************/
     /*                   Methods                  */
     /**********************************************/

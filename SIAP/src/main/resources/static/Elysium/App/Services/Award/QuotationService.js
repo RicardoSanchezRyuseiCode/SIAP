@@ -8,7 +8,7 @@ Elysium.App.Services.Award.QuotationService = (function () {
     /**********************************************/
     /*                   Variables                */
     /**********************************************/
-    var Api = '/award/quotation';
+    var Api = Elysium.AppHost + 'award/quotation';
     /**********************************************/
     /*                   Methods                  */
     /**********************************************/

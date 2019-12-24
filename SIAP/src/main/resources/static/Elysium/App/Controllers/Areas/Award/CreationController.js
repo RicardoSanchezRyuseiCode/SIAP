@@ -2485,7 +2485,7 @@ Elysium.App.Controllers.Areas.Award.CreationController = function (arguments) {
      * @astract Method to reload page
      */
     var NewAdjudicationClick = function() {
-    	location.reload();
+    	window.location.href = "creation";
     }
     /************************************/
     /*              Initialize          */

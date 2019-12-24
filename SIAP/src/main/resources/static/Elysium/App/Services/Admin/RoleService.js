@@ -8,7 +8,7 @@ Elysium.App.Services.Admin.RoleService = (function () {
     /**********************************************/
     /*                   Variables                */
     /**********************************************/
-    var Api = '/admin/role';
+    var Api = Elysium.AppHost + 'admin/role';
     /**********************************************/
     /*                   Methods                  */
     /**********************************************/

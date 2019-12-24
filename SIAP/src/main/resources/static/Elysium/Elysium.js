@@ -85,6 +85,7 @@ Elysium.CreateNS("Elysium.App.Controllers.Areas.Requisition");
 Elysium.CreateNS("Elysium.App.Services");
 Elysium.CreateNS("Elysium.App.Services.Admin");
 Elysium.CreateNS("Elysium.App.Services.Award");
+Elysium.CreateNS("Elysium.App.Services.Requisition");
 Elysium.CreateNS("Elysium.App.Services.Util");
 
 /***************************************************************/
@@ -96,9 +97,7 @@ try {
         localStorage["Elysium.Ryusei.Language"] = "es-MX"; 
     }
     // App Host
-    //Elysium.AppHost = AppHost;
-    // Api gateway
-    //Elysium.ApiGateway = 'http://localhost:8080';
+    Elysium.AppHost = AppHost;
     // Elysium MsgTime
     Elysium.MsgTime = 300;
     // Notification time
@@ -107,7 +106,7 @@ try {
     Elysium.ProfilePictureSize = 10485760;
     Elysium.ProfilePictureDimension = 114;
     // Spinner Image
-    Elysium.SpinnerImage =  "/App/img/loader.gif";
+    Elysium.SpinnerImage = Elysium.AppHost + "App/img/loader.gif";
     // Spinner Background
     Elysium.SpinnerBackground = "#fff";
     // File Size

@@ -4,6 +4,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import com.ryuseicode.siap.entity.admin.AdministrativeUnit;
 import com.ryuseicode.siap.exception.ServiceException;
 import com.ryuseicode.siap.service.admin.imp.AdministrativeUnitService;
 import com.ryuseicode.siap.service.admin.imp.UserDataAdministrativeUnitService;
@@ -28,6 +29,48 @@ public class AdministrativeUnitWrapper implements IAdministrativeUnitWrapper {
 	 */
 	@Autowired
 	private UserDataAdministrativeUnitService userDataAdministrativeUnitService;
+	/**
+	 * @name save
+	 * @abstract Method to save an administrativeunit
+	 * @param administrativeUnit
+	 */
+	public void save(AdministrativeUnit administrativeUnit) throws Exception {
+		if(administrativeUnit.getAuthorizer() == 1) {
+			// Get current authorizet
+			AdministrativeUnit authorizer = this.administrativeUnitService.GetByAuthorizer();
+			if(authorizer != null) {
+				authorizer.setAuthorizer(0);
+				authorizer.setEmail(null);
+				this.administrativeUnitService.Update(authorizer);
+				this.administrativeUnitService.Save(administrativeUnit);
+			}
+		}
+		else {
+			this.administrativeUnitService.Save(administrativeUnit);
+		}
+	}
+	
+	/**
+	 * @name update
+	 * {@summary Method to update an administrative unit }
+	 * @param administrativeUnit
+	 * @throws Exception
+	 */
+	public void update(AdministrativeUnit administrativeUnit) throws Exception {
+		if(administrativeUnit.getAuthorizer() == 1) {
+			// Get current authorizet
+			AdministrativeUnit authorizer = this.administrativeUnitService.GetByAuthorizer();
+			if(authorizer != null) {
+				authorizer.setAuthorizer(0);
+				authorizer.setEmail(null);
+				this.administrativeUnitService.Update(authorizer);
+				this.administrativeUnitService.Update(administrativeUnit);
+			}
+		}
+		else {
+			this.administrativeUnitService.Update(administrativeUnit);
+		}
+	}
 	/**
 	 * @name Delete
 	 * {@summary Method to delete an administrative unit}

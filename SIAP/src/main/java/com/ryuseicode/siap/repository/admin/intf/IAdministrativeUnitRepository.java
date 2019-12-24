@@ -39,6 +39,18 @@ public interface IAdministrativeUnitRepository {
 	 */
 	AdministrativeUnit GetByCodeDifferentId(String code, int administrativeUnitId);
 	/**
+	 * @name GetByUserDataId
+	 * {@summary Method to get by userId }
+	 * @param userId
+	 * @return
+	 */
+	AdministrativeUnit GetByUserDataId(int userDataId);
+	/**
+	 * @name GetByAuthorizer
+	 * @return
+	 */
+	AdministrativeUnit GetByAuthorizer();
+	/**
 	 * @name Save
 	 * @param AdministrativeUnit
 	 */

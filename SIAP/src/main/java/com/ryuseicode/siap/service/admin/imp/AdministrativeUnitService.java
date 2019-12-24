@@ -32,6 +32,22 @@ public class AdministrativeUnitService implements IAdministrativeUnitService {
 		return this.administrativeUnitRepository.Get();
 	}
 	/**
+	 * @name GetByAuthorizer
+	 * @return
+	 */
+	public AdministrativeUnit GetByAuthorizer() {
+		return this.administrativeUnitRepository.GetByAuthorizer();
+	}
+	/**
+	 * @name GetByUserDataId
+	 * {@summary Method to get by userId }
+	 * @param userId
+	 * @return
+	 */
+	public AdministrativeUnit GetByUserDataId(int userDataId) {
+		return this.administrativeUnitRepository.GetByUserDataId(userDataId);
+	}
+	/**
 	 * @name Save
 	 * @param AdministrativeUnit
 	 * @throws Exception 

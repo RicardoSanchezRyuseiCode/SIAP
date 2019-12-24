@@ -99,6 +99,12 @@ Elysium.App.Controllers.Areas.Admin.AdministrativeUnitController = function (arg
     var OnSuccess = function() {
     	// Get car information
         var administrativeUnit = IForm.GetValues();
+        if( $(Attr.UI.InputAuthorizer).is(":checked")) {
+        	administrativeUnit['authorizer'] = 1;
+        }
+        else {
+        	administrativeUnit['authorizer'] = 0;
+        }
         // Show message dialog
         Elysium.UI.Entities.MsgBox.DialogQuestion(
             'Guardar unidad',
@@ -136,6 +142,15 @@ Elysium.App.Controllers.Areas.Admin.AdministrativeUnitController = function (arg
     {
     	// Set values
     	IForm.SetValues(data);
+    	// Check authorizer
+    	if(data.authorizer == 1) {
+    		$(Attr.UI.InputAuthorizer).prop('checked', true);
+    		$(Attr.UI.InputEmail).prop('disabled', false);
+    	} 
+    	else {
+    		$(Attr.UI.InputAuthorizer).prop('checked', false);
+    		$(Attr.UI.InputEmail).prop('disabled', true);
+    	} 
     	// Open Modal
         OpenModal();
     }
@@ -177,8 +192,37 @@ Elysium.App.Controllers.Areas.Admin.AdministrativeUnitController = function (arg
     	$(Attr.UI.InputAdminUnit).val(null);
     	// Clean form
         IForm.Clean();
+        $(Attr.UI.InputAuthorizer).prop('checked', false);
+		$(Attr.UI.InputEmail).prop('disabled', true);
+		$(Attr.UI.InputEmail).val('');
         // Clean pasrley
         Parsley.reset();    	
+    }
+    /**
+     * @name InputAuthorizerClick
+     * @astract Evet fired when input authorizer click
+     */
+    var InputAuthorizerClick = function() {
+    	// Check if is 
+    	if( $(Attr.UI.InputAuthorizer).is(":checked")) {
+    		// Enable input
+    		$(Attr.UI.InputEmail).prop("disabled", false);
+    		$(Attr.UI.InputEmail).val("");
+    		// Destroy parsley 
+    		$(Attr.UI.Form).parsley().destroy();
+    		// Enable again
+    		Parsley = $(Attr.UI.Form).parsley({ excluded: "input[type=button], input[type=submit], input[type=reset], input[type=hidden], [disabled], :hidden" }).on('form:submit', OnSuccess);
+    	}
+    	else {
+    		// Enable input
+    		$(Attr.UI.InputEmail).prop("disabled", true);
+    		$(Attr.UI.InputEmail).val("");
+    		// Destroy parsley 
+    		$(Attr.UI.Form).parsley().destroy();
+    		// Enable again
+    		Parsley = $(Attr.UI.Form).parsley({ excluded: "input[type=button], input[type=submit], input[type=reset], input[type=hidden], [disabled], :hidden" }).on('form:submit', OnSuccess);
+    	}
+    	
     }
     /************************************/
     /*              Initialize          */
@@ -209,7 +253,10 @@ Elysium.App.Controllers.Areas.Admin.AdministrativeUnitController = function (arg
         	// modal
         	$(Attr.UI.Modal).on('hide.bs.modal', CleanForm);
         	// Parsley
-        	Parsley = $(Attr.UI.Form).parsley().on('form:submit', OnSuccess);
+        	Parsley = $(Attr.UI.Form).parsley({ excluded: "input[type=button], input[type=submit], input[type=reset], input[type=hidden], [disabled], :hidden" }).on('form:submit', OnSuccess);
+        	// Bind
+        	$(Attr.UI.InputAuthorizer).click(InputAuthorizerClick);
+        	
         	// Hide spinner
         	ISpinner.Hide(Attr.UI.MainPanel);
     	});

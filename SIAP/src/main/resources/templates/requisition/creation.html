@@ -61,7 +61,310 @@
 				<!-- =								          Footer     						          = -->
 				<!-- ====================================================================================== -->
 				<div id="content" class="container-fluid">
-                    Requisition creation
+                    <!-- Breadcumb  -->
+                    <div class="page-breadcrumb">
+		                <div class="row">
+		                    <div class="col-5 align-self-center">
+		                        <h4 class="page-title">Requisición</h4>
+		                        <div class="d-flex align-items-center">
+		                            <nav aria-label="breadcrumb">
+		                                <ol class="breadcrumb">
+		                                    <li class="breadcrumb-item"><a th:href="@{/home}">Inicio</a></li>
+		                                    <li class="breadcrumb-item active" aria-current="page">Requisición</li>
+		                                </ol>
+		                            </nav>
+		                        </div>
+		                    </div>
+		                </div>
+		            </div>
+		            <br/>
+		            <!-- Breadcumb -->
+                    <!-- Card Container  -->
+                    <div class="container-fluid">
+                    	<div class="row" id="RequestListContainer">
+                    		<div class="col-md-12">
+                    			<div class="card">
+                    				<!-- Card body -->
+                    				<div class="card-body">
+                    					<div class="row">
+                    						<div class="col-md-3">
+                    							<button id="RequestEditNew" type="button" class="btn btn-primary btn-block">
+	                    							<span class="fas fa-edit"></span> Crear
+	                    						</button>
+                    						</div>
+                    					</div>
+                    					<hr/>
+                    					<form id="RequestListForm">
+	                    					<div class="row mb-3">
+	                    						<div class="col-md-3">
+	                    							<label for="budgetId" class="control-label mt-2">Ejercicio</label>
+	                  								<select 
+	           											type="text" 
+	           											class="form-control" 
+	           											id="budgetId" 
+	           											name="budgetId"
+	           											data-parsley-select="Seleccionar Ejercicio"
+	                           							data-parsley-select-message="Debe seleccionar un ejercicio"	                    											
+		                                    		></select>
+	                    						</div>
+	                    						<div class="col-md-3">
+	                    							<label for="chapterId" class="control-label mt-2">Capítulo</label>
+	                    							<select 
+	           											type="text" 
+	           											class="form-control" 
+	           											id="chapterId" 
+	           											name="chapterId"
+	           											data-parsley-select="Seleccionar Capítulo"
+	                           							data-parsley-select-message="Debe seleccionar un capítulo"	                    											
+		                                    		></select>
+	                    						</div>
+	                    						<div class="col-md-3">
+	                    							<label for="entryId" class="control-label mt-2">Partida</label>
+	                    							<select 
+	           											type="text" 
+	           											class="form-control" 
+	           											id="entryId" 
+	           											name="entryId"
+	           											data-parsley-select="Seleccionar Partida"
+	                           							data-parsley-select-message="Debe seleccionar una partida"	                    											
+		                                    		></select>
+	                    						</div>
+	                    						<div class="col-md-3">
+	                    							<label for="status" class="control-label mt-2">Partida</label>
+	                    							<select 
+	           											type="text" 
+	           											class="form-control" 
+	           											id="status" 
+	           											name="status"
+	           											data-parsley-select="Seleccionar estatus"
+	                           							data-parsley-select-message="Debe seleccionar un estatus"	                    											
+		                                    		>
+		                                    			<option selected>Seleccionar estatus</option>
+		                                    			<option value="En proceso">En proceso</option>
+		                                    			<option value="Completa">Completa</option>
+		                                    		</select>
+	                    						</div>
+	                    					</div>
+	                    					<div class="row mb-3">
+	                    						<div class="col-md-3 offset-md-9">
+	                    							<button type="submit" class="btn btn-primary btn-block">
+	                    								<span class="fas fa-refresh"></span> Listar
+	                    							</button>
+	                    						</div>
+	                    					</div>
+                    					</form>
+                    					<hr />
+                    					<div class="table-responsive">
+			                                <table id="RequestTable" class="table table-striped table-bordered ">
+			                                    <thead>
+			                                        <tr>
+			                                            <th>Código</th>
+			                                            <th>Estatus</th>
+			                                            <th>Monto</th>
+			                                            <th>Fecha de creación</th>
+			                                            <th>Acciones</th>
+			                                        </tr>
+			                                    </thead>
+			                                    <tbody>
+			                                        
+			                                    </tbody>
+			                                </table>
+			                            </div>
+			                            <hr/>		                 					
+                    				</div>
+                    				<!-- Card body -->
+                    			</div>
+                    		</div>
+                    	</div>
+                    	<div class="row" id="RequestEditContainer">
+                    		<div class="col-md-12">
+                    			<div class="card">
+                    				<div class="card-body">
+                    					<form id="RequestEditForm">
+                    						<div class="row mb-3">
+                    							<div class="col-md-10">
+                    								<h4>Requisición</h4>
+                    							</div>
+                    							<div class="col-md-2">
+                    								<button id="RequestEditReturn" type="button" class="btn btn-secondary btn-block">
+                    									<span class="fas fa-arrow-left"></span> Regresar
+                    								</button>
+                    							</div>
+                    						</div>
+                    						<div class="row mb-3">
+                    							<div class="col-md-4">
+                    								<label for="code" class="control-label mt-2">Requisición</label>
+	                  								<input type="text" id="code" name="code" class="form-control" readonly="readonly" placeholder="Requisición" />
+                    							</div>
+                    							<div class="col-md-8">
+                    								<label for="administrativeUnitName" class="control-label mt-2">Unidad Administrativa</label>
+	                  								<input type="text" id="administrativeUnitName" name="administrativeUnitName" class="form-control" readonly="readonly" placeholder="Unidad administrativa" />
+                    							</div>
+                    						</div>
+                    						<div class="row mb-3">
+                    							<div class="col-md-8">
+                    								<label for="budgetId" class="control-label mt-2">Ejercicio</label>
+	                  								<select 
+	           											type="text" 
+	           											class="form-control" 
+	           											id="budgetId" 
+	           											name="budgetId"
+	           											data-parsley-select="Seleccionar Ejercicio"
+	                           							data-parsley-select-message="Debe seleccionar un ejercicio"	    
+	                           							data-elysium-requisition-edit-element                											
+		                                    		></select>
+                    							</div>
+                    						</div>
+                    						<div class="row mb-3">
+                    							<div class="col-md-8">
+                    								<label for="chapterId" class="control-label mt-2">Capítulo</label>
+	                  								<select 
+	           											type="text" 
+	           											class="form-control" 
+	           											id="chapterId" 
+	           											name="chapterId"
+	           											data-parsley-select="Seleccionar Capítulo"
+	                           							data-parsley-select-message="Debe seleccionar un capítulo"	  
+	                           							data-elysium-requisition-edit-element                  											
+		                                    		></select>
+                    							</div>
+                    						</div>
+                    						<div class="row mb-3">
+                    							<div class="col-md-8">
+                    								<label for="entryId" class="control-label mt-2">Partida</label>
+	                  								<select 
+	           											type="text" 
+	           											class="form-control" 
+	           											id="entryId" 
+	           											name="entryId"
+	           											data-parsley-select="Seleccionar Partida"
+	                           							data-parsley-select-message="Debe seleccionar una partida"
+	                           							data-elysium-requisition-edit-element	                    											
+		                                    		></select>
+                    							</div>
+                    						</div>
+                    						<div class="row mb-3">
+                    							<div class="col-md-2 offset-md-10">
+                    								<button type="submit" class="btn btn-primary btn-block" data-elysium-requisition-edit-element>
+                    									<span class="fas fa-save"></span> Guardar
+                    								</button>
+                    							</div>
+                    						</div>
+                    					</form>
+                    					<hr/>
+                    					<form id="RequestDetailForm">
+                    						<h4>Detalle Requisición</h4>
+                    						<div class="row mb-3">
+                    							<div class="col-md-6">
+                    								<label for="asset" class="control-label mt-2">Bien o Servicio</label>
+	                  								<input 
+	                  									type="text" 
+	                  									id="asset" 
+	                  									name="asset" 
+	                  									class="form-control" 
+	                  									placeholder="Bien o Servicio"
+	                  									data-parsley-required="true"
+		                                    			data-parsley-required-message="Debe ingresar un bien o servicio"
+					                                    data-parsley-minlength="1"
+					                                    data-parsley-minlength-message="La longitud minima es de 1 caracter"
+					                                    data-parsley-maxlength="200"
+					                                    data-parsley-maxlength-message="La longitud maxima es de 200 caracteres"    
+	                  									
+	                  									data-elysium-requisition-creation-detail-element
+	                  								/>
+                    							</div>
+                    							<div class="col-md-2">
+                    								<label for="quantity" class="control-label mt-2">Cantidad</label>
+	                  								<input 
+	                  									type="number" 
+	                  									min="1" 
+	                  									max="2000000000"
+	                  									step="1" 
+	                  									id="quantity" 
+	                  									name="quantity"
+	                  								    class="form-control" 
+	                  								    placeholder="Cantidad"
+	                  								    data-parsley-required="true"
+		                                    			data-parsley-required-message="Debe ingresar una cantidad"
+		                                    			data-parsley-type="number"
+														data-parsley-type-message="La cantidad debe ser numerica mayor o igual a 1 y menor que 2,000,000,000"									                                    
+					                                    data-parsley-gte="1"
+					                                    data-parsley-gte-message="La cantidad debe ser mayor o igual a 1"
+					                                    data-parsley-lte="2000000000"
+					                                    data-parsley-lte-message="La cantidad debe ser menor o igual a 2,000,000,000.00"
+					                                    value="1"
+					                                    
+					                                    data-elysium-requisition-creation-detail-element
+	                  								/>
+                    							</div>
+                    							<div class="col-md-2">
+                    								<label for="unitPrice" class="control-label mt-2">Precio Unitario</label>
+	                  								<input 
+	                  									type="number" 
+	                  									min="0.01" 
+	                  									max="2000000000"
+	                  									step="0.01" 
+	                  									id="unitPrice" 
+	                  									name="unitPrice" 
+	                  									class="form-control"
+	                  									placeholder="Cantidad"
+	                  								    data-parsley-required="true"
+		                                    			data-parsley-required-message="Debe ingresar un precio unitario "
+		                                    			data-parsley-type="number"
+														data-parsley-type-message="El precio unitario debe ser numerico mayor o igual a 0.01 y menor que 2,000,000,000.00"									                                    
+					                                    data-parsley-gte="0.01"
+					                                    data-parsley-gte-message="El precio unitario debe ser mayor o igual a 0.01"
+					                                    data-parsley-lte="2000000000"
+					                                    data-parsley-lte-message="El precio unitario debe ser menor o igual a 2,000,000,000.00"
+					                                    value="0.01"
+					                                    
+					                                    data-elysium-requisition-creation-detail-element
+	                  								/>
+                    							</div>
+                    							<div class="col-md-2">
+                    								<label for="total" class="control-label mt-2">Total</label>
+	                  								<input type="text" id="total" name="total" class="form-control" value="0.01" readonly="readonly" placeholder="total" />
+                    							</div>
+                    						</div>
+                    						<div class="row">
+                    							<div class="col-md-2 offset-md-10">
+                    								<button type="submit" class="btn btn-primary btn-block" data-elysium-requisition-creation-detail-element>
+                    									<span class="fas fa-save"></span> Guardar
+                    								</button>
+                    							</div>
+                    						</div>
+                    					</form>
+                    					<br />
+                    					<div class="table-responsive">
+			                                <table id="RequestDetailTable" class="table table-striped table-bordered">
+			                                    <thead>
+			                                        <tr>
+			                                            <th>Bien o Servicio</th>
+			                                            <th>Cantidad</th>
+			                                            <th>Precio Unitario</th>
+			                                            <th>Total</th>
+			                                            <th>Acciones</th>
+			                                        </tr>
+			                                    </thead>
+			                                    <tbody>
+			                                    </tbody>
+			                                </table>
+			                            </div>
+			                            <hr />
+			                            <div class="row mb-3">
+                   							<div class="col-md-2 offset-md-10">
+                   								<button id="RequestComplete" type="button" class="btn btn-primary btn-block" data-elysium-requisition-creation-close>
+                   									<span class="fas fa-save"></span> Completar Requisición
+                   								</button>
+                   							</div>
+                   						</div>
+                    				</div>
+                    			</div>
+                    		</div>
+                 		</div>
+                    </div>
+                    <!-- Card Container -->
+                    
                 </div>
 				<!-- ====================================================================================== -->
 				<!-- =								          Footer     						          = -->
@@ -112,13 +415,15 @@
 		<script type="text/javascript" th:src="@{/Xtreme/libs/select2/dist/js/select2.min.js}"></script>
 		<script type="text/javascript" th:src="@{/Xtreme/libs/sheetJS/xlsx.full.min.js}"></script>
 		<script type="text/javascript" th:src="@{/Xtreme/extra-libs/DataTables/datatables.min.js}"></script>
+		<script type="text/javascript" th:src="@{/Xtreme/extra-libs/DataTablesV4/datetime.js}"></script>
 		<script type="text/javascript" th:src="@{/Xtreme/libs/spectrum/datatables.min.js}"></script>
 		<script type="text/javascript" th:src="@{/Xtreme/libs/spectrum/spectrum.js}"></script>
-		
-		
 		<!-- ====================================================================================== -->
 		<!-- =								         Elysium	     					          = -->
 		<!-- ====================================================================================== -->
+		<script th:inline="javascript">
+			var AppHost =  /*[[@{/}]]*/ '';
+		</script>
 		<script type="text/javascript" th:src="@{/Elysium/Elysium.js}"></script>
 		<script type="text/javascript" th:src="@{/Elysium/Types/String.js}"></script>
 		<script type="text/javascript" th:src="@{/Elysium/Types/Image.js}"></script>
@@ -154,14 +459,60 @@
 		<script type="text/javascript" th:src="@{/Elysium/UI/Entities/ReportViewer.js}"></script>
 		<script type="text/javascript" th:src="@{/Elysium/UI/Entities/Stylesheet.js}"></script>
 		<script type="text/javascript" th:src="@{/Elysium/UI/Entities/Calendar.js}"></script>
-		<script type="text/javascript" th:src="@{/Elysium/Directives/RequestError.js}"></script>
-		
+		<script type="text/javascript" th:src="@{/Elysium/Directives/RequestError.js}"></script>		
+		<script type="text/javascript" th:src="@{/Elysium/App/Services/Admin/UserService.js}"></script>
+		<script type="text/javascript" th:src="@{/Elysium/App/Services/Admin/AdministrativeUnitService.js}"></script>
+		<script type="text/javascript" th:src="@{/Elysium/App/Services/Requisition/BudgetService.js}"></script>
+		<script type="text/javascript" th:src="@{/Elysium/App/Services/Requisition/ChapterService.js}"></script>
+		<script type="text/javascript" th:src="@{/Elysium/App/Services/Requisition/EntryService.js}"></script>
+		<script type="text/javascript" th:src="@{/Elysium/App/Services/Requisition/RequestService.js}"></script>
+		<script type="text/javascript" th:src="@{/Elysium/App/Services/Requisition/RequestDetailService.js}"></script>
 		<script type="text/javascript" th:src="@{/Elysium/App/Interfaces/IController.js}"></script>
-		
+		<script type="text/javascript" th:src="@{/Elysium/App/Controllers/Areas/Requisition/CreationController.js}"></script>
 		<script type="text/javascript" th:src="@{/Elysium/App/Globals/BrdcstChGlobals.js}"></script>
 		<script type="text/javascript" th:src="@{/Elysium/App/Globals/I18nGlobals.js}"></script>
 		<script type="text/javascript" th:src="@{/Elysium/App/Globals/ValidatorGlobals.js}"></script>
 		<script type="text/javascript" th:src="@{/Elysium/App/Globals/SessionGlobals.js}"></script>
 		<script type="text/javascript" th:src="@{/Elysium/App/Globals/MenuItemGlobals.js}"></script>
+		<!-- ============================================================== -->
+		<!--                            Script of page                      -->
+		<!-- ============================================================== -->		
+		<script>
+		    /**
+		     * Entry point of app
+		     */
+		    $(document).ready(function () {
+		        // Define controller
+		        var controller = Elysium.Implements(new Elysium.App.Controllers.Areas.Requisition.CreationController({
+		            UI: {
+		                MainPanel: "#content",
+		                RequestListContainer: "#RequestListContainer",
+		                RequestListForm: "#RequestListForm",
+		                RequestListBudgetId: "#RequestListForm #budgetId",
+		                RequestListChapterId: "#RequestListForm #chapterId",
+		                RequestListEntryId: "#RequestListForm #entryId",
+		                RequestListStatus: "#RequestListForm #status",
+		                RequestListTable: "#RequestTable",
+		                RequestEditContainer: "#RequestEditContainer",
+		                RequestEditNew: "#RequestEditNew",
+		                RequestEditForm: "#RequestEditForm",
+		                RequestEditCode: "#RequestEditForm #code",
+		                RequestEditAdministrativeUnitName: "#RequestEditForm #administrativeUnitName",
+		                RequestEditBudgetId: "#RequestEditForm #budgetId",
+		                RequestEditChapterId: "#RequestEditForm #chapterId",
+		                RequestEditEntryId: "#RequestEditForm #entryId",
+		                RequestDetailForm: "#RequestDetailForm",
+		                RequestDetailQuantity: "#RequestDetailForm #quantity",
+		                RequestDetailUnitPrice: "#RequestDetailForm #unitPrice",
+		                RequestDetailTotal: "#RequestDetailForm #total",
+		                RequestDetailTable: "#RequestDetailTable",
+		                RequestComplete: "#RequestComplete",
+		                RequestEditReturn: "#RequestEditReturn"
+		            }
+		        }), [Elysium.App.Interfaces.IController]);
+		        // Initialize controller
+		        controller.Initialize();
+		    });
+		</script>
 	</body>
 </html>

@@ -60,6 +60,17 @@ public class AdministrativeUnitController {
 		 return this.administrativeUnitService.Get();
     }
 	/**
+	 * @name getByUserDataId
+	 * {@summary Method to get by user data id }
+	 * @param userDataId
+	 * @return
+	 */
+	@ResponseBody
+	@GetMapping(path = "/admin/administrativeUnit/getByUserDataId/{userDataId}", produces = "application/json")	
+    public AdministrativeUnit getByUserDataId(@PathVariable int userDataId) {
+		 return this.administrativeUnitService.GetByUserDataId(userDataId);
+    }
+	/**
 	 * @name post
 	 * @abstract Method to save an user
 	 * @param userData
@@ -68,7 +79,7 @@ public class AdministrativeUnitController {
 	public void post(@RequestBody AdministrativeUnit administrativeUnit, HttpServletResponse response) {
 	    try 
 	    {
-			this.administrativeUnitService.Save(administrativeUnit);
+			this.administrativeUnitWrapper.save(administrativeUnit);
 		} 
 	    catch (ServiceException ex)
 	    {	
@@ -88,7 +99,7 @@ public class AdministrativeUnitController {
 	public void put(@RequestBody AdministrativeUnit administrativeUnit, HttpServletResponse response) {
 		try 
 	    {
-			this.administrativeUnitService.Update(administrativeUnit);
+			this.administrativeUnitWrapper.update(administrativeUnit);
 		} 
 	    catch (ServiceException ex)
 	    {	

@@ -31,6 +31,12 @@
     <script src="https://oss.maxcdn.com/libs/html5shiv/3.7.0/html5shiv.js"></script>
     <script src="https://oss.maxcdn.com/libs/respond.js/1.4.2/respond.min.js"></script>
  	<![endif]-->
+ 	<style th:inline="text">
+	    .login-background{
+	        background: url([[@{/Xtreme/images/big/auth-bg.png}]])  no-repeat center center fixed;
+	        background-size: cover;
+	    }
+	</style>
 </head>
 <body>
 	<!-- Main Container* -->
@@ -47,7 +53,7 @@
         <!-- ============================================================== -->
 	    <!--                            Login Box                           -->
 	    <!-- ============================================================== -->
-		<div class="auth-wrapper d-flex no-block justify-content-center align-items-center" style="background:url(/Xtreme/images/big/auth-bg.png) no-repeat center center; background-size: cover;">
+		<div class="auth-wrapper d-flex no-block justify-content-center align-items-center login-background">
 	         <div class="auth-box">
 	             <div>
 	                 <div class="logo">
@@ -155,6 +161,9 @@
 	<!-- ====================================================================================== -->
 	<!-- =								         Elysium	     					          = -->
 	<!-- ====================================================================================== -->
+	<script th:inline="javascript">
+			var AppHost =  /*[[@{/}]]*/ '';
+	</script>
 	<script type="text/javascript" th:src="@{/Elysium/Elysium.js}"></script>
 	<script type="text/javascript" th:src="@{/Elysium/Types/String.js}"></script>
 	<script type="text/javascript" th:src="@{/Elysium/Types/Image.js}"></script>

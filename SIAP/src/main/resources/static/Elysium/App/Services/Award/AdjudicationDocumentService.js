@@ -8,7 +8,7 @@ Elysium.App.Services.Award.AdjudicationDocumentService = (function () {
     /**********************************************/
     /*                   Variables                */
     /**********************************************/
-    var Api = '/award/adjudicationDocument';
+    var Api = Elysium.AppHost + 'award/adjudicationDocument';
     /**********************************************/
     /*                   Methods                  */
     /**********************************************/

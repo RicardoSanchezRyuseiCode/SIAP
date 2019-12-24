@@ -132,7 +132,7 @@
 		<!-- ====================================================================================== -->
 		<!-- =								       Main Wrapper 						          = -->
 		<!-- ====================================================================================== -->
-		<div id="ModalUsers" class="modal fade bs-example-modal-lg" tabindex="-1" role="dialog" aria-labelledby="myLargeModalLabel" aria-hidden="true" style="display: none;" data-backdrop="static" data-keyboard="false">
+		<div id="ModalUsers" class="modal fade bs-example-modal-lg"  role="dialog" aria-labelledby="myLargeModalLabel" aria-hidden="true" style="display: none;" data-backdrop="static" data-keyboard="false">
 		    <div class="modal-dialog modal-dialog-centered">
 		        <div class="modal-content">
 		            <div class="modal-header">
@@ -311,6 +311,9 @@
 		<!-- ====================================================================================== -->
 		<!-- =								         Elysium	     					          = -->
 		<!-- ====================================================================================== -->
+		<script th:inline="javascript">
+			var AppHost =  /*[[@{/}]]*/ '';
+		</script>
 		<script type="text/javascript" th:src="@{/Elysium/Elysium.js}"></script>
 		<script type="text/javascript" th:src="@{/Elysium/Types/String.js}"></script>
 		<script type="text/javascript" th:src="@{/Elysium/Types/Image.js}"></script>

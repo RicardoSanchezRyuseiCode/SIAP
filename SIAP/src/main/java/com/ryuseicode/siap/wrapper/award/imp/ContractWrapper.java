@@ -6,6 +6,7 @@ import java.nio.file.Paths;
 import java.nio.file.StandardCopyOption;
 import java.text.SimpleDateFormat;
 import java.time.LocalDateTime;
+import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 
@@ -23,7 +24,9 @@ import com.ryuseicode.siap.entity.award.Institution;
 import com.ryuseicode.siap.entity.award.Opening;
 import com.ryuseicode.siap.entity.award.Proposal;
 import com.ryuseicode.siap.entity.award.Quotation;
+import com.ryuseicode.siap.message.EmailMessage;
 import com.ryuseicode.siap.paramoutput.award.CompetitorParamOutput;
+import com.ryuseicode.siap.properties.DistributionProperties;
 import com.ryuseicode.siap.properties.DocumentProperties;
 import com.ryuseicode.siap.properties.FolderProperties;
 import com.ryuseicode.siap.service.award.imp.AdjudicationDocumentService;
@@ -53,6 +56,10 @@ public class ContractWrapper extends WordWrapper implements IContractWrapper {
 	 * QUOTATION
 	 */
 	private static final String IDENTIFIER = "CONTRACT";
+	/**
+	 * EMAIL_MESSAGE
+	 */
+	private static final String EMAIL_MESSAGE = "Estimado proveedor %s <br/> En este correo electronico encontrara anexo su contrato para la adjudicación número %s, para la instutición %s";
 	/**
 	 * ContractService
 	 */
@@ -121,6 +128,16 @@ public class ContractWrapper extends WordWrapper implements IContractWrapper {
 	 */
 	@Autowired 
 	private NumberParserWrapper numberParserWrapper;
+	/**
+	 * DistributionProperties
+	 */
+	@Autowired
+	private DistributionProperties distributionProperties;
+	/**
+	 * EmailMessage
+	 */
+	@Autowired
+	private EmailMessage emailMessage;
 	/**
 	 * @name CreateDocument
 	 * {@summary Method to create document }
@@ -201,6 +218,9 @@ public class ContractWrapper extends WordWrapper implements IContractWrapper {
 		// Save step
  		this.adjudicationStepService.Save(new AdjudicationStep(0, adjudication.getAdjudicationId(), IDENTIFIER, LocalDateTime.now()));
  		// TODO send contract by email :) last sprint 
+ 		ArrayList<String> attachments = new ArrayList<String>();
+ 		attachments.add(newDocumentPath);
+ 		this.emailMessage.sendEmail(contract.getEmail(), this.distributionProperties.getCc(), "", attachments, String.format(EMAIL_MESSAGE, competitorOutputParam.getSupplier().getName(), adjudication.getProcedureNumber(), institution.getName()));
 		// return 
 		return fileName;
 	}

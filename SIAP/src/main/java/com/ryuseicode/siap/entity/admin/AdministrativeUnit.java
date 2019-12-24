@@ -18,7 +18,15 @@ public class AdministrativeUnit {
 	/**
 	 * description
 	 */
-	private String description;	
+	private String description;
+	/**
+	 * email
+	 */
+	private String email;
+	/**
+	 * authorizer
+	 */
+	private int authorizer;
 	/**
 	 * active
 	 */
@@ -31,10 +39,12 @@ public class AdministrativeUnit {
 	 * @param description
 	 * @param active
 	 */
-	public AdministrativeUnit(int administrativeUnitId, String code, String description, int active) {
+	public AdministrativeUnit(int administrativeUnitId, String code, String description, String email, int authorizer, int active) {
 		this.setAdministrativeUnitId(administrativeUnitId);
 		this.setCode(code);
 		this.setDescription(description);
+		this.setEmail(email);
+		this.setAuthorizer(authorizer);
 		this.setActive(active);
 	}
 	/**
@@ -92,5 +102,29 @@ public class AdministrativeUnit {
 	 */
 	public void setActive(int active) {
 		this.active = active;
+	}
+	/**
+	 * @return the email
+	 */
+	public String getEmail() {
+		return email;
+	}
+	/**
+	 * @param email the email to set
+	 */
+	public void setEmail(String email) {
+		this.email = email;
+	}
+	/**
+	 * @return the authorizer
+	 */
+	public int getAuthorizer() {
+		return authorizer;
+	}
+	/**
+	 * @param authorizer the authorizer to set
+	 */
+	public void setAuthorizer(int authorizer) {
+		this.authorizer = authorizer;
 	}
 }

@@ -40,6 +40,15 @@ public class UserDataService implements IUserDataService {
 		return this.userDataRepository.Get();
 	}
 	/**
+	 * @name getByNickname
+	 * {@summary Method to get by nickname }
+	 * @param nickname
+	 * @return
+	 */
+	public UserDataParamOutput getByNickname(String nickname) {
+		return this.userDataRepository.GetByNickname(nickname);
+	}
+	/**
 	 * @name Save
 	 * {@summary Method to save a userData in the database}
 	 * @param userData

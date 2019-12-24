@@ -37,6 +37,8 @@ public class AdministrativeUnitRepository implements IAdministrativeUnitReposito
                         		rs.getInt("administrativeunitid"),
                                 rs.getString("code"),
                                 rs.getString("description"),
+                                rs.getString("email"),
+                                rs.getInt("authorizer"),
                                 rs.getInt("active")
                         )
         );
@@ -56,6 +58,8 @@ public class AdministrativeUnitRepository implements IAdministrativeUnitReposito
 	                        		rs.getInt("administrativeunitid"),
 	                                rs.getString("code"),
 	                                rs.getString("description"),
+	                                rs.getString("email"),
+	                                rs.getInt("authorizer"),
 	                                rs.getInt("active")
 	                        )
 	        );
@@ -76,6 +80,8 @@ public class AdministrativeUnitRepository implements IAdministrativeUnitReposito
 	                        		rs.getInt("administrativeunitid"),
 	                                rs.getString("code"),
 	                                rs.getString("description"),
+	                                rs.getString("email"),
+	                                rs.getInt("authorizer"),
 	                                rs.getInt("active")
 	                        )
 	        );
@@ -96,6 +102,49 @@ public class AdministrativeUnitRepository implements IAdministrativeUnitReposito
 	                        		rs.getInt("administrativeunitid"),
 	                                rs.getString("code"),
 	                                rs.getString("description"),
+	                                rs.getString("email"),
+	                                rs.getInt("authorizer"),
+	                                rs.getInt("active")
+	                        )
+	        );
+		return result.size() > 0 ? result.get(0) : null;
+	}
+	/**
+	 * @name GetByAuthorizer
+	 * @return
+	 */
+	public AdministrativeUnit GetByAuthorizer() {
+		List<AdministrativeUnit> result = jdbcTemplate.query(
+				 "select * from AdministrativeUnit where authorizer = 1 and Active = 1 ",
+	                (rs, rowNum) ->
+	                        new AdministrativeUnit(
+	                        		rs.getInt("administrativeunitid"),
+	                                rs.getString("code"),
+	                                rs.getString("description"),
+	                                rs.getString("email"),
+	                                rs.getInt("authorizer"),
+	                                rs.getInt("active")
+	                        )
+	        );
+		return result.size() > 0 ? result.get(0) : null;
+	}
+	/**
+	 * @name GetByUserId
+	 * {@summary Method to get by userId }
+	 * @param userId
+	 * @return
+	 */
+	public AdministrativeUnit GetByUserDataId(int userDataId) {
+		List<AdministrativeUnit> result = jdbcTemplate.query(
+				 "select a.* from administrativeunit a inner join userdata_administrativeunit ua on a.administrativeunitid = ua.administrativeunitid  where userdataid = ? and active = 1",
+				 new Object[] { userDataId },
+	                (rs, rowNum) ->
+	                        new AdministrativeUnit(
+	                        		rs.getInt("administrativeunitid"),
+	                                rs.getString("code"),
+	                                rs.getString("description"),
+	                                rs.getString("email"),
+	                                rs.getInt("authorizer"),
 	                                rs.getInt("active")
 	                        )
 	        );
@@ -107,8 +156,8 @@ public class AdministrativeUnitRepository implements IAdministrativeUnitReposito
 	 */
 	public int Save(AdministrativeUnit administrativeUnit) {
 		return jdbcTemplate.update(
-                "insert into AdministrativeUnit (code, description, active) values(?,?,?)",
-                administrativeUnit.getCode() ,administrativeUnit.getDescription() , administrativeUnit.getActive());
+                "insert into AdministrativeUnit (code, description, email, authorizer, active) values(?,?,?,?,?)",
+                administrativeUnit.getCode() ,administrativeUnit.getDescription(),administrativeUnit.getEmail(), administrativeUnit.getAuthorizer(), administrativeUnit.getActive());
 	}
 	/**
 	 * @name Update
@@ -116,8 +165,8 @@ public class AdministrativeUnitRepository implements IAdministrativeUnitReposito
 	 */
 	public int Update(AdministrativeUnit administrativeUnit) {
 		return jdbcTemplate.update(
-                "update AdministrativeUnit set code = ?, description = ? where administrativeunitid = ?",
-                administrativeUnit.getCode() ,administrativeUnit.getDescription() , administrativeUnit.getAdministrativeUnitId());
+                "update AdministrativeUnit set code = ?, description = ?, email = ?, authorizer = ? where administrativeunitid = ?",
+                administrativeUnit.getCode() ,administrativeUnit.getDescription() ,administrativeUnit.getEmail(), administrativeUnit.getAuthorizer(), administrativeUnit.getAdministrativeUnitId());
 	}
 	/**
 	 * @name Delete

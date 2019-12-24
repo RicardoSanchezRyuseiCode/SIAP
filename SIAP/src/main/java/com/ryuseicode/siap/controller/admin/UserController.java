@@ -7,6 +7,7 @@ import javax.servlet.http.HttpServletResponse;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.core.Authentication;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.DeleteMapping;
@@ -60,6 +61,28 @@ public class UserController {
 	@GetMapping(path = "/admin/users/get", produces = "application/json")	
     public List<UserDataParamOutput> get() {
 		 return this.userDataService.Get();
+    }
+	/**
+	 * @name getByNickname
+	 * {@summary Method to get by nickname }
+	 * @param nickname
+	 * @return
+	 */
+	@ResponseBody
+	@GetMapping(path = "/admin/users/getByNickname/{nickname}", produces = "application/json")	
+    public UserDataParamOutput getByNickname(@PathVariable String nickname) {
+		 return this.userDataService.getByNickname(nickname);
+    }
+	/**
+	 * @name getCurrentUser
+	 * {@summary Method to get current user }
+	 * @param authentication
+	 * @return
+	 */
+	@ResponseBody
+	@GetMapping(path = "/admin/users/getCurrentUser", produces = "application/json")	
+    public UserDataParamOutput getCurrentUser(Authentication authentication) {
+		 return this.userDataService.getByNickname(authentication.getName());
     }
 	/**
 	 * @name post

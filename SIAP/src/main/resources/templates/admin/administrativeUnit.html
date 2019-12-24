@@ -132,7 +132,7 @@
 		<!-- ====================================================================================== -->
 		<!-- =								       Main Wrapper 						          = -->
 		<!-- ====================================================================================== -->
-		<div id="ModalAdministrativeUnit" class="modal fade bs-example-modal-lg" tabindex="-1" role="dialog" aria-labelledby="myLargeModalLabel" aria-hidden="true" style="display: none;" data-backdrop="static" data-keyboard="false">
+		<div id="ModalAdministrativeUnit" class="modal fade bs-example-modal-lg"  role="dialog" aria-labelledby="myLargeModalLabel" aria-hidden="true" style="display: none;" data-backdrop="static" data-keyboard="false">
 		    <div class="modal-dialog modal-dialog-centered">
 		        <div class="modal-content">
 		            <div class="modal-header">
@@ -177,6 +177,42 @@
                                     			 />
                                     	</div>
                                     </div>
+                                    
+                                    <div class="row">
+                                    	<div class="col-md-12 form-group">
+          									<div class="custom-control custom-checkbox mb-3">
+			                                    <input 
+			                                    	type="checkbox" 
+			                                    	id="authorizer" 
+			                                    	name="authorizer" 
+			                                    	class="custom-control-input"    
+			                                    >
+			                                    <label class="custom-control-label" for="authorizer">Autorizador</label>
+			                                </div>
+          								</div>
+                                    </div>
+                                    
+                                    <div class="row">
+                                    	<div class="col-md-12 form-group">
+                                    		<label for="email">Correo electronico</label>
+                                    		<input type="email" 
+                                    			id="email" 
+                                    			name="email" 
+                                    			class="form-control"
+                                    			placeholder="Correo electronico"
+                                    			required
+                                    			data-parsley-required-message="Debe ingresar una descripción"
+                                    			data-parsley-type-message="Debe ingresar un correo valido"                                    			
+			                                    data-parsley-minlength="1"
+			                                    data-parsley-minlength-message="La longitud minima es de 1 caracter"
+			                                    data-parsley-maxlength="150"
+			                                    data-parsley-maxlength-message="La longitud maxima es de 150 caracteres"
+			                                    disabled="disabled"
+                                    			 />
+                                    	</div>
+                                    </div>
+                                    
+                                    
                                     
                                     <input type="hidden" id="administrativeUnitId" name="administrativeUnitId">
                                     
@@ -241,6 +277,9 @@
 		<!-- ====================================================================================== -->
 		<!-- =								         Elysium	     					          = -->
 		<!-- ====================================================================================== -->
+		<script th:inline="javascript">
+			var AppHost =  /*[[@{/}]]*/ '';
+		</script>
 		<script type="text/javascript" th:src="@{/Elysium/Elysium.js}"></script>
 		<script type="text/javascript" th:src="@{/Elysium/Types/String.js}"></script>
 		<script type="text/javascript" th:src="@{/Elysium/Types/Image.js}"></script>
@@ -288,7 +327,8 @@
 		<!-- ============================================================== -->
 		<!--                            Script of page                      -->
 		<!-- ============================================================== -->		
-		<script>
+		<script th:inline="javascript">
+			
 		    /**
 		     * Entry point of app
 		     */
@@ -302,7 +342,9 @@
 		                Form: "#AdministrativeUnitForm",
 		                BtnNew: "#NewAdministrativeUnit",
 		                BtnRefresh: "#Refresh",
-		                InputAdminUnit: "#administrativeUnitId"
+		                InputAdminUnit: "#administrativeUnitId",
+		                InputAuthorizer: "#authorizer",
+		                InputEmail: "#email"
 		            }
 		        }), [Elysium.App.Interfaces.IController]);
 		        // Initialize controller

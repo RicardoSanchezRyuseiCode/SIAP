@@ -8,7 +8,7 @@ Elysium.App.Services.Award.AnnexService = (function () {
     /**********************************************/
     /*                   Variables                */
     /**********************************************/
-    var Api = '/award/annex';
+    var Api = Elysium.AppHost + 'award/annex';
     /**********************************************/
     /*                   Methods                  */
     /**********************************************/

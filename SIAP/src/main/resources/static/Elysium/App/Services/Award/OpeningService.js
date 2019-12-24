@@ -8,7 +8,7 @@ Elysium.App.Services.Award.OpeningService = (function () {
     /**********************************************/
     /*                   Variables                */
     /**********************************************/
-    var Api = '/award/opening';
+    var Api = Elysium.AppHost + 'award/opening';
     /**********************************************/
     /*                   Methods                  */
     /**********************************************/

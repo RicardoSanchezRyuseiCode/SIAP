@@ -8,7 +8,7 @@ Elysium.App.Services.Util.DateParserService = (function () {
     /**********************************************/
     /*                   Variables                */
     /**********************************************/
-    var Api = '/util/dateParser';
+    var Api = Elysium.AppHost + 'util/dateParser';
     /**********************************************/
     /*                   Methods                  */
     /**********************************************/

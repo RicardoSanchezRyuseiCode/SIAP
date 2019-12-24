@@ -317,6 +317,7 @@ Elysium.UI.Entities.MsgBox = (function (/* Argumentos */) {
       */
      function Info(options) {
         CreateMsg(options,Types.Info);
+        $(".swal2-confirm").focus();
      }
      /**
       * WarningMsg
@@ -325,6 +326,7 @@ Elysium.UI.Entities.MsgBox = (function (/* Argumentos */) {
       */
      function Warning(options) {
         CreateMsg(options,Types.Warning);
+        $(".swal2-confirm").focus();
      }
      /**
       * ErrorMsg
@@ -333,6 +335,7 @@ Elysium.UI.Entities.MsgBox = (function (/* Argumentos */) {
       */
      function Error(options) {
         CreateMsg(options,Types.Error);
+        $(".swal2-confirm").focus();
      }     
      /**
       * SuccessMsg
@@ -341,6 +344,7 @@ Elysium.UI.Entities.MsgBox = (function (/* Argumentos */) {
       */
      function Success(options) {
         CreateMsg(options,Types.Success);
+        $(".swal2-confirm").focus();
      }
     /**
      * QuestionMsg
@@ -350,6 +354,7 @@ Elysium.UI.Entities.MsgBox = (function (/* Argumentos */) {
      */
      function Question(options) {
          CreateMsg(options, Types.Question);
+         $(".swal2-confirm").focus();
      }
      /**
       * DialogInfo
@@ -373,6 +378,7 @@ Elysium.UI.Entities.MsgBox = (function (/* Argumentos */) {
                  });
              }
          }).catch(swal.noop);
+         $(".swal2-confirm").focus();
      }     
      /**
       * DialogWarning
@@ -396,6 +402,7 @@ Elysium.UI.Entities.MsgBox = (function (/* Argumentos */) {
                  });
              }
          }).catch(swal.noop);
+         $(".swal2-confirm").focus();
      }
      /**
       * DialogQuestion
@@ -419,6 +426,7 @@ Elysium.UI.Entities.MsgBox = (function (/* Argumentos */) {
                  });
              }
          }).then(function () { }, function (dismiss) { cancelCallback(); }).catch(swal.noop);
+         
      }
      /**
       * @name Close

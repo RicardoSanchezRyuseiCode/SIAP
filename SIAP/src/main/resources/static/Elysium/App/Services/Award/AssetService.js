@@ -8,7 +8,7 @@ Elysium.App.Services.Award.AssetService = (function () {
     /**********************************************/
     /*                   Variables                */
     /**********************************************/
-    var Api = '/award/asset';
+    var Api = Elysium.AppHost + 'award/asset';
     /**********************************************/
     /*                   Methods                  */
     /**********************************************/

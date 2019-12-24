@@ -18,6 +18,18 @@ public interface IAdministrativeUnitService {
 	 */
 	List<AdministrativeUnit> Get();
 	/**
+	 * @name GetByAuthorizer
+	 * @return
+	 */
+	AdministrativeUnit GetByAuthorizer();
+	/**
+	 * @name GetByUserDataId
+	 * {@summary Method to get by userId }
+	 * @param userId
+	 * @return
+	 */
+	AdministrativeUnit GetByUserDataId(int userDataId);
+	/**
 	 * @name Save
 	 * @param AdministrativeUnit
 	 * @throws Exception 

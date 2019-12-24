@@ -8,7 +8,7 @@ Elysium.App.Services.Award.EmissionService = (function () {
     /**********************************************/
     /*                   Variables                */
     /**********************************************/
-    var Api = '/award/emission';
+    var Api = Elysium.AppHost + 'award/emission';
     /**********************************************/
     /*                   Methods                  */
     /**********************************************/

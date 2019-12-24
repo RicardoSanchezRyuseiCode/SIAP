@@ -19,6 +19,13 @@ public interface IUserDataService {
 	 */
 	List<UserDataParamOutput> Get();
 	/**
+	 * @name getByNickname
+	 * {@summary Method to get by nickname }
+	 * @param nickname
+	 * @return
+	 */
+	UserDataParamOutput getByNickname(String nickname);
+	/**
 	 * @name Save
 	 * @param userData
 	 * @throws Exception 
