@@ -1965,3 +1965,132 @@ ALTER TRIGGER TRG_UserData_USERDATAID ENABLE;
 	  REFERENCES ROLE (ROLEID) ENABLE;
   ALTER TABLE USERDATA_ROLE ADD CONSTRAINT FK_UserData_Role_UserData FOREIGN KEY (USERDATAID)
 	  REFERENCES USERDATA (USERDATAID) ENABLE;
+--------------------------------------------------------
+--  File created - Thursday-December-26-2019   
+--------------------------------------------------------
+--------------------------------------------------------
+--  DDL for Sequence SEQ_ADJUDICATION_ADJUDICATIONID
+--------------------------------------------------------
+
+   CREATE SEQUENCE  SEQ_ADJUDICATION_ADJUDICATIONID  MINVALUE 1 MAXVALUE 9999999999999999999999999999 INCREMENT BY 1 START WITH 49 NOCACHE  NOORDER  NOCYCLE  NOKEEP  NOSCALE  GLOBAL ;
+--------------------------------------------------------
+--  DDL for Sequence SEQ_ADJUDICATIONDOCUMENT_ADJUDICATIONDOCUMENTID
+--------------------------------------------------------
+
+   CREATE SEQUENCE  SEQ_ADJUDICATIONDOCUMENT_ADJUDICATIONDOCUMENTID  MINVALUE 1 MAXVALUE 9999999999999999999999999999 INCREMENT BY 1 START WITH 170 NOCACHE  NOORDER  NOCYCLE  NOKEEP  NOSCALE  GLOBAL ;
+--------------------------------------------------------
+--  DDL for Sequence SEQ_ADJUDICATIONSTEP_ADJUDICATIONSTEPID
+--------------------------------------------------------
+
+   CREATE SEQUENCE  SEQ_ADJUDICATIONSTEP_ADJUDICATIONSTEPID  MINVALUE 1 MAXVALUE 9999999999999999999999999999 INCREMENT BY 1 START WITH 183 NOCACHE  NOORDER  NOCYCLE  NOKEEP  NOSCALE  GLOBAL ;
+--------------------------------------------------------
+--  DDL for Sequence SEQ_AdministrativeUnit_ADMINISTRATIVEUNITID
+--------------------------------------------------------
+
+   CREATE SEQUENCE  SEQ_AdministrativeUnit_ADMINISTRATIVEUNITID  MINVALUE 1 MAXVALUE 9999999999999999999999999999 INCREMENT BY 1 START WITH 8 NOCACHE  NOORDER  NOCYCLE  NOKEEP  NOSCALE  GLOBAL ;
+--------------------------------------------------------
+--  DDL for Sequence SEQ_ADMINISTRATIVEUNIT_ADMINISTRATIVEUNITID
+--------------------------------------------------------
+
+   CREATE SEQUENCE  SEQ_ADMINISTRATIVEUNIT_ADMINISTRATIVEUNITID  MINVALUE 1 MAXVALUE 9999999999999999999999999999 INCREMENT BY 1 START WITH 3 NOCACHE  NOORDER  NOCYCLE  NOKEEP  NOSCALE  GLOBAL ;
+--------------------------------------------------------
+--  DDL for Sequence SEQ_ANNEX_ANNEXID
+--------------------------------------------------------
+
+   CREATE SEQUENCE  SEQ_ANNEX_ANNEXID  MINVALUE 1 MAXVALUE 9999999999999999999999999999 INCREMENT BY 1 START WITH 540 NOCACHE  NOORDER  NOCYCLE  NOKEEP  NOSCALE  GLOBAL ;
+--------------------------------------------------------
+--  DDL for Sequence SEQ_ASSET_ASSETID
+--------------------------------------------------------
+
+   CREATE SEQUENCE  SEQ_ASSET_ASSETID  MINVALUE 1 MAXVALUE 9999999999999999999999999999 INCREMENT BY 1 START WITH 32 NOCACHE  NOORDER  NOCYCLE  NOKEEP  NOSCALE  GLOBAL ;
+--------------------------------------------------------
+--  DDL for Sequence SEQ_BUDGET_BUDGETID
+--------------------------------------------------------
+
+   CREATE SEQUENCE  SEQ_BUDGET_BUDGETID  MINVALUE 1 MAXVALUE 9999999999999999999999999999 INCREMENT BY 1 START WITH 3 NOCACHE  NOORDER  NOCYCLE  NOKEEP  NOSCALE  GLOBAL ;
+--------------------------------------------------------
+--  DDL for Sequence SEQ_CHAPTER_CHAPTERID
+--------------------------------------------------------
+
+   CREATE SEQUENCE  SEQ_CHAPTER_CHAPTERID  MINVALUE 1 MAXVALUE 9999999999999999999999999999 INCREMENT BY 1 START WITH 5 NOCACHE  NOORDER  NOCYCLE  NOKEEP  NOSCALE  GLOBAL ;
+--------------------------------------------------------
+--  DDL for Sequence SEQ_COMPETITOR_COMPETITORID
+--------------------------------------------------------
+
+   CREATE SEQUENCE  SEQ_COMPETITOR_COMPETITORID  MINVALUE 1 MAXVALUE 9999999999999999999999999999 INCREMENT BY 1 START WITH 46 NOCACHE  NOORDER  NOCYCLE  NOKEEP  NOSCALE  GLOBAL ;
+--------------------------------------------------------
+--  DDL for Sequence SEQ_CONTRACT_CONTRACTID
+--------------------------------------------------------
+
+   CREATE SEQUENCE  SEQ_CONTRACT_CONTRACTID  MINVALUE 1 MAXVALUE 9999999999999999999999999999 INCREMENT BY 1 START WITH 51 NOCACHE  NOORDER  NOCYCLE  NOKEEP  NOSCALE  GLOBAL ;
+--------------------------------------------------------
+--  DDL for Sequence SEQ_DOCUMENTVARIABLE_DOCUMENTVARIABLEID
+--------------------------------------------------------
+
+   CREATE SEQUENCE  SEQ_DOCUMENTVARIABLE_DOCUMENTVARIABLEID  MINVALUE 1 MAXVALUE 9999999999999999999999999999 INCREMENT BY 1 START WITH 65 NOCACHE  NOORDER  NOCYCLE  NOKEEP  NOSCALE  GLOBAL ;
+--------------------------------------------------------
+--  DDL for Sequence SEQ_EMISSION_EMISSIONID
+--------------------------------------------------------
+
+   CREATE SEQUENCE  SEQ_EMISSION_EMISSIONID  MINVALUE 1 MAXVALUE 9999999999999999999999999999 INCREMENT BY 1 START WITH 32 NOCACHE  NOORDER  NOCYCLE  NOKEEP  NOSCALE  GLOBAL ;
+--------------------------------------------------------
+--  DDL for Sequence SEQ_ENTRY_ENTRYID
+--------------------------------------------------------
+
+   CREATE SEQUENCE  SEQ_ENTRY_ENTRYID  MINVALUE 1 MAXVALUE 9999999999999999999999999999 INCREMENT BY 1 START WITH 9 NOCACHE  NOORDER  NOCYCLE  NOKEEP  NOSCALE  GLOBAL ;
+--------------------------------------------------------
+--  DDL for Sequence SEQ_INSTITUTION_INSTITUTIONID
+--------------------------------------------------------
+
+   CREATE SEQUENCE  SEQ_INSTITUTION_INSTITUTIONID  MINVALUE 1 MAXVALUE 9999999999999999999999999999 INCREMENT BY 1 START WITH 2 NOCACHE  NOORDER  NOCYCLE  NOKEEP  NOSCALE  GLOBAL ;
+--------------------------------------------------------
+--  DDL for Sequence SEQ_ITEM_ITEMID
+--------------------------------------------------------
+
+   CREATE SEQUENCE  SEQ_ITEM_ITEMID  MINVALUE 1 MAXVALUE 9999999999999999999999999999 INCREMENT BY 1 START WITH 848 NOCACHE  NOORDER  NOCYCLE  NOKEEP  NOSCALE  GLOBAL ;
+--------------------------------------------------------
+--  DDL for Sequence SEQ_OPENING_OPENINGID
+--------------------------------------------------------
+
+   CREATE SEQUENCE  SEQ_OPENING_OPENINGID  MINVALUE 1 MAXVALUE 9999999999999999999999999999 INCREMENT BY 1 START WITH 23 NOCACHE  NOORDER  NOCYCLE  NOKEEP  NOSCALE  GLOBAL ;
+--------------------------------------------------------
+--  DDL for Sequence SEQ_PROPOSAL_PROPOSALID
+--------------------------------------------------------
+
+   CREATE SEQUENCE  SEQ_PROPOSAL_PROPOSALID  MINVALUE 1 MAXVALUE 9999999999999999999999999999 INCREMENT BY 1 START WITH 56 NOCACHE  NOORDER  NOCYCLE  NOKEEP  NOSCALE  GLOBAL ;
+--------------------------------------------------------
+--  DDL for Sequence SEQ_QUOTATION_QUOTATIONID
+--------------------------------------------------------
+
+   CREATE SEQUENCE  SEQ_QUOTATION_QUOTATIONID  MINVALUE 1 MAXVALUE 9999999999999999999999999999 INCREMENT BY 1 START WITH 31 NOCACHE  NOORDER  NOCYCLE  NOKEEP  NOSCALE  GLOBAL ;
+--------------------------------------------------------
+--  DDL for Sequence SEQ_QUOTATIONDETAIL_QUOTATIONDETAILID
+--------------------------------------------------------
+
+   CREATE SEQUENCE  SEQ_QUOTATIONDETAIL_QUOTATIONDETAILID  MINVALUE 1 MAXVALUE 9999999999999999999999999999 INCREMENT BY 1 START WITH 49 NOCACHE  NOORDER  NOCYCLE  NOKEEP  NOSCALE  GLOBAL ;
+--------------------------------------------------------
+--  DDL for Sequence SEQ_REQUEST_REQUESTID
+--------------------------------------------------------
+
+   CREATE SEQUENCE  SEQ_REQUEST_REQUESTID  MINVALUE 1 MAXVALUE 9999999999999999999999999999 INCREMENT BY 1 START WITH 22 NOCACHE  NOORDER  NOCYCLE  NOKEEP  NOSCALE  GLOBAL ;
+--------------------------------------------------------
+--  DDL for Sequence SEQ_REQUESTDETAIL_REQUESTDETAILID
+--------------------------------------------------------
+
+   CREATE SEQUENCE  SEQ_REQUESTDETAIL_REQUESTDETAILID  MINVALUE 1 MAXVALUE 9999999999999999999999999999 INCREMENT BY 1 START WITH 22 NOCACHE  NOORDER  NOCYCLE  NOKEEP  NOSCALE  GLOBAL ;
+--------------------------------------------------------
+--  DDL for Sequence SEQ_Role_ROLEID
+--------------------------------------------------------
+
+   CREATE SEQUENCE  SEQ_Role_ROLEID  MINVALUE 1 MAXVALUE 9999999999999999999999999999 INCREMENT BY 1 START WITH 5 NOCACHE  NOORDER  NOCYCLE  NOKEEP  NOSCALE  GLOBAL ;
+--------------------------------------------------------
+--  DDL for Sequence SEQ_SUPPLIER_SUPPLIERID
+--------------------------------------------------------
+
+   CREATE SEQUENCE  SEQ_SUPPLIER_SUPPLIERID  MINVALUE 1 MAXVALUE 9999999999999999999999999999 INCREMENT BY 1 START WITH 3 NOCACHE  NOORDER  NOCYCLE  NOKEEP  NOSCALE  GLOBAL ;
+--------------------------------------------------------
+--  DDL for Sequence SEQ_UserData_USERDATAID
+--------------------------------------------------------
+
+   CREATE SEQUENCE  SEQ_UserData_USERDATAID  MINVALUE 1 MAXVALUE 9999999999999999999999999999 INCREMENT BY 1 START WITH 11 NOCACHE  NOORDER  NOCYCLE  NOKEEP  NOSCALE  GLOBAL ;
+
