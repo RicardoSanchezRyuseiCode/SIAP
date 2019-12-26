@@ -29,7 +29,7 @@ public class ChapterRepository implements IChapterRepository {
 	 */
 	public List<Chapter> getByBudgetId(int budgetId) {
 		return jdbcTemplate.query(
-                "select * from chapter where active = 1  and budgetid = ? order by code, concept ",
+                "select * from chapter where active = 1  and budgetid = ? and amount > 0 order by code, concept ",
                 new Object[] { budgetId },
                 (rs, rowNum) ->
                         new Chapter(
